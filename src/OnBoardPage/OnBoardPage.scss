@@ -1,0 +1,314 @@
+/* Layout */
+.onboard-container {
+
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    min-height: 100vh;
+    background-color: #000000;
+
+
+    .content-section {
+        flex-grow: 1;
+        padding: 40px;
+        background-color: #fff;
+        display: flex;
+        flex-direction: column;
+        // justify-content: center;
+        align-items: flex-start;
+        gap: 3rem;
+        width: 70%;
+    }
+
+    .content-container {
+        width: 80%;
+        margin: 0px auto;
+    }
+
+    .header {
+        justify-content: flex-start;
+        width: 100%;
+    }
+
+    .logo-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .logo {
+        width: 32px;
+        height: 32px;
+        object-fit: contain;
+    }
+
+    .brand {
+        display: flex;
+        align-items: flex-start;
+    }
+
+    .brand-name {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 800;
+        font-size: 24px;
+        color: #000000;
+    }
+
+    .trademark {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 800;
+        font-size: 3px;
+        color: #000000;
+        margin-top: 3px;
+        margin-left: 2px;
+    }
+
+    /* Header Section */
+    .header-section {
+        background-color: inherit;
+        padding: 20px;
+        padding-left: 0px;
+        //   min-width: 300px;
+    }
+
+    .header-title {
+        font-family: 'Inter', sans-serif;
+        font-weight: 800;
+        font-size: 48px;
+        line-height: 57.6px;
+        letter-spacing: -2px;
+        color: #000000;
+        margin-bottom: 10px;
+    }
+
+    .header-subtitle {
+        font-family: 'Inter', sans-serif;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 24px;
+        letter-spacing: -0.32px;
+        color: #676b5f;
+    }
+
+    /* Username Input */
+    .username-input-container {
+        width: 100%;
+        max-width: 588px;
+        min-width: 300px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        background-color: var(--input-background);
+        border-radius: 8px;
+        padding: 0 16px;
+        margin: 30px 0px;
+    }
+
+    .username-label {
+        font-family: Inter, sans-serif;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 48px;
+        color: #000000;
+        margin-right: 12px;
+    }
+
+    .username-input {
+        flex: 1;
+        height: 32px;
+        border: none;
+        background: transparent;
+        font-family: Inter, sans-serif;
+        font-size: 14px;
+        padding: 0 8px;
+        outline: none;
+    }
+
+    .username-input::placeholder {
+        color: #666666;
+    }
+
+    /* Category Selection */
+    .category-selection {
+        width: 100%;
+        min-width: 320px;
+        padding: 20px 0px 60px;
+        background-color: inherit;
+    }
+
+    .category-title {
+        font-family: Inter, sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 21px;
+        color: #000000;
+        margin-bottom: 20px;
+    }
+
+    .categories-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .category-button {
+        display: flex;
+        align-items: center;
+        padding: 10px 17px;
+        background-color: #e0e2d9;
+        border: 1px solid #a8aaa2;
+        border-radius: 24px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .category-button:hover {
+        background-color: var(--input-background);
+    }
+
+    .category-button.selected {
+        background-color: #28a263;
+        color: #ffffff;
+        border-color: #000000;
+    }
+
+    .category-icon {
+        margin-right: 12px;
+        font-size: 14px;
+        line-height: 21px;
+    }
+
+    .category-name {
+        font-family: Inter, sans-serif;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 21px;
+    }
+
+    /* Continue Button */
+    .continue-button {
+        width: 100%;
+        min-width: 200px;
+        height: 48px;
+        background-color: #28a263;
+        border-radius: 64px;
+        border: none;
+        color: #fff;
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        font-size: 16px;
+        letter-spacing: -0.32px;
+        line-height: 24px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+
+    .continue-button:hover {
+        background-color: #238e55;
+    }
+
+    .continue-button:active {
+        background-color: #1d7847;
+    }
+
+    .continue-button:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+    }
+
+    /* Image Section */
+    .image-section {
+        width: 30%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        //   min-width: 470px;
+        height: 100vh;
+        background-color: #254f1a;
+        overflow: hidden;
+    }
+
+    .section-image {
+        width: 100%;
+        height: 100%;
+        min-height: 783px;
+        object-fit: cover;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 800px) {
+        .onboard-container {
+            flex-direction: column;
+        }
+
+        .content-container{
+            margin: 0px;
+            width: 100%;
+        }
+
+        .content-section {
+            padding: 20px;
+            justify-content: flex-start;
+        }
+
+        .header-section {
+            padding: 0px;
+            width: 100%;
+        }
+
+        .header-title {
+            font-size: 28px;
+            line-height: 44px;
+            margin-bottom: 0px;
+        }
+
+        .header-subtitle {
+            font-size: 10px;
+            line-height: 20px;
+        }
+
+        .username-input-container {
+            width: 100%;
+            margin: 30px 0px;
+        }
+
+        .categories-container {
+            justify-content: center;
+        }
+
+        .category-name{
+            font-size: 10px;
+        }
+
+        .category-button {
+            flex: 1 1 calc(50% - 8px);
+            max-width: calc(50% - 8px);
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .continue-button {
+            width: 100%;
+            min-width: unset;
+        }
+
+        .image-section {
+            min-width: 100%;
+            min-height: 400px;
+            display: none;
+        }
+
+        .section-image {
+            min-height: 400px;
+        }
+
+        .brand-name{
+            font-size: 20px;
+        }
+
+        .logo{
+            width: 28px;
+            height: 28px;
+        }
+    }
+}

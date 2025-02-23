@@ -1,0 +1,306 @@
+
+/* Layout Styles */
+.signup-page-container {
+    :root {
+        // --primary-color: #28a263;
+        --background-color: #ffff;
+        --input-background: #eff0ec;
+        --button-background: #C3C3C3;
+        --button-text: #a8aaa2;
+        --footer-text: #676b5f;
+        --image-background: #254f1a;
+    }
+
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: white;
+
+
+    .content-container {
+        display: flex;
+        flex: 1;
+        justify-content: space-between;
+        //   align-items: center;
+        //   padding: 20px;
+    }
+
+    .left-content {
+        display: flex;
+        flex-direction: column;
+        width: 70%;
+    }
+
+    /* Header Styles */
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 3rem;
+        height: 64px;
+        background-color: white;
+    }
+
+    .title h1 {
+        font-size: 48px;
+        font-weight: bold;
+        text-align: center;
+        letter-spacing: -2px;
+        padding-bottom: 20px;
+    }
+
+    .logo-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .logo {
+        width: 32px;
+        height: 32px;
+        object-fit: contain;
+    }
+
+    .brand {
+        display: flex;
+        align-items: flex-start;
+    }
+
+    .brand-name {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 800;
+        font-size: 24px;
+        color: #000000;
+    }
+
+    .trademark {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 800;
+        font-size: 3px;
+        color: #000000;
+        margin-top: 3px;
+        margin-left: 2px;
+    }
+
+    /* Sign Up Form Styles */
+    .signup-container {
+        width: 40%;
+        //   max-width: 376px;
+        padding: 20px;
+        font-family: 'Poppins', sans-serif;
+        background-color: white;
+        color: var(--footer-text);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin: auto;
+    }
+
+    .header-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 48px;
+    }
+
+    .header-row h1 {
+        font-size: 22.55px;
+        font-weight: 500;
+        color: #333333;
+        margin: 0;
+    }
+
+    .sign-in-link {
+        font-size: 11.28px;
+        color: #28a263;
+        text-decoration: underline;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 2.82px;
+        margin-bottom: 14.1px;
+    }
+
+    .form-group label {
+        font-size: 13px;
+        color: #666666;
+        font-weight: 400;
+    }
+
+    .form-group input {
+        height: 39.47px;
+        border-radius: 8.46px;
+        border: 0.7px solid #66666659;
+        padding: 0 10px;
+        font-size: 13px;
+        background-color: white;
+    }
+
+    .form-group input:focus {
+        outline: none;
+        border-color: #28a263;
+    }
+
+    .checkbox-group {
+        display: flex;
+        align-items: flex-start;
+        gap: 5.64px;
+        margin: 20px 0;
+        padding: 5.64px;
+    }
+
+    .checkbox-container {
+        position: relative;
+        width: 16px;
+        height: 16px;
+
+        input[type='checkbox'] {
+            accent-color: #111111;
+            cursor: pointer;
+        }
+    }
+
+    .checkbox-image {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+    }
+
+    .checkbox-group label {
+        font-size: 11px;
+        color: #3d3d3d;
+        line-height: 1.5;
+    }
+
+    .submit-button {
+        width: 100%;
+        height: 48px;
+        background-color: #C3C3C3;
+        border: none;
+        border-radius: 28px;
+        color: var(--button-text);
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: opacity 0.3s ease;
+        color: white;
+    }
+
+    .submit-button:not(:disabled) {
+        opacity: 1;
+    }
+
+    .submit-button:hover:not(:disabled) {
+        opacity: 0.9;
+    }
+
+    /* Background Image Styles */
+    .background-container {
+        width: 29%;
+        min-height: 100vh;
+        background-color: #28a263;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .background-frame {
+        width: 100%;
+        height: 100%;
+        background-color: var(--image-background);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .frame-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* Footer Styles */
+    .footer-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-width: 100%;
+        padding: 60px 16px 30px 16px;
+        margin: 0 auto;
+        background-color: white;
+    }
+
+    .footer-text {
+        font-family: 'Inter', sans-serif;
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 18px;
+        color: var(--footer-text);
+        margin: 0;
+    }
+
+    .footer-link {
+        color: var(--footer-text);
+        text-decoration: underline;
+        cursor: pointer;
+        transition: opacity 0.2s ease;
+    }
+
+    .footer-link:hover {
+        opacity: 0.8;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+        .content-container {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .logo-container {
+            justify-content: center;
+        }
+
+        .footer-container {
+            flex-direction: column;
+            align-items: flex-start;
+
+
+        }
+
+        .title h1 {
+            font-size: 32px;
+        }
+
+        .left-content {
+            width: 80%;
+        }
+
+        .header {
+            padding: 2rem 0rem;
+            justify-content: flex-start;
+            width: 100%;
+        }
+
+        .signup-container {
+            padding: 10px;
+            width: 100%;
+        }
+
+        .header-row {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .sign-in-link {
+            margin-top: 10px;
+        }
+
+        .background-container {
+            display: none;
+        }
+    }
+}

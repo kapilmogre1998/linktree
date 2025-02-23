@@ -1,0 +1,649 @@
+/* Layout */
+.add-link-container {
+    display: flex;
+    min-height: 100vh;
+
+    --side-bar-width: 230px;
+
+    .layout {
+        display: flex;
+        min-height: 100vh;
+        background-color: #f5f5f5;
+      }
+      
+      .main-content {
+        flex-grow: 1;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        background-color: #F3F3F1;
+        margin-left: var(--side-bar-width);
+    }
+    
+    .content-sections {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      
+      /* Sidebar */
+      .sidebar {
+        width: var(--side-bar-width);
+        min-height: 100vh;
+        background-color: #fff;
+        display: flex;
+        flex-direction: column;
+        color: #fff;
+        position: fixed;
+      }
+      
+      .logo-section {
+        padding: 36px 30px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      
+      .logo-img {
+        width: 43px;
+        height: 44.51px;
+      }
+      
+      .logo-text {
+        font-family: 'Poppins', sans-serif;
+        font-size: 32px;
+        font-weight: 600;
+        letter-spacing: 0.64px;
+        color: #fff;
+        margin: 0;
+      }
+      
+      .nav-section {
+        margin-top: 45px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        .nav-item {
+          padding: 0 30px;
+          display: flex;
+          align-items: center;
+          gap: 20px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          padding: 18px 30px;
+        }
+        
+        // .nav-item:hover {
+        //   background-color: rgba(40, 162, 99, 0.1);
+        // }
+        
+        .nav-icon {
+          width: 24px;
+          height: 24px;
+        }
+        
+        .nav-label {
+          font-family: 'Poppins', sans-serif;
+          font-size: 16px;
+          font-weight: 400;
+          color: #676b5f;
+        }
+        
+        .nav-item.active .nav-label {
+          color: #28a263;
+          font-weight: 500;
+          font-size: 18px;
+        }
+  
+        .nav-item.active{
+          position: relative;
+          background-color: #F3F3F1;
+        }
+  
+        .nav-item.active::before {
+            content: "";
+            width: 30px;
+            height: 30px;
+            background-color: white;
+            position: absolute;
+            right: 0;
+            bottom: 100%;
+            box-shadow: 0 18px 0 #F3F3F1;
+            border-bottom-right-radius: 18px;        
+        }
+
+        .nav-item.active::after {
+            content: "";
+            width: 30px;
+            height: 30px;
+            background-color: white;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            box-shadow: 0 -18px 0 #F3F3F1;
+            border-top-right-radius: 18px;        
+        }
+      }
+      
+      
+      /* Header */
+      .header {
+        width: 100%;
+        min-width: 350px;
+        padding: 20px;
+        background: transparent;
+      }
+      
+      .header-content {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      
+      .greeting {
+        font-family: 'Pacifico', cursive;
+        font-size: 24px;
+        font-weight: 400;
+        letter-spacing: 0.48px;
+        margin: 0;
+      }
+      
+      .notification {
+        font-family: 'Poppins', sans-serif;
+        font-size: 14px;
+        font-weight: 400;
+        margin: 0;
+      }
+
+      .left-right-container{
+        display: flex;
+        padding: 0px 40px;
+        gap: 8rem;
+      }
+
+      .profile-banner-section{
+        flex-grow: 1;
+      }
+      
+      /* Profile Section */
+      .profile-section-container {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        min-width: 320px;
+        max-width: 800px;
+        width: 100%;
+      }
+      
+      .profile-heading {
+        font-family: Inter, sans-serif;
+        font-size: 20px;
+        font-weight: 600;
+        line-height: 24px;
+        letter-spacing: -0.4px;
+        color: #000000;
+        margin: 0;
+      }
+      
+      .profile-container {
+        background: #ffffff;
+        border-radius: 24px;
+        padding: 24px;
+      }
+      
+      .profile-content {
+        display: flex;
+        flex-direction: column;
+        gap: 48px;
+        width: 100%;
+      }
+      
+      .profile-header {
+        display: flex;
+        flex-direction: row;
+        gap: 16px;
+        align-items: center;
+      }
+      
+      .profile-image {
+        width: 96px;
+        height: 96px;
+        object-fit: cover;
+        background-color: #254f1a;
+        border-radius: 50%;
+      }
+      
+      .profile-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        flex-grow: 1;
+      }
+      
+      .pick-image-button {
+        background: #28a263;
+        border-radius: 64px;
+        padding: 12px;
+        color: #ffffff;
+        font-family: Inter, sans-serif;
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 24px;
+        letter-spacing: -0.32px;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+      }
+      
+      .remove-button {
+        background: #e0e2d9;
+        border-radius: 64px;
+        padding: 12px;
+        color: #a8aaa2;
+        font-family: Inter, sans-serif;
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 24px;
+        letter-spacing: -0.32px;
+        cursor: pointer;
+        width: 100%;
+      }
+      
+      /* Banner Section */
+      .banner-section {
+        width: 100%;
+        max-width: 800px;
+        padding: 20px;
+        border-radius: 25px;
+        box-sizing: border-box;
+
+        & h2{
+            background-color: transparent;
+        }
+      }
+      
+      .banner-title {
+        font-family: 'Poppins', sans-serif;
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        color: #000000;
+      }
+      
+      .banner-preview {
+        width: 100%;
+        height: 308px;
+        border-radius: 6px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+        background-color: #000000;
+      }
+      
+      .banner-profile-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: #FFFFFF;
+      }
+      
+      .banner-profile-image {
+        width: 124px;
+        height: 124px;
+        border-radius: 50%;
+        margin-bottom: 15px;
+        background-color: #254f1a;
+      }
+      
+      .banner-username {
+        font-family: 'Poppins', sans-serif;
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 10px;
+        color: #FFFFFF;
+      }
+      
+      .handle-container {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      
+      .frame-icon {
+        width: 18px;
+        height: 21px;
+      }
+      
+      .handle {
+        font-family: 'Poppins', sans-serif;
+        font-size: 16px;
+        font-weight: 400;
+        color: rgba(255, 255, 255, 0.72);
+      }
+      
+      /* Color Customization */
+      .color-customization {
+        margin-top: 20px;
+      }
+      
+      .color-label {
+        font-family: 'Poppins', sans-serif;
+        font-size: 13px;
+        font-weight: 500;
+        margin-bottom: 15px;
+      }
+      
+      .color-options {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+      
+      .color-button {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        border: none;
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
+      
+      .color-button:hover {
+        transform: scale(1.05);
+      }
+      
+      .color-button.active {
+        outline: 2px solid #000000;
+      }
+      
+      .color-input-container {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+      
+      .color-preview {
+        width: 48px;
+        height: 48px;
+        border-radius: 8px;
+      }
+      
+      .color-input-wrapper {
+        background: #eff0ec;
+        border-radius: 9px;
+        padding: 12px 15px;
+        flex-grow: 1;
+        max-width: 231px;
+      }
+      
+      .color-input {
+        width: 100%;
+        border: none;
+        background: transparent;
+        font-family: 'Poppins', sans-serif;
+        font-size: 13px;
+        font-weight: 500;
+        color: #000000;
+      }
+      
+      .color-input:focus {
+        outline: none;
+      }
+      
+      /* Mobile Preview */
+      .mobile-preview {
+        display: flex;
+        justify-content: center;
+        // align-items: center;
+        min-width: 360px;
+        padding: 20px;
+        height: fit-content;
+        border-radius: 50px;
+        background-color: #000000;
+      }
+      
+      .mobile-frame {
+        width: 328px;
+        height: 710px;
+        background: #ffffff;
+        border-radius: 40px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      }
+      
+      .mobile-profile-section {
+        height: 237px;
+        background: #254f1a;
+        border-radius: 40px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+      
+      .mobile-profile-image {
+        width: 96px;
+        height: 94px;
+        margin-bottom: 20px;
+      }
+      
+      .mobile-username {
+        color: #ffffff;
+        font-family: 'Poppins', sans-serif;
+        font-size: 24px;
+        font-weight: 700;
+        text-align: center;
+      }
+      
+      .button-group {
+        margin: 20px 0;
+        display: flex;
+        justify-content: center;
+      }
+      
+      .toggle-button {
+        display: flex;
+        background: #e0e2d9;
+        border-radius: 24px;
+        padding: 3px;
+        width: 244px;
+        height: 43px;
+        border: 1px solid #bfbfbf;
+      }
+      
+      .active-button {
+        background: #28a263;
+        color: #ffffff;
+        border-radius: 100px;
+        padding: 11px 49px;
+        font-family: 'Inter', sans-serif;
+        font-size: 16px;
+        font-weight: 500;
+      }
+      
+      .inactive-button {
+        color: #a8aaa2;
+        padding: 11px 49px;
+        font-family: 'Inter', sans-serif;
+        font-size: 16px;
+        font-weight: 500;
+      }
+      
+      .links-section {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding: 0 20px;
+      }
+      
+      .link-item {
+        display: flex;
+        align-items: center;
+        background: #e0e2d9;
+        border-radius: 100px;
+        padding: 8px;
+        height: 48px;
+      }
+      
+      .link-thumbnail {
+        width: 48px;
+        height: 48px;
+        background: #ffffff;
+        border-radius: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 12px;
+      }
+      
+      .link-thumbnail img {
+        width: 28px;
+        height: 28px;
+        object-fit: contain;
+      }
+      
+      .link-item span {
+        font-family: 'Poppins', sans-serif;
+        font-size: 16px;
+        font-weight: 500;
+        color: #1e1e20;
+      }
+      
+      .connect-button {
+        background: #28a263;
+        color: #ffffff;
+        border: none;
+        border-radius: 30px;
+        padding: 12px;
+        width: 178px;
+        margin: 30px auto;
+        font-family: 'Poppins', sans-serif;
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+      }
+      
+      .connect-button:hover {
+        background: #2db06c;
+      }
+      
+      /* Footer */
+      .footer {
+        margin-top: auto;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+      }
+      
+      .spark-logo {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      
+      .spark-logo img {
+        width: 24px;
+        height: 24px;
+      }
+      
+      .spark-text {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 18px;
+        font-weight: 800;
+        color: #676b5f;
+      }
+      
+      .tm {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 2.5px;
+        font-weight: 800;
+        color: #676b5f;
+        align-self: flex-start;
+      }
+
+      .save-btn-container{
+        width: 100%;
+        display: flex;
+        justify-content: end;
+        padding: 20px 0px;
+        padding-right: 50px;
+      }
+      
+      /* Save Button */
+      .save-button {
+        min-width: 190px;
+        height: 50px;
+        padding: 20px 74px;
+        border-radius: 15px;
+        background-color: #28a263;
+        border: none;
+        cursor: pointer;
+        color: #fff;
+        font-family: 'Poppins', sans-serif;
+        font-size: 18px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.2s ease;
+      }
+      
+      .save-button:hover {
+        background-color: #238b54;
+      }
+      
+      .save-button:active {
+        background-color: #1d7445;
+      }
+      
+      /* Form Elements */
+      .input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        position: relative;
+      }
+      
+      .input-label {
+        font-family: Inter, sans-serif;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 21px;
+        color: #676b5f;
+        padding-left: 16px;
+      }
+      
+      .profile-input {
+        background: #eff0ec;
+        border-radius: 8px;
+        border: none;
+        padding: 12px 16px;
+        font-family: Inter, sans-serif;
+        font-size: 14px;
+        line-height: 48px;
+        color: #000000;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      
+      .bio-input {
+        background: #eff0ec;
+        border-radius: 8px;
+        border: none;
+        padding: 12px 16px;
+        font-family: Inter, sans-serif;
+        font-size: 14px;
+        line-height: 21px;
+        color: #000000;
+        width: 100%;
+        min-height: 96px;
+        resize: none;
+        box-sizing: border-box;
+      }
+}
