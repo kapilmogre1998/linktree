@@ -1,0 +1,106 @@
+@import '../../global.scss';
+
+.sidebar-container {
+    width: $side-bar-width;
+    min-height: 100vh;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    padding-bottom: 36px;
+
+
+    .logo-section {
+        padding: 36px 30px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .logo-img {
+        width: 43px;
+        height: 44.51px;
+    }
+
+    .logo-text {
+        font-family: 'Poppins', sans-serif;
+        font-size: 32px;
+        font-weight: 600;
+        letter-spacing: 0.64px;
+        margin: 0;
+    }
+
+    .nav-section {
+        margin-top: 25px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        .nav-item {
+            padding: 0 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 18px 30px;
+        }
+
+        // .nav-item:hover {
+        //   background-color: rgba(40, 162, 99, 0.1);
+        // }
+
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        .nav-label {
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            font-weight: 400;
+            color: #676b5f;
+        }
+
+        .nav-item.active .nav-label {
+            color: #28a263;
+            font-weight: 500;
+            font-size: 18px;
+        }
+
+        .nav-item.active {
+            position: relative;
+            background-color: #F3F3F1;
+        }
+
+        .nav-item.active::before {
+            content: "";
+            width: 30px;
+            height: 30px;
+            background-color: white;
+            position: absolute;
+            right: 0;
+            bottom: 100%;
+            box-shadow: 0 18px 0 #F3F3F1;
+            border-bottom-right-radius: 18px;
+        }
+
+        .nav-item.active::after {
+            content: "";
+            width: 30px;
+            height: 30px;
+            background-color: white;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            box-shadow: 0 -18px 0 #F3F3F1;
+            border-top-right-radius: 18px;
+        }
+    }
+
+}

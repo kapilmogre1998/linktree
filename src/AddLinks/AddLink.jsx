@@ -1,18 +1,25 @@
 import React, { useState } from 'react';
 import './AddLink.scss';
+import Modal from '../Common/Modal/Modal';
+import Sidebar from '../Common/Sidebar/Sidebar';
+import MobilePreview from '../Common/MobilePreview/MobilePreview';
 
 const AddLink = () => {
   const [bio, setBio] = useState('');
   const [backgroundColor, setBackgroundColor] = useState('#342b26');
   const [colorInput, setColorInput] = useState('#000000');
+  const [activeTab, setActiveTab] = useState('link');
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [profileImage, setProfileImage] = useState('https://dashboard.codeparrot.ai/api/image/Z7sOYjHWD6EJo6xw/group-10.png');
 
-  const navItems = [
-    { id: 1, label: 'Links', icon: 'https://dashboard.codeparrot.ai/api/image/Z7sOYjHWD6EJo6xw/frame.png', active: true },
-    { id: 2, label: 'Appearance', icon: 'https://dashboard.codeparrot.ai/api/image/Z7sOYjHWD6EJo6xw/vector.png' },
-    { id: 3, label: 'Analytics', icon: 'https://dashboard.codeparrot.ai/api/image/Z7sOYjHWD6EJo6xw/combined.png' },
-    { id: 4, label: 'Settings', icon: 'https://dashboard.codeparrot.ai/api/image/Z7sOYjHWD6EJo6xw/combined-2.png' }
-  ];
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   const colorOptions = [
     { color: '#342b26', id: 'color1' },
@@ -41,76 +48,18 @@ const AddLink = () => {
 
   return (
     <div className="add-link-container">
-      <div className="sidebar">
-        <div className="logo-section">
-          <img src="https://dashboard.codeparrot.ai/api/image/Z7sOYjHWD6EJo6xw/group-1.png" alt="Spark Logo" className="logo-img" />
-          <h1 className="logo-text">Spark</h1>
-        </div>
-
-        <nav className="nav-section">
-          {navItems.map(item => (
-            <div key={item.id} className={`nav-item ${item.active ? 'active' : ''}`}>
-              <img src={item.icon} alt={item.label} className="nav-icon" />
-              <span className="nav-label">{item.label}</span>
-            </div>
-          ))}
-        </nav>
-
-        <div className="profile-section">
-          <div className="profile-info">
-            <img src="https://dashboard.codeparrot.ai/api/image/Z7sOYjHWD6EJo6xw/frame-2.png" alt="Profile" className="profile-img" />
-            <span className="profile-name">Jenny Wilson</span>
-          </div>
-        </div>
-      </div>
+      <Sidebar />
 
       <div className="main-content">
         <header className="header">
           <div className="header-content">
-            <h1 className="greeting">Hi, Jenny Wilson!</h1>
+            <h1 className="greeting"><span className='text-bold' >Hi</span>, Jenny Wilson!</h1>
             <p className="notification">Congratulations. You got a great response today.</p>
           </div>
         </header>
 
         <div className='left-right-container' >
-          <div className="mobile-preview">
-            <div className="mobile-frame">
-              <div className="mobile-profile-section">
-                <div className="mobile-profile-image">
-                  <img src="https://dashboard.codeparrot.ai/api/image/Z7sOYjHWD6EJo6xw/frame-11.png" alt="Profile" />
-                </div>
-                <div className="mobile-username">@opopo_08</div>
-              </div>
-              <div className="button-group">
-                <div className="toggle-button">
-                  <div className="active-button">link</div>
-                  <div className="inactive-button">Shop</div>
-                </div>
-              </div>
-              <div className="links-section">
-                <div className="link-item">
-                  <div className="link-thumbnail">
-                    <img src="https://dashboard.codeparrot.ai/api/image/Z7sOYjHWD6EJo6xw/add.png" alt="YouTube" />
-                  </div>
-                  <span>Latest YouTube Video</span>
-                </div>
-                <div className="link-item">
-                  <div className="link-thumbnail">
-                    <img src="https://dashboard.codeparrot.ai/api/image/Z7sOYjHWD6EJo6xw/skill-ic.png" alt="Instagram" />
-                  </div>
-                  <span>Latest Instagram reel</span>
-                </div>
-              </div>
-              <button className="connect-button">Get Connected</button>
-              <div className="footer">
-                <div className="spark-logo">
-                  <img src="https://dashboard.codeparrot.ai/api/image/Z7sOYjHWD6EJo6xw/group.png" alt="Spark Logo" />
-                  <span className="spark-text">SPARK</span>
-                  <span className="tm">TM</span>
-                </div>
-              </div>
-            </div>
-          </div>
+          <MobilePreview />
 
           <div className='profile-banner-section' >
             <div className="content-sections">
@@ -142,11 +91,37 @@ const AddLink = () => {
                           onChange={handleBioChange}
                           placeholder="Bio"
                         />
-                        <span className="bio-counter">{bio.length} / 80</span>
+                        {/* <span className="bio-counter">{bio.length} / 80</span> */}
                       </div>
                     </div>
                   </div>
                 </div>
+              </div>
+
+              <div className="frame-container">
+                  <div className="toggle-container">
+                    <div
+                      className={activeTab === 'link' ? "active-toggle" : "inactive-toggle"}
+                      onClick={() => setActiveTab('link')}
+                    >
+                      <img src="https://dashboard.codeparrot.ai/api/image/Z7ymhiOoSyo_4k6O/iconoir.png" alt="link-icon" className="icon" />
+                      <span className={activeTab === 'link' ? "active-text" : "inactive-text"}>Add Link</span>
+                    </div>
+                    <div
+                      className={activeTab === 'shop' ? "active-toggle" : "inactive-toggle"}
+                      onClick={() => setActiveTab('shop')}
+                    >
+                      <img src="https://dashboard.codeparrot.ai/api/image/Z7ymhiOoSyo_4k6O/iconoir-2.png" alt="shop-icon" className="icon" />
+                      <span className={activeTab === 'shop' ? "active-text" : "inactive-text"}>Add Shop</span>
+                    </div>
+                  </div>
+
+                  <button className="add-button" onClick={openModal}>
+                    <img src="https://dashboard.codeparrot.ai/api/image/Z7ymhiOoSyo_4k6O/mingcute.png" alt="add-icon" className="add-icon" />
+                    <span>Add</span>
+                  </button>
+
+                <Modal isOpen={isModalOpen} onClose={closeModal} activeTab={activeTab} />
               </div>
 
               <div className="banner-section">
