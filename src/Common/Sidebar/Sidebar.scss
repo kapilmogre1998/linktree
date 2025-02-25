@@ -1,7 +1,7 @@
-@import '../../global.scss';
+@use '../../global.scss';
 
 .sidebar-container {
-    width: $side-bar-width;
+    width: global.$side-bar-width;
     min-height: 100vh;
     background-color: #fff;
     display: flex;
@@ -101,6 +101,11 @@
             box-shadow: 0 -18px 0 #F3F3F1;
             border-top-right-radius: 18px;
         }
-    }
+    }    
+}
 
+@media screen and (max-width: 800px) {
+    .sidebar-container {
+        display: none;
+    }
 }
