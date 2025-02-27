@@ -1,0 +1,820 @@
+@use '../global.scss';
+
+// Main Layout Styles
+.appearance-container {
+    
+    $primary-color: #28a263;
+    $background-color: #000000;
+    $input-background: #eff0ec;
+    $button-background: #e0e2d9;
+    $button-text: #a8aaa2;
+    $footer-text: #676b5f;
+    $image-background: #254f1a;
+    
+    background-color: #f5f5f5;
+
+    .appearance-content {
+        $primary-color: #28a263;
+        $background-color: #000000;
+        $input-background: #eff0ec;
+        $button-background: #e0e2d9;
+        $button-text: #a8aaa2;
+        $footer-text: #676b5f;
+        $image-background: #254f1a;
+
+        margin-left: global.$side-bar-width;
+
+        .layout-container {
+            display: flex;
+            flex-direction: column;
+            // width: 640px;
+            padding: 24px;
+            background-color: white;
+            border-radius: 24px;
+            font-family: 'Poppins', sans-serif;
+
+            button {
+                font-family: 'Poppins', sans-serif;
+                font-weight: 400;
+                font-size: 14px;
+                line-height: 21px;
+                text-align: center;
+            }
+
+            .button-section {
+                display: flex;
+                flex-direction: column;
+                gap: 24px;
+                flex-grow: 1;
+            }
+
+            /* Fill Buttons */
+            .fill-buttons-container {
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
+                padding-bottom: 6px;
+                min-width: 592px;
+                width: 100%;
+                box-sizing: border-box;
+
+                .fill-label {
+                    font-weight: 400;
+                    font-size: 14px;
+                    line-height: 21px;
+                    color: $button-text;
+                }
+
+                .buttons-row {
+                    display: flex;
+                    gap: 16px;
+                    height: 36px;
+
+                    .fill-button {
+                        flex: 1;
+                        height: 100%;
+                        border: none;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+
+                        &:hover {
+                            opacity: 0.9;
+                        }
+
+                        &:active {
+                            transform: scale(0.98);
+                        }
+
+                        &.primary {
+                            background-color: $background-color;
+                            background-size: cover;
+                        }
+
+                        &.secondary {
+                            background-color: $background-color;
+                            border-radius: 8px;
+                            color: #ffffff;
+                        }
+
+                        &.tertiary {
+                            background-color: $background-color;
+                            border-radius: 24px;
+                            color: #ffffff;
+                        }
+                    }
+                }
+            }
+
+            /* Outline Buttons */
+            .outline-buttons-container {
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
+                padding-bottom: 6px;
+                min-width: 320px;
+                width: 100%;
+                max-width: 592px;
+
+                .outline-title {
+                    font-weight: 400;
+                    font-size: 14px;
+                    line-height: 21px;
+                    color: $button-text;
+                    margin: 0;
+                }
+
+                .buttons-row {
+                    display: flex;
+                    gap: 16px;
+                    width: 100%;
+                }
+
+                .outline-button {
+                    flex: 1;
+                    height: 36px;
+                    padding: 8px 16px;
+                    background: transparent;
+                    color: $button-text;
+                    cursor: pointer;
+                    transition: all 0.2s ease-in-out;
+
+                    &:hover {
+                        background: rgba(168, 170, 162, 0.1);
+                    }
+
+                    &:active {
+                        background: rgba(168, 170, 162, 0.2);
+                    }
+
+                    &.square {
+                        border-radius: 0;
+                    }
+
+                    &.rounded {
+                        border-radius: 8px;
+                    }
+
+                    &.pill {
+                        border-radius: 18px;
+                    }
+                }
+            }
+
+            /* Hard Shadow Buttons */
+            .hard-shadow-container {
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
+                padding-bottom: 6px;
+                min-width: 320px;
+                width: 100%;
+                max-width: 592px;
+
+                .hard-shadow-title {
+                    font-weight: 400;
+                    font-size: 14px;
+                    line-height: 21px;
+                    color: $button-text;
+                    margin: 0;
+                }
+
+                .hard-shadow-buttons {
+                    display: flex;
+                    gap: 16px;
+                    width: 100%;
+                    height: 36px;
+
+                    .hard-shadow-btn {
+                        flex: 1;
+                        height: 100%;
+                        background-color: white;
+                        box-shadow: 4px 4px 0px $background-color;
+                        border-radius: 4px;
+                        cursor: pointer;
+                        transition: all 0.2s ease-in-out;
+
+                        &:hover {
+                            transform: translate(-2px, -2px);
+                            box-shadow: 6px 6px 0px $background-color;
+                        }
+
+                        &:active {
+                            transform: translate(2px, 2px);
+                            box-shadow: 2px 2px 0px $background-color;
+                        }
+
+                        &.primary {
+                            border-radius: 0px;
+                        }
+
+                        &.secondary {
+                            border-radius: 8px;
+                        }
+
+                        &.tertiary {
+                            border-radius: 24px;
+                        }
+                    }
+                }
+            }
+
+            /* Soft Shadow Buttons */
+            .soft-shadow-container {
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
+                padding-bottom: 6px;
+                min-width: 592px;
+                width: 100%;
+
+                .soft-shadow-title {
+                    font-weight: 400;
+                    font-size: 14px;
+                    line-height: 21px;
+                    color: $footer-text;
+                    margin: 0;
+                }
+
+                .soft-shadow-buttons {
+                    display: flex;
+                    gap: 16px;
+                    width: 100%;
+                    height: 36px;
+
+                    .soft-shadow-button {
+                        flex: 1;
+                        height: 100%;
+                        border: none;
+                        background-color: white;
+                        color: $button-text;
+                        box-shadow: 0 4px 3px rgb(0 0 0 / 28%);
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+
+                        &:hover {
+                            transform: translateY(-2px);
+                            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+                        }
+
+                        &:active {
+                            transform: translateY(1px);
+                            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                        }
+
+                        &.primary {
+                            border-radius: 0px;
+                        }
+
+                        &.secondary {
+                            border-radius: 8px;
+                        }
+
+                        &.tertiary {
+                            border-radius: 24px;
+                        }
+                    }
+                }
+            }
+
+            /* Special Buttons */
+            .special-buttons {
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
+                min-width: 592px;
+                width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
+
+                .special-title {
+                    font-size: 14px;
+                    font-weight: 400;
+                    line-height: 21px;
+                    color: $button-text;
+                }
+
+                .button-container {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 24px;
+                }
+
+                .button-row {
+                    display: flex;
+                    justify-content: space-between;
+                    gap: 24px;
+                    flex-wrap: wrap;
+                }
+
+                .special-button {
+                    width: 181px;
+                    height: 36px;
+                    // border-radius: 24px;
+                    background: $background-color;
+                    border: none;
+                    position: relative;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+
+                    &:hover {
+                        opacity: 0.8;
+                    }
+
+                    .hard-curve-top {
+                        position: absolute;
+                        top: -4px;
+                        z-index: 111;
+                        left: 0px;
+                    }
+
+                    .hard-curve-btm {
+                        position: absolute;
+                        bottom: -4px;
+                        z-index: 111;
+                        left: 0px;
+                    }
+
+                    &.wave-middle {
+                        .wave-curve-top {
+                            position: absolute;
+                            top: -3px;
+                            z-index: 111;
+                            left: 0px;
+                        }
+
+                        .wave-curve-btm {
+                            position: absolute;
+                            bottom: -4px;
+                            z-index: 111;
+                            left: 0px;
+                        }
+                    }
+
+                    &.rectangle-1 {
+                        width: 182px;
+                        height: 28px;
+                        border: 1px solid black;
+                        background-color: transparent;
+                        position: relative;
+                        z-index: 111;
+                    }
+
+                    &.rectangle-2 {
+                        border: 1px solid black;
+                        background-color: transparent;
+                        width: 174px;
+                        position: absolute;
+                        top: -6px;
+                        left: 3px;
+                    }
+
+                    &.solid {
+                        border-radius: 24px;
+                    }
+
+                    &.box-corner {
+                        border: 1px solid black;
+                        background: white;
+                        position: relative;
+                    }
+
+                    .corner-button {
+                        position: absolute;
+                        background-color: white;
+                        width: 10px;
+                        height: 10px;
+                    }
+
+                    .top-left {
+                        top: -4px;
+                        left: -4px;
+                    }
+
+                    .top-right {
+                        top: -4px;
+                        right: -4px;
+                    }
+
+                    .bottom-left {
+                        bottom: -4px;
+                        left: -4px;
+                    }
+
+                    .bottom-right {
+                        bottom: -4px;
+                        right: -4px;
+                    }
+
+                    &.dotted {
+                        border-radius: 24px 0px 0px 24px;
+                    }
+                }
+            }
+
+            /* Button Color Selector */
+            .button-color-container {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+                min-width: 300px;
+                max-width: 100%;
+                padding: 16px;
+
+                .button-color-title {
+                    font-weight: 600;
+                    font-size: 14px;
+                    line-height: 21px;
+                    color: $footer-text;
+                }
+
+                .button-color-frame {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    height: 52px;
+
+                    .color-preview {
+                        width: 48px;
+                        height: 48px;
+                        background: $background-color;
+                        border: 1px solid $input-background;
+                        border-radius: 8px;
+                    }
+
+                    .color-input-container {
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        padding: 2px;
+                        gap: 2px;
+                        border-radius: 10px;
+                        background-color: $button-background;
+                        flex-grow: 1;
+
+                        .color-label {
+                            font-weight: 400;
+                            font-size: 14px;
+                            line-height: 21px;
+                            color: $button-text;
+                            padding: 2.28px 14px;
+                        }
+
+                        .color-input {
+                            width: 198px;
+                            height: 48px;
+                            background: $input-background;
+                            border-radius: 8px;
+                            display: flex;
+                            align-items: center;
+                            flex-grow: 1;
+
+                            span {
+                                font-weight: 400;
+                                font-size: 14px;
+                                line-height: 48px;
+                                color: $background-color;
+                                padding-left: 16px;
+                            }
+                        }
+                    }
+                }
+            }
+
+            /* Button Font Color Selector */
+            .button-font-color-container {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+                min-width: 300px;
+                max-width: 100%;
+
+                .title {
+                    font-size: 14px;
+                    font-weight: 600;
+                    line-height: 21px;
+                    color: $footer-text;
+                }
+
+                .content {
+                    display: flex;
+                    flex-direction: row;
+                    gap: 12px;
+                    height: 52px;
+                    align-items: center;
+
+                    .color-preview {
+                        width: 48px;
+                        height: 48px;
+                        background-color: #888888;
+                        border-radius: 8px;
+                        border: 1px solid $input-background;
+                    }
+
+                    .color-selector {
+                        display: flex;
+                        flex-direction: row;
+                        padding: 2px;
+                        gap: 2px;
+                        border-radius: 10px;
+                        background-color: $button-background;
+                        flex-grow: 1;
+
+                        .label {
+                            display: flex;
+                            align-items: center;
+                            font-size: 14px;
+                            font-weight: 400;
+                            line-height: 21px;
+                            color: $button-text;
+                            padding: 2px 13px;
+                        }
+
+                        .color-input {
+                            width: 198px;
+                            height: 48px;
+                            background-color: $input-background;
+                            border-radius: 8px;
+                            display: flex;
+                            align-items: center;
+                            flex-grow: 1;
+
+                            span {
+                                padding-left: 16px;
+                                font-size: 14px;
+                                font-weight: 400;
+                                line-height: 48px;
+                                color: #000000;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .layout-options {
+            width: 646px;
+            padding: 24px;
+            background: #ffffff;
+            border-radius: 24px;
+        }
+
+        .layout-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .layout-options__container {
+            display: flex;
+            justify-content: space-around;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .layout-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .layout-option:hover {
+            transform: scale(1.05);
+        }
+
+        .layout-option__icon-wrapper {
+            width: 142px;
+            height: 128px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 12px;
+            border: 1px solid #000000;
+        }
+
+        .layout-option__icon {
+            max-width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .layout-option__text {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 55.5px;
+            color: #a8aaa2;
+            text-align: center;
+        }
+
+        .font-color-selector {
+            // width: 640px;
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 24px;
+            font-family: 'Poppins', sans-serif;
+
+
+            .section {
+                margin-bottom: 24px;
+            }
+
+            .section-title {
+                font-size: 14px;
+                font-weight: 600;
+                color: #212529;
+                line-height: 21px;
+                margin: 0 0 12px 0;
+            }
+
+            /* Font Selector Styles */
+            .font-selector {
+                background: #fff;
+                border: 1px solid #e0e2d9;
+                border-radius: 8px;
+                padding: 17px;
+            }
+
+            .font-preview {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+            }
+
+            .font-sample {
+                width: 48px;
+                height: 48px;
+                background: #eff0ec;
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .font-sample span {
+                font-family: 'DM Sans', sans-serif;
+                font-size: 20px;
+                font-weight: 500;
+                color: #212529;
+                line-height: 24px;
+            }
+
+            .font-name {
+                font-family: 'DM Sans', sans-serif;
+                font-size: 15px;
+                font-weight: 700;
+                color: #212529;
+                line-height: 24px;
+            }
+
+            /* Color Selector Styles */
+            .color-selector {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .color-preview {
+                width: 48px;
+                height: 48px;
+                border: 0.8px solid rgba(0, 0, 0, 0.18);
+                border-radius: 8px;
+            }
+
+            .color-value {
+                display: flex;
+                flex-direction: column;
+                gap: 2px;
+            }
+
+            .color-label {
+                font-size: 14px;
+                font-weight: 400;
+                color: #676b5f;
+                line-height: 21px;
+                // margin-left: 15px;
+            }
+
+            .color-input {
+                background: #eff0ec;
+                border-radius: 8px;
+                // padding: 8px 16px;
+                width: 198px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                padding: 3px;
+                padding-left: 12px;
+            }
+
+            .color-input {
+                .color-hex-code {
+                    font-size: 14px;
+                    font-weight: 400;
+                    color: #000;
+                    line-height: 24px;
+                }
+            }
+
+            /* Hover States */
+            .font-selector:hover {
+                border-color: #c0c2b9;
+            }
+
+            .color-preview:hover {
+                border-color: rgba(0, 0, 0, 0.3);
+            }
+
+            .color-input:hover {
+                background: #eff0ee;
+            }
+
+            /* Active/Focus States */
+            .font-selector:active,
+            .font-selector:focus-within {
+                border-color: #a0a29a;
+            }
+
+            .color-input:active,
+            .color-input:focus-within {
+                background: #e8e9e7;
+            }
+        }
+
+        .color-grid {
+            $primary-color: #28a263;
+            $background-color: #000000;
+            $input-background: #eff0ec;
+            $button-background: #e0e2d9;
+            $button-text: #a8aaa2;
+            $footer-text: #676b5f;
+            $image-background: #254f1a;
+
+            padding: 24px;
+            background: white;
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            // width: 640px;
+
+            .grid-row {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                grid-template-rows: 1fr 1fr;
+                gap: 16px;
+            }
+
+            .card-container {
+                display: flex;
+                flex-direction: column;
+                gap: 7px;
+                padding: 3px;
+                width: 136px;
+            }
+
+            .card {
+                border: 1px solid $button-background;
+                border-radius: 8px;
+                height: 200px;
+                width: 128px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 1px;
+
+                &:hover {
+                    transform: scale(1.02);
+                    transition: transform 0.2s ease;
+                    cursor: pointer;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                }
+            }
+
+            .stripes {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                width: 70%;
+            }
+
+            .stripe {
+                height: 12px;
+                border-radius: 6px;
+                // background: currentColor;
+            }
+
+            .label {
+                font-family: 'Poppins', sans-serif;
+                font-size: 14px;
+                font-weight: 400;
+                color: $footer-text;
+                text-align: center;
+                line-height: 21px;
+                margin-top: 8px;
+            }
+        }
+    }
+}

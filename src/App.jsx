@@ -6,6 +6,7 @@ import LoginPage from './LoginPage/LoginPage'
 import SignupPage from './SignupPage/SignupPage'
 import OnboardingPage from './OnBoardPage/OnBoardPage'
 import AddLink from './AddLinks/AddLink'
+import Appearance from './Appearance/Appearance'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -18,6 +19,7 @@ function App() {
         <Route path='/signup' element={<SignupPage />} />
         <Route path='/on-board' element={<OnboardingPage />} />
         <Route path='/add-link' element={<AddLink />} />
+        <Route path='/appearance' element={<Appearance />} />
       </Routes>
     </BrowserRouter>
     // <>
