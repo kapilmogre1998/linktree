@@ -24,10 +24,13 @@ import socialmediaicons from '../assets/socialmediaicons.png';
 import customerStory from '../assets/customer-story.png';
 
 import './HomePage.scss';
+import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
   const frameImages = [frame5, frame4, frame3, frame2, frame1];
   const shareImages = [share1, share2, share3];
+  const navigate = useNavigate();
+
 
   const testimonials = [
     {
@@ -130,7 +133,7 @@ const HomePage = () => {
             <span className="logo-trademark">TM</span>
             <span className="logo-separator">| Marketplace</span>
           </div>
-          <button className="signup-button">Sign up free</button>
+          <button className="signup-button" onClick={() => navigate('/signup')} >Sign up free</button>
         </header>
       </div>
 

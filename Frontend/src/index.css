@@ -4,3 +4,9 @@
   box-sizing: border-box;
   font-family: sans-serif;
 }
+
+.error-msg{
+  color: red;
+  font-size: 14px;
+  height: 15px;
+}

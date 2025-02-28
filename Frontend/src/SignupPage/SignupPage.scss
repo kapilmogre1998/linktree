@@ -119,8 +119,7 @@
     .form-group {
         display: flex;
         flex-direction: column;
-        gap: 2.82px;
-        margin-bottom: 14.1px;
+        margin-bottom: 6px;
     }
 
     .form-group label {
@@ -143,11 +142,15 @@
         border-color: #28a263;
     }
 
+    .agree-terms-conditions{
+        margin-bottom: 20px;
+    }
+
     .checkbox-group {
         display: flex;
         align-items: flex-start;
         gap: 5.64px;
-        margin: 20px 0;
+        margin: 20px 0 0;
         padding: 5.64px;
     }
 
