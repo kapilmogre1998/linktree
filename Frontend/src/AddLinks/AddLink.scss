@@ -34,7 +34,6 @@
   /* Header */
   .header {
     width: 100%;
-    min-width: 350px;
     padding: 20px;
     background: transparent;
   }
@@ -75,30 +74,19 @@
   }
 
   /* Profile Section */
-  .profile-section {
-    display: flex;
-    justify-content: center;
-    font-weight: bold;
-  }
+  // .profile-section {
+  //   display: flex;
+  //   justify-content: center;
+  //   font-weight: bold;
+  // }
 
   .profile-section-container {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    min-width: 320px;
-    max-width: 800px;
+    // min-width: 320px;
+    // max-width: 800px;
     width: 100%;
-  }
-
-  .profile-info {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    display: flex;
-    border: 1px solid black;
-    padding: 12px 28px;
-    border-radius: 30px;
-    width: fit-content;
   }
 
   .profile-heading {
@@ -177,8 +165,8 @@
   }
 
   .frame-container {
-    min-width: 320px;
-    max-width: 800px;
+    // min-width: 320px;
+    // max-width: 800px;
     background: #fff;
     border-radius: 21px;
     padding: 24px;
@@ -278,7 +266,7 @@
   /* Banner Section */
   .banner-section {
     width: 100%;
-    max-width: 800px;
+    // max-width: 800px;
     border-radius: 25px;
     box-sizing: border-box;
 
@@ -293,6 +281,12 @@
     font-weight: 600;
     margin-bottom: 20px;
     color: #000000;
+  }
+
+  .banner-box{
+    background: white;
+    padding: 20px;
+    border-radius: 20px
   }
 
   .banner-preview {
@@ -399,7 +393,7 @@
     border-radius: 9px;
     padding: 12px 15px;
     flex-grow: 1;
-    max-width: 231px;
+    // max-width: 231px;
   }
 
   .color-input {
@@ -802,10 +796,15 @@
     .main-content{
       margin-left: 0;
       background-color: white;
+      padding: 18px;
 
       .header{
         display: none;
       }
+    }
+
+    .input-group{
+      padding: 10px 0px 10px 0px;
     }
 
     .left-right-container{
@@ -815,11 +814,29 @@
       }
     }
 
+    .frame-container{
+      padding: 24px 0px;
+      margin: 10px 0px;
+    }
+
     .bio-counter{
       font-size: 12px;
       display: flex;
       justify-content: end;
       opacity: 0.8;
+    }
+
+    .profile-container{
+      padding: 0px;
+    }
+
+    .banner-box{
+      padding: 0px 0px 10px;
+    }
+
+    .save-btn-container{
+      justify-content: center;
+      padding: 30px 0px;
     }
   }
 }

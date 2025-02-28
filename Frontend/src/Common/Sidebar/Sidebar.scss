@@ -102,6 +102,23 @@
             border-top-right-radius: 18px;
         }
     }    
+
+    .profile-section {
+        display: flex;
+        justify-content: center;
+        font-weight: bold;
+      }
+
+      .profile-info {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        display: flex;
+        border: 1px solid black;
+        padding: 12px 28px;
+        border-radius: 30px;
+        width: fit-content;
+      }
 }
 
 @media screen and (max-width: 800px) {

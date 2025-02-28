@@ -233,7 +233,7 @@ const AddLink = () => {
 
               <div className="banner-section">
                 <h2 className="banner-title">Banner</h2>
-                <div style={{ background: 'white', padding: '20px', borderRadius: '20px' }} >
+                <div className='banner-box' >
                   <div className="banner-preview" style={{ backgroundColor }}>
                     <div className="banner-profile-content">
                       <img src={profileImage} alt="Profile" className="banner-profile-image" />
