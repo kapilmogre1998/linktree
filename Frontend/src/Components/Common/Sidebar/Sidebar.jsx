@@ -1,14 +1,17 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
+
 import './Sidebar.scss'
 
 const navItems = [
-    { id: 1, label: 'Links', icon: 'https://dashboard.codeparrot.ai/api/image/Z7sOYjHWD6EJo6xw/frame.png', active: true },
-    { id: 2, label: 'Appearance', icon: 'https://dashboard.codeparrot.ai/api/image/Z7sOYjHWD6EJo6xw/vector.png' },
+    { id: 1, label: 'Links', icon: 'https://dashboard.codeparrot.ai/api/image/Z7sOYjHWD6EJo6xw/frame.png', route: '/add-link' },
+    { id: 2, label: 'Appearance', icon: 'https://dashboard.codeparrot.ai/api/image/Z7sOYjHWD6EJo6xw/vector.png', route: '/appearance' },
     { id: 3, label: 'Analytics', icon: 'https://dashboard.codeparrot.ai/api/image/Z7sOYjHWD6EJo6xw/combined.png' },
     { id: 4, label: 'Settings', icon: 'https://dashboard.codeparrot.ai/api/image/Z7sOYjHWD6EJo6xw/combined-2.png' }
 ];
 
-const Sidebar = () => {
+const Sidebar = ({ activeIndex = 1 }) => {
+    const navigate = useNavigate();
 
     return (
         <div className="sidebar-container">
@@ -20,7 +23,7 @@ const Sidebar = () => {
 
                 <nav className="nav-section">
                     {navItems.map(item => (
-                        <div key={item.id} className={`nav-item ${item.active ? 'active' : ''}`}>
+                        <div key={item.id} className={`nav-item ${item.id == activeIndex ? 'active' : ''}`} onClick={() => navigate(item.route)} >
                             <img src={item.icon} alt={item.label} className="nav-icon" />
                             <span className="nav-label">{item.label}</span>
                         </div>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import bgImg from '../assets/login-img.png';
-import sparkIcon from '../assets/spark-icon.png';
+import bgImg from '../../assets/login-img.png';
+import sparkIcon from '../../assets/spark-icon.png';
 import './OnBoardPage.scss';
 
 const OnboardingPage = () => {

@@ -9,7 +9,6 @@
     border-radius: 50px;
     background-color: #000000;
   
-  
   .mobile-frame {
     width: 328px;
     background: #ffffff;
@@ -24,7 +23,7 @@
 
   .mobile-profile-section {
     height: 237px;
-    background: #254f1a;
+    // background: #342b26;
     border-radius: 40px;
     display: flex;
     flex-direction: column;
@@ -33,15 +32,25 @@
     padding: 20px;
   }
   
-  .mobile-profile-image {
+  .mobile-profile-image img,.no-preview-img {
     width: 96px;
-    height: 94px;
-    margin-bottom: 20px;
+    height: 96px;
+    object-fit: cover;
+    background-color: #254f1a;
+    border-radius: 50%;
+  }
+
+  .no-preview-img{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000000c4;
+    border: 1px solid #000000c4;
   }
   
   .mobile-username {
     color: #ffffff;
-    font-family: 'Poppins', sans-serif;
+    // font-family: 'Poppins', sans-serif;
     font-size: 24px;
     font-weight: 700;
     text-align: center;
@@ -60,24 +69,30 @@
     padding: 3px;
     width: 252px;
     height: 43px;
-    border: 1px solid #bfbfbf;
+    // border: 1px solid #bfbfbf;
   }
   
-  .active-button {
-    background: #28a263;
+  .btn-container {
+    background: #e0e2d9;
     color: #ffffff;
     border-radius: 100px;
     padding: 7px 49px;
-    font-family: 'Inter', sans-serif;
+    // font-family: 'Inter', sans-serif;
     font-size: 16px;
     font-weight: 500;
     width: 122px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &.active{
+      background: #28a263;
+    }
   }
   
   .inactive-button {
     color: #a8aaa2;
     padding: 7px 49px;
-    font-family: 'Inter', sans-serif;
+    // font-family: 'Inter', sans-serif;
     font-size: 16px;
     font-weight: 500;
     width: 122px;
@@ -93,10 +108,11 @@
   .link-item {
     display: flex;
     align-items: center;
-    background: #e0e2d9;
+    // background: #e0e2d9;
     border-radius: 100px;
     padding: 8px;
-    height: 48px;
+    gap: 8px;
+    // height: 48px;
   }
   
   .link-thumbnail {
@@ -107,7 +123,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 12px;
+    gap: 8px;
+    // margin-right: 12px;
   }
   
   .link-thumbnail img {
@@ -117,7 +134,7 @@
   }
   
   .link-item span {
-    font-family: 'Poppins', sans-serif;
+    // font-family: 'Poppins', sans-serif;
     font-size: 16px;
     font-weight: 500;
     color: #1e1e20;
@@ -131,7 +148,7 @@
     padding: 12px;
     width: 178px;
     margin:  auto;
-    font-family: 'Poppins', sans-serif;
+    // font-family: 'Poppins', sans-serif;
     font-size: 13px;
     font-weight: 500;
     cursor: pointer;
@@ -168,7 +185,7 @@
   }
   
   .spark-text {
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    // font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 18px;
     font-weight: 800;
     color: #676b5f;

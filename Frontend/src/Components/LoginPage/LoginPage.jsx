@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
-import sparkIcon from '../assets/spark-icon.png';
-import loginImg from '../assets/login-img.png';
+import sparkIcon from '../../assets/spark-icon.png';
+import loginImg from '../../assets/login-img.png';
 import './LoginPage.scss';
 
 const LoginPage = () => {

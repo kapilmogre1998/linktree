@@ -1,4 +1,4 @@
-@use '../global.scss';
+@use '../../global.scss';
 
 /* Layout */
 .add-link-container {
@@ -125,6 +125,13 @@
     object-fit: cover;
     background-color: #254f1a;
     border-radius: 50%;
+
+    &.no-img{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #000000c4;
+    }
   }
 
   .profile-buttons {
@@ -133,6 +140,38 @@
     gap: 8px;
     flex-grow: 1;
   }
+
+  .file-upload-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    // width: 480px;
+    height: fit-content;
+  }
+  
+  .upload-button {
+    background-color: #28a263;
+    color: #fff;
+    border: none;
+    border-radius: 64px;
+    padding: 13px;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 25px;
+    letter-spacing: -0.32px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.2s ease;
+    width: 100%;
+  }
+  
+  .upload-button:hover {
+    background-color: #229357;
+  }
+  
+  .upload-button:active {
+    background-color: #1d7d4a;
+  }  
 
   .pick-image-button {
     background: #28a263;
@@ -152,7 +191,7 @@
   .remove-button {
     background: white;
     border-radius: 64px;
-    padding: 12px;
+    padding: 11px;
     color: #a8aaa2;
     font-family: Inter, sans-serif;
     font-size: 16px;
@@ -249,6 +288,53 @@
     background: #239358;
   }
 
+  .links-container{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .links-heading{
+    background: #F3F3F1;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    gap: 0.25rem;
+  }
+
+  .link-content{
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 0.5rem;
+    cursor: pointer;
+
+    .title{
+      color: #575757;
+    }
+
+    .url{
+      color: #767676;
+    }
+  }
+
+  .signal-count{
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: #9EA099;
+    margin-top: 6px;
+  }
+  
+  .toggle-delete{
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    align-items: center;
+    justify-content: space-around;
+    cursor: pointer;
+  }
+
   .add-icon {
     width: 24px;
     height: 24px;
@@ -297,7 +383,6 @@
     justify-content: center;
     align-items: center;
     margin-bottom: 20px;
-    background-color: #000000;
   }
 
   .banner-profile-content {
@@ -313,6 +398,13 @@
     border-radius: 50%;
     margin-bottom: 15px;
     background-color: #254f1a;
+
+    &.no-img{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #000000c4;
+    }
   }
 
   .banner-username {
@@ -326,7 +418,6 @@
   .handle-container {
     display: flex;
     align-items: center;
-    gap: 8px;
   }
 
   .frame-icon {
@@ -363,7 +454,7 @@
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    border: none;
+    // border: none;
     cursor: pointer;
     transition: transform 0.2s;
   }
@@ -373,7 +464,7 @@
   }
 
   .color-button.active {
-    outline: 2px solid #000000;
+    // outline: 2px solid #000000;
   }
 
   .color-input-container {
@@ -423,7 +514,6 @@
     display: flex;
     justify-content: end;
     padding: 20px 0px;
-    padding-right: 50px;
   }
 
   /* Save Button */
@@ -490,7 +580,7 @@
     outline: none;
     background-color: #eff0ec;
     border-radius: 8px;
-    padding: 0px 8px;
+    padding: 0px 12px;
   }
 
   .bio-input {
@@ -508,6 +598,13 @@
     resize: none;
     box-sizing: border-box;
     margin-bottom: 8px;
+  }
+
+  .bio-counter{
+    font-size: 12px;
+    display: flex;
+    justify-content: end;
+    opacity: 0.8;
   }
 
   .addlink-container {
@@ -714,6 +811,10 @@
         background: $button-background;
         cursor: pointer;
       }
+
+      &.active{
+        border: 1px solid grey;
+      }
     }
 
     .app-icon {
@@ -819,13 +920,6 @@
       margin: 10px 0px;
     }
 
-    .bio-counter{
-      font-size: 12px;
-      display: flex;
-      justify-content: end;
-      opacity: 0.8;
-    }
-
     .profile-container{
       padding: 0px;
     }
@@ -837,6 +931,10 @@
     .save-btn-container{
       justify-content: center;
       padding: 30px 0px;
+    }
+
+    .upload-button{
+      padding: 12px;
     }
   }
 }

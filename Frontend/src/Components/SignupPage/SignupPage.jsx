@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import sparkIcon from '../assets/spark-icon.png';
-import loginImg from '../assets/login-img.png';
-import './SignupPage.scss';
+import sparkIcon from '../../assets/spark-icon.png';
+import loginImg from '../../assets/login-img.png';
 import { signupAPI } from './api';
 import { useNavigate } from 'react-router-dom';
+import './SignupPage.scss';
 
 const SignupPage = () => {
     const [formData, setFormData] = useState({

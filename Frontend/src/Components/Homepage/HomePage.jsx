@@ -1,30 +1,30 @@
 // HomePage.jsx
 import React from 'react';
-import analystics from '../assets/analytics.webp';
-import frame1 from '../assets/frame1.png';
-import frame2 from '../assets/frame2.png';
-import frame3 from '../assets/frame3.png';
-import frame4 from '../assets/frame4.png';
-import frame5 from '../assets/frame5.png';
-import share1 from '../assets/share1.webp';
-import share2 from '../assets/share2.webp';
-import share3 from '../assets/share3.webp';
-import appicon1 from '../assets/app1.png';
-import appicon2 from '../assets/app2.png';
-import appicon3 from '../assets/app3.png';
-import appicon4 from '../assets/app4.png';
-import appicon5 from '../assets/app5.png';
-import appicon6 from '../assets/app6.png';
-import appicon7 from '../assets/app7.png';
-import appicon8 from '../assets/app8.png';
-import appicon9 from '../assets/app9.png';
-import sparkicon from '../assets/spark-icon.png'
-import socialmediaicons from '../assets/socialmediaicons.png';
+import analystics from '../../assets/analytics.webp';
+import frame1 from '../../assets/frame1.png';
+import frame2 from '../../assets/frame2.png';
+import frame3 from '../../assets/frame3.png';
+import frame4 from '../../assets/frame4.png';
+import frame5 from '../../assets/frame5.png';
+import share1 from '../../assets/share1.webp';
+import share2 from '../../assets/share2.webp';
+import share3 from '../../assets/share3.webp';
+import appicon1 from '../../assets/app1.png';
+import appicon2 from '../../assets/app2.png';
+import appicon3 from '../../assets/app3.png';
+import appicon4 from '../../assets/app4.png';
+import appicon5 from '../../assets/app5.png';
+import appicon6 from '../../assets/app6.png';
+import appicon7 from '../../assets/app7.png';
+import appicon8 from '../../assets/app8.png';
+import appicon9 from '../../assets/app9.png';
+import sparkicon from '../../assets/spark-icon.png'
+import socialmediaicons from '../../assets/socialmediaicons.png';
+import { useNavigate } from 'react-router-dom';
+import customerStory from '../../assets/customer-story.png';
 
-import customerStory from '../assets/customer-story.png';
 
 import './HomePage.scss';
-import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
   const frameImages = [frame5, frame4, frame3, frame2, frame1];

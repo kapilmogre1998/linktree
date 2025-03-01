@@ -1,4 +1,4 @@
-@use '../global.scss';
+@use '../../global.scss';
 
 // Main Layout Styles
 .appearance-container {
@@ -148,10 +148,14 @@
                             color: #ffffff;
                         }
 
-                        &.tertiary {
+                        &.teritary {
                             background-color: $background-color;
                             border-radius: 24px;
                             color: #ffffff;
+                        }
+
+                        &.clr-opacity-8{
+                            opacity: 0.6;
                         }
                     }
                 }
@@ -196,16 +200,20 @@
                         background: rgba(168, 170, 162, 0.2);
                     }
 
-                    &.square {
+                    &.primary {
                         border-radius: 0;
                     }
 
-                    &.rounded {
+                    &.secondary {
                         border-radius: 8px;
                     }
 
-                    &.pill {
+                    &.teritary {
                         border-radius: 18px;
+                    }
+
+                    &.clr-opacity-8{
+                        opacity: 0.4;
                     }
                 }
             }
@@ -259,8 +267,12 @@
                             border-radius: 8px;
                         }
 
-                        &.tertiary {
+                        &.teritary {
                             border-radius: 24px;
+                        }
+
+                        &.clr-opacity-8{
+                            opacity: 0.4;
                         }
                     }
                 }
@@ -317,8 +329,12 @@
                             border-radius: 8px;
                         }
 
-                        &.tertiary {
+                        &.teritary {
                             border-radius: 24px;
+                        }
+
+                        &.clr-opacity-8{
+                            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.574);
                         }
                     }
                 }
@@ -414,7 +430,7 @@
                     &.rectangle-2 {
                         border: 1px solid black;
                         background-color: transparent;
-                        width: 98%;
+                        width: 96%;
                         position: absolute;
                         top: -6px;
                         left: 3px;
@@ -497,7 +513,7 @@
                         display: flex;
                         flex-direction: column;
                         justify-content: center;
-                        padding: 3px;
+                        padding: 6px 3px;
                         padding-left: 12px;
                         flex: 1;
 
@@ -517,6 +533,7 @@
                             display: flex;
                             align-items: center;
                             flex-grow: 1;
+                            text-transform: uppercase;
 
                             // span {
                             //     font-size: 14px;
@@ -525,10 +542,11 @@
                             //     line-height: 24px;
                             // }
                         }
+
                     }
                 }
             }
-
+    
             /* Button Font Color Selector */
             .button-font-color-container {
                 display: flex;
@@ -587,6 +605,15 @@
             }
         }
 
+        .input-color{
+            width: 30%;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 16px;
+        }
+
+
         .layout-options {
             width: 100%;
             padding: 24px;
@@ -599,6 +626,7 @@
             flex-direction: column;
             gap: 1rem;
             align-items: center;
+            cursor: pointer;
         }
 
         .layout-options__container {
@@ -628,6 +656,12 @@
             align-items: center;
             border-radius: 12px;
             border: 1px solid #000000;
+            transition: all 0.3s ease;
+
+            &.active{
+                background-color: #f6f7f5;
+                border: none;
+            }
         }
 
         .layout-option__icon {
@@ -663,6 +697,20 @@
                 color: #212529;
                 line-height: 21px;
                 margin: 0 0 12px 0;
+            }
+
+            .option-selector{
+                width: 100%;
+
+                .select{
+                    border-radius: 4px;
+                    outline: none;
+                    width: 100%;
+                    padding: 10px 12px;
+                    background: white;
+                    // color: #fff;
+                    // text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+                }
             }
 
             /* Font Selector Styles */
@@ -826,6 +874,10 @@
                     transition: transform 0.2s ease;
                     cursor: pointer;
                     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                }
+
+                &.active{
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.431);
                 }
             }
 
