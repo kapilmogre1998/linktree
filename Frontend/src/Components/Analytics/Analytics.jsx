@@ -1,9 +1,13 @@
 import { useState } from 'react';
 import './Analytics.scss';
 import Sidebar from '../Common/Sidebar/Sidebar';
+import { CiCalendar } from "react-icons/ci";
+import { FaAngleDown } from "react-icons/fa6";
 
 const Analytics = () => {
-    // Sample data for charts
+    const userName = JSON.parse(localStorage.getItem('user_data'))?.userName || {};
+    const [hoveredBarIndex, setHoveredBarIndex] = useState(null);
+
     const lineChartData = [1000, 800, 900, 1500, 2800, 2200, 2400];
 
     const barChartData = [
@@ -22,7 +26,6 @@ const Analytics = () => {
         { label: 'Other', value: 110, color: '#D9F2E4', percentage: '11.2%' }
     ];
 
-    const [hoveredBarIndex, setHoveredBarIndex] = useState(null);
 
     // Line chart path generator
     const getLinePath = (data) => {
@@ -64,8 +67,25 @@ const Analytics = () => {
 
     return (
         <div className='analytics-container' >
-            <Sidebar />
+            <Sidebar activeIndex={'3'} />
             <div className="dashboard-container">
+                <header className="header">
+                    <div className="header-content">
+                        <h1 className="greeting"><span className='text-bold' >Hi</span>, {userName}!</h1>
+                        <p className="notification">Congratulations. You got a great response today.</p>
+                    </div>
+                </header>
+
+                <div className='calendar-container' >
+                    <div className='title' >Overview</div>
+                    <div className="date-range-selector" onClick={() => { }}>
+                        <div className="date-range-content">
+                            <CiCalendar style={{ width: '20px', height: '20px' }} />
+                            <span className="date-text">{'Feb 9th to feb 15th'}</span>
+                            <FaAngleDown style={{ width: '14px', height: '14px' }} />
+                        </div>
+                    </div>
+                </div>
                 {/* Header Cards */}
                 <div className="header-cards">
                     <div className="header-cards-container">
@@ -74,10 +94,10 @@ const Analytics = () => {
                                 <h3>Clicks on Links</h3>
                                 <div className="stats">
                                     <div className="number">2,318</div>
-                                    <div className="trend">
+                                    {/* <div className="trend">
                                         <span>+14%</span>
                                         <div className="trend-arrow up"></div>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </div>
@@ -86,10 +106,10 @@ const Analytics = () => {
                                 <h3>Click on Shop</h3>
                                 <div className="stats">
                                     <div className="number">7,265</div>
-                                    <div className="trend">
+                                    {/* <div className="trend">
                                         <span>+24%</span>
                                         <div className="trend-arrow up"></div>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </div>
@@ -98,16 +118,15 @@ const Analytics = () => {
                                 <h3>CTA</h3>
                                 <div className="stats">
                                     <div className="number">156</div>
-                                    <div className="trend">
+                                    {/* <div className="trend">
                                         <span>+42%</span>
                                         <div className="trend-arrow up"></div>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 {/* Charts Container */}
                 <div className="charts-container">
                     {/* Line Chart */}
@@ -121,10 +140,10 @@ const Analytics = () => {
                         <div className="chart-area">
                             <svg width="100%" height="100%" viewBox="0 0 989 307" className="line-chart">
                                 {/* Horizontal grid lines */}
-                                <line x1="0" y1="0" x2="989" y2="0" className="grid-line" />
-                                <line x1="0" y1="76.75" x2="989" y2="76.75" className="grid-line" />
-                                <line x1="0" y1="153.5" x2="989" y2="153.5" className="grid-line" />
-                                <line x1="0" y1="230.25" x2="989" y2="230.25" className="grid-line" />
+                                {/* <line x1="0" y1="0" x2="989" y2="0" className="grid-line" /> */}
+                                {/* <line x1="0" y1="76.75" x2="989" y2="76.75" className="grid-line" /> */}
+                                {/* <line x1="0" y1="153.5" x2="989" y2="153.5" className="grid-line" /> */}
+                                {/* <line x1="0" y1="230.25" x2="989" y2="230.25" className="grid-line" /> */}
 
                                 {/* Main chart line */}
                                 <path
@@ -158,7 +177,7 @@ const Analytics = () => {
                                     <div className="y-axis-label">0</div>
                                 </div>
                                 <div className="chart-area">
-                                    <div className="horizontal-line"></div>
+                                    {/* <div className="horizontal-line"></div> */}
                                     <div className="bars-container">
                                         {barChartData.map((item, index) => (
                                             <div key={index} className="bar-column">
@@ -218,6 +237,45 @@ const Analytics = () => {
                                         </div>
                                     ))}
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="bar-chart-container link-count">
+                    <h2 className="chart-title">Traffic by links</h2>
+                    <div className="chart-content">
+                        <div className="y-axis-labels">
+                            <div className="y-axis-label">3K</div>
+                            <div className="y-axis-label">2K</div>
+                            <div className="y-axis-label">1K</div>
+                            <div className="y-axis-label">0</div>
+                        </div>
+                        <div className="chart-area">
+                            {/* <div className="horizontal-line"></div> */}
+                            <div className="bars-container">
+                                {barChartData.map((item, index) => (
+                                    <div key={index} className="bar-column">
+                                        <div
+                                            className="bar-wrapper"
+                                            onMouseEnter={() => setHoveredBarIndex(index)}
+                                            onMouseLeave={() => setHoveredBarIndex(null)}
+                                        >
+                                            {hoveredBarIndex === index && (
+                                                <div className="tooltip">
+                                                    {item.value.toLocaleString()}
+                                                </div>
+                                            )}
+                                            <div
+                                                className="bar"
+                                                style={{
+                                                    height: `${(item.value / Math.max(...barChartData.map(d => d.value))) * 216}px`,
+                                                    backgroundColor: item.color
+                                                }}
+                                            />
+                                        </div>
+                                        <div className="x-axis-label">{item.label}</div>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </div>

@@ -108,14 +108,13 @@ const SignupPage = () => {
             if(res?.data?.sts === 1){
                 localStorage.setItem("token", res.data.token);
                 localStorage.setItem("user_data", JSON.stringify(res.data.userData))
-                toast.success(res.data.msg);
+                toast.success(res.data.msg, { theme: 'colored' });
                 navigate('/on-board');
             }
         } catch (error) {
             if(error?.response?.data?.msg){
-                toast.error(error.response.data.msg);
+                toast.error(error.response.data.msg, { theme: 'colored' });
             }
-            console.log("🚀 ~ registerUser ~ error:", error)
         }
     }
 

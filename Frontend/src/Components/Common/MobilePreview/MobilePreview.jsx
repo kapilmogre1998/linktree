@@ -27,7 +27,7 @@ const MobilePreview = (props) => {
                     borderRadius: buttons.type === 'teritary' ? '18px' : buttons.type == 'secondary' ? '8px' : '0px',
                     color: buttons.fontColor,
                     flexDirection: layout == 'Grid' || layout == 'Carousel' ? 'Column' : 'Row',
-                    flex: '1 0 0'
+                    // flex: '1 0 0'
                 };
             case 'Outline':
                 return {
@@ -35,7 +35,7 @@ const MobilePreview = (props) => {
                     borderRadius: buttons.type === 'teritary' ? '18px' : buttons.type == 'secondary' ? '8px' : '0px',
                     color: buttons.fontColor,
                     flexDirection: layout == 'Grid' || layout == 'Carousel' ? 'Column' : 'Row',
-                    flex: '1 0 0'
+                    // flex: '1 0 0'
                 };
             case 'HardShadow':
                 return {
@@ -44,8 +44,8 @@ const MobilePreview = (props) => {
                     borderRadius: buttons.type === 'teritary' ? '18px' : buttons.type == 'secondary' ? '8px' : '0px',
                     color: buttons.fontColor,
                     padding: '10px',
-                    flexDirection: layout == 'Grid'|| layout == 'Carousel' ? 'Column' : 'Row',
-                    flex: '1 0 0'
+                    flexDirection: layout == 'Grid' || layout == 'Carousel' ? 'Column' : 'Row',
+                    // flex: '1 0 0'
                 };
             case 'SoftShadow':
                 return {
@@ -55,7 +55,7 @@ const MobilePreview = (props) => {
                     color: buttons.fontColor,
                     padding: '10px',
                     flexDirection: layout == 'Grid' || layout == 'Carousel' ? 'Column' : 'Row',
-                    flex: '1 0 0'
+                    // flex: '1 0 0'
                 };
             default:
                 return {};
@@ -99,7 +99,7 @@ const MobilePreview = (props) => {
                                     </div>
                             }
                         </div>
-                        <div className="mobile-username">{profile?.title}</div>
+                        <div className="mobile-username" style={{ color: fonts.color }}  >{profile?.title}</div>
                     </div>
                     <div className="button-group" >
                         <div className="toggle-button" >
@@ -111,14 +111,14 @@ const MobilePreview = (props) => {
                         {
                             activeTab === 'link' ?
                                 links?.map(({ title, url, icon, index }, id) => (
-                                    <div key={id} className="link-item" style={{...applyStyles(buttons.option),  flex: layout == 'Carousel' ? '1 0 40%' : '1'}} >
+                                    <div key={id} className="link-item" onClick={() =>  window.open(url, '_blank')} style={{ ...applyStyles(buttons.option), width: layout == 'Stack' ? '100%' : '120px' }} >
                                         <div className="link-thumbnail" style={{ width: layout == 'Carousel' ? '60px' : '42px', height: layout == 'Carousel' ? '60px' : '42px' }} >
                                             <img src={LINKICON[icon]} alt="YouTube" />
                                         </div>
                                         <span style={{ color: buttons.fontColor }} >{title}</span>
                                     </div>)) :
                                 shops?.map(({ title, url, icon }, id) => (
-                                    <div key={id} className="link-item" style={applyStyles(buttons.option)} >
+                                    <div key={id} className="link-item" style={applyStyles(buttons.option)} onClick={() =>  window.open(url, '_blank')} >
                                         <div className="link-thumbnail">
                                             <img src={SHOPICON[icon]} alt="YouTube" />
                                         </div>

@@ -33,6 +33,8 @@ router.post('/register', async (req, res) => {
                 userData: {
                     userId: userData._id, 
                     email: userData.email,
+                    firstname, 
+                    lastname
                 },
                 msg:'Signup successful',
                 sts: 1
@@ -44,7 +46,7 @@ router.post('/register', async (req, res) => {
     }
 })
 
-router.post('/update-username', authenticateToken, async (req, res) => {
+router.post('/add-username', authenticateToken, async (req, res) => {
     try {
         const { userId, username, category } = req.body;
 
@@ -60,6 +62,13 @@ router.post('/update-username', authenticateToken, async (req, res) => {
         await userData.save();
 
         res.status(200).json({
+            userData: {
+                userId: userData._id,
+                email: userData.email,
+                firstname: userData.firstname,
+                lastname: userData.lastname,
+                username: userData.username
+            },
             msg: 'Username created successfully',
             sts: 1
         })
@@ -112,6 +121,9 @@ router.post('/update', authenticateToken, async (req, res) => {
             userData: {
                 userId: userData._id,
                 email: userData.email,
+                firstname: userData.firstname,
+                lastname: userData.lastname,
+                username: userData.username
             },
             msg: 'User data updated successfully',
             sts: 1
@@ -146,6 +158,8 @@ router.post('/login',async(req,res)=> {
                 userData: {
                     userId: userExists._id, 
                     email: userExists.email,
+                    firstname: userExists.firstname, 
+                    lastname: userExists.lastname
                 },
                 msg:'Login successful',
                 sts: 1

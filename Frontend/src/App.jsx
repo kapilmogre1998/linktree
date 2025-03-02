@@ -7,12 +7,14 @@ import SignupPage from './Components/SignupPage/SignupPage'
 import LoginPage from './Components/LoginPage/LoginPage'
 import HomePage from './Components/Homepage/HomePage'
 import Analytics from './Components/Analytics/Analytics'
+import Settings from './Components/Settings/Settings'
 
 function App() {
 
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/settings" element={<Settings />} />
         <Route path="/analytics" element={<Analytics />} />
         <Route path='/appearance' element={<Appearance />} />
         <Route path='/add-link' element={<AddLink />} />

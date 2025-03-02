@@ -4,15 +4,93 @@
 .analytics-container {
     background-color: #f3f3f1;
 
+    .header {
+        width: 100%;
+        padding: 20px 0px 0px;
+        background: transparent;
+    }
+
+    .header-content {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .greeting {
+        font-family: 'Pacifico', cursive;
+        font-size: 24px;
+        font-weight: 400;
+        letter-spacing: 0.48px;
+        margin: 0;
+
+        .text-bold {
+            font-weight: bold;
+        }
+    }
+
+    .calendar-container {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+
+        .title{
+            font-size: 18px;
+        }
+
+        .date-range-selector {
+            width: 244px;
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 21px 23px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .date-range-selector:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .date-range-content {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .calendar-icon {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+            background-color: white
+        }
+
+        .date-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            // color: var(--footer-text);
+            line-height: 14.45px;
+            flex-grow: 1;
+        }
+
+        .arrow-icon {
+            width: 12px;
+            height: 7px;
+            object-fit: contain;
+            margin-left: auto;
+            background-color: white
+        }
+    }
+
     /* Dashboard Container */
     .dashboard-container {
         display: flex;
         flex-direction: column;
         gap: 20px;
-        width: 100%;
-        max-width: 1111px;
+        // width: 100%;
+        // max-width: 1111px;
         background-color: #f3f3f1;
-        padding: 20px;
+        padding: 20px 40px;
         border-radius: 20px;
         font-family: 'Poppins', sans-serif;
         margin-left: global.$side-bar-width;
@@ -52,7 +130,7 @@
     }
 
     .card.light {
-        background-color: #eff0ec;
+        background-color: #daf8eb;
     }
 
     .card-content {
@@ -173,9 +251,9 @@
 
     .chart-area {
         display: flex;
-        flex-direction: column;
+        flex-direction: column-reverse;
         width: 100%;
-        height: 307px;
+        // height: 307px;
     }
 
     .line-chart {
@@ -212,7 +290,6 @@
     /* Bar Chart */
     .bar-chart-container {
         width: 100%;
-        max-width: 538px;
         min-height: 289px;
         background: white;
         border-radius: 20px;
@@ -220,20 +297,25 @@
         display: flex;
         flex-direction: column;
         gap: 20px;
+
+        &.link-count{
+            width: 60%;
+        }
     }
 
     .chart-title {
         font-weight: 600;
         font-size: 17.44px;
         line-height: 24.91px;
-        color: #ffffff;
+        // color: #ffffff;
         margin: 0;
     }
 
     .chart-content {
         display: flex;
-        gap: 16px;
+        gap: 24px;
         height: 244px;
+        align-items: center;
     }
 
     .y-axis-labels {
@@ -243,6 +325,7 @@
         width: 20px;
         font-weight: 400;
         font-size: 14.95px;
+        height: 220px;
         color: #676b5f;
         text-align: right;
     }
@@ -270,7 +353,7 @@
 
     .bar-wrapper {
         width: 35px;
-        height: 216px;
+        height: 190px;
         display: flex;
         align-items: flex-end;
         position: relative;
@@ -310,7 +393,6 @@
     /* Donut Chart */
     .donut-chart-container {
         width: 100%;
-        max-width: 538px;
         min-height: 289px;
         background: #FFFFFF;
         border-radius: 20px;
@@ -382,5 +464,13 @@
 
     .value {
         text-align: right;
+    }
+
+    @media screen and (max-width: 800px) {
+        .dashboard-container {
+            padding: 20px;
+            margin-left: 0;
+            width: 100%;
+        }
     }
 }

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import bgImg from '../../assets/login-img.png';
 import { useNavigate } from 'react-router-dom';
 import sparkIcon from '../../assets/spark-icon.png';
-import { updateUserNameAPI } from './api';
+import { addUserNameAPI } from './api';
 
 import './OnBoardPage.scss';
 
@@ -38,10 +38,12 @@ const OnboardingPage = () => {
         }
         try {
             const userData = localStorage.getItem('user_data')
-            const userId = userData ? JSON.parse(userData)?.userId : null;
-            const res = await updateUserNameAPI({userName, category: selectedCategory, userId});
+            const userId = userData ? JSON.parse(userData)?.id : null;
+            const res = await addUserNameAPI({username: userName, category: selectedCategory, userId});
+
             if(res.data.sts === 1){
-                localStorage.setItem('user_data', JSON.stringify({id: userId, userName, category: selectedCategory}));
+                const { email, lastname, firstname } = res.data.userData;
+                localStorage.setItem('user_data', JSON.stringify({id: userId, userName, email, lastName: lastname, firstName: firstname}));
                 navigate('/add-link');
             }
         } catch (error) {

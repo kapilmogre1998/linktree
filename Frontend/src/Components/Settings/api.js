@@ -6,9 +6,9 @@ const getHeaders = () => ({
     'Content-Type': 'application/json'
   });
 
-export const addUserNameAPI = async (data) => {
+export const updateUserAPI = async (data) => {
     try {
-        return await axios.post(`${API_URL}/api/add-username`, data, { headers: getHeaders() })
+        return await axios.post(`${API_URL}/api/update`, data, { headers: getHeaders() })
     } catch (error) {
        throw error;
     }

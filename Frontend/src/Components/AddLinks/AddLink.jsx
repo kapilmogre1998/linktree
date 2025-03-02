@@ -23,6 +23,7 @@ import { createLinkTreeAPI, getLinkTreeAPI, updateLinkTreeAPI } from './api';
 
 
 import './AddLink.scss';
+import Loader from '../Common/Loader/Loader';
 
 const AddLink = () => {
   const [state, dispatch] = useReducer(mobilePreviewReducer, mobilePreviewInitialState);
@@ -38,6 +39,7 @@ const AddLink = () => {
   const [linkActiveIcon, setLinkActiveIcon] = useState(0);
   const [modalError, setModalError] = useState(false);
   const [toggle, setToggle] = useState(false);
+  const [isLoader, setIsLoader] = useState(false);
   const [data, setData] = useState({
     profile: {
       pic: profilePic,
@@ -193,6 +195,7 @@ const AddLink = () => {
 
   const fetchData = async (userId) => {
     try {
+      setIsLoader(true);
       const res = await getLinkTreeAPI(userId);
       if (res?.data?.sts == 1 && res.data?.data) {
         console.log(res)
@@ -213,6 +216,8 @@ const AddLink = () => {
       if (error?.response?.data?.msg) {
         toast.error(error.response.data.msg);
       }
+    } finally {
+      setIsLoader(false)
     }
   }
 
@@ -234,7 +239,7 @@ const AddLink = () => {
   }, [])
 
   return (
-    <div className="add-link-container">
+  <div className="add-link-container">
       <Sidebar activeIndex='1' />
 
       <div className="main-content">
@@ -256,7 +261,7 @@ const AddLink = () => {
                   <div className="profile-content">
                     <div className="profile-header">
                       {
-                        data?.profile?.pic ?
+                        data?.profile?.pic ? 
                           <img src={data.profile.pic} alt="Profile" className="profile-image" /> :
                           <div className='profile-image no-img' ><MdAddAPhoto style={{ width: '50px', height: '50px' }} /></div>
                       }
@@ -516,6 +521,8 @@ const AddLink = () => {
           </div>
         </div>
       </Modal>}
+
+      {isLoader && <Loader /> }
     </div>
   );
 };
