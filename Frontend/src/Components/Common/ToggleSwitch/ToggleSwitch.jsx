@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './ToggleSwitch.scss';
 
-const ToggleSwitch = ({ addLink, bool = false }) => {
-  const [isOn, setIsOn] = useState(bool);
+const ToggleSwitch = ({ addLink, toggle = false }) => {
+  // const [isOn, setIsOn] = useState(bool);
   const timeOutId = useRef(null);
 
-  const toggle = () => {
-    setIsOn(!isOn);
-    if(!isOn){
+  const handleToggle = () => {
+    // setIsOn(!isOn);
+    if(!toggle){
      timeOutId.current = setTimeout(() => {
         addLink();
       }, 200)
@@ -23,8 +23,8 @@ const ToggleSwitch = ({ addLink, bool = false }) => {
 
   return (
     <div
-      className={`toggle-switch ${isOn ? 'on' : ''}`}
-      onClick={toggle}
+      className={`toggle-switch ${toggle ? 'on' : ''}`}
+      onClick={handleToggle}
     >
       <div className="toggle-switch-handle" />
     </div>

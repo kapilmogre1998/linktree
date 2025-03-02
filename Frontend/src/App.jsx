@@ -6,12 +6,14 @@ import OnboardingPage from './Components/OnBoardPage/OnBoardPage'
 import SignupPage from './Components/SignupPage/SignupPage'
 import LoginPage from './Components/LoginPage/LoginPage'
 import HomePage from './Components/Homepage/HomePage'
+import Analytics from './Components/Analytics/Analytics'
 
 function App() {
 
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/analytics" element={<Analytics />} />
         <Route path='/appearance' element={<Appearance />} />
         <Route path='/add-link' element={<AddLink />} />
         <Route path='/on-board' element={<OnboardingPage />} />

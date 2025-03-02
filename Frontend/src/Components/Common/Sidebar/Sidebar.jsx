@@ -12,6 +12,7 @@ const navItems = [
 
 const Sidebar = ({ activeIndex = 1 }) => {
     const navigate = useNavigate();
+    const userName = JSON.parse(localStorage.getItem('user_data'))?.userName || {};
 
     return (
         <div className="sidebar-container">
@@ -33,7 +34,7 @@ const Sidebar = ({ activeIndex = 1 }) => {
             <div className="profile-section">
                 <div className="profile-info">
                     <img src="https://dashboard.codeparrot.ai/api/image/Z7sOYjHWD6EJo6xw/frame-2.png" alt="Profile" className="profile-img" />
-                    <span className="profile-name">Jenny Wilson</span>
+                    <span className="profile-name">{userName}</span>
                 </div>
             </div>
         </div>

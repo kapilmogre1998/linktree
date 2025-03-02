@@ -11,17 +11,23 @@ const mobilePreviewInitialState = {
         links: [],
         shops: [],
         bannerBgClr: "#342b26",
-        layout: '',
+        layout: 'Stack',
         buttons: {
-            color: '',
-            fontColor: '',
-            buttonType: ''
+            option: 'Fill',
+            color: '#888888',
+            fontColor: '#888888',
+            index: 2,
+            type: 'teritary'
         },
         fonts: {
-            fontType: '',
-            color: '#ffffff'
+            fontType: 'Sans-serif',
+            color: '#FFFFFF'
         },
-        theme: ''
+        theme: {
+            name: 'Air_Snow',
+            background: 'white',
+        },
+        id: ''
     }
 }
 

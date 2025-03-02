@@ -1,11 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import bgImg from '../../assets/login-img.png';
+import { useNavigate } from 'react-router-dom';
 import sparkIcon from '../../assets/spark-icon.png';
+import { updateUserNameAPI } from './api';
+
 import './OnBoardPage.scss';
 
 const OnboardingPage = () => {
     const [selectedCategory, setSelectedCategory] = useState('Business');
+    const [userName, setUserName] = useState('');
     const [isFocused, setIsFocused] = useState(false);
+    const [showError, setShowError] = useState(false);
+    const navigate = useNavigate()
 
     const categories = [
         { icon: '🏢', name: 'Business' },
@@ -26,8 +32,37 @@ const OnboardingPage = () => {
         setSelectedCategory(category);
     };
 
-    const handleInputFocus = () => setIsFocused(true);
-    const handleInputBlur = () => setIsFocused(false);
+    const handleClickOnContinue = async () => {
+        if(!userName.trim().length){
+            setShowError(true);
+        }
+        try {
+            const userData = localStorage.getItem('user_data')
+            const userId = userData ? JSON.parse(userData)?.userId : null;
+            const res = await updateUserNameAPI({userName, category: selectedCategory, userId});
+            if(res.data.sts === 1){
+                localStorage.setItem('user_data', JSON.stringify({id: userId, userName, category: selectedCategory}));
+                navigate('/add-link');
+            }
+        } catch (error) {
+            console.log("🚀 ~ handleSubmit ~ error:", error)
+            if(error?.response?.data?.msg){
+                toast.error(error.response.data.msg);
+            }
+        }
+    }
+
+    useEffect(() => {
+        const userData = localStorage.getItem('user_data');
+        const parseData = JSON.parse(userData);
+        
+        if(parseData && parseData?.userName && parseData?.category){
+            navigate('/add-link');
+        }
+    },[])
+
+    // const handleInputFocus = () => setIsFocused(true);
+    // const handleInputBlur = () => setIsFocused(false);
 
     return (
         <div className="onboard-container">
@@ -47,14 +82,19 @@ const OnboardingPage = () => {
                         <p className="header-subtitle">For a personalized Spark experience</p>
                     </div>
 
-                    <div className="username-input-container">
-                        <input
-                            type="text"
-                            className={`username-input ${isFocused ? 'focused' : ''}`}
-                            placeholder="Tell us your username"
-                            onFocus={handleInputFocus}
-                            onBlur={handleInputBlur}
-                        />
+                    <div>
+                        <div className="username-input-container">
+                            <input
+                                type="text"
+                                value={userName}
+                                className={`username-input`}
+                                placeholder="Tell us your username"
+                                onChange={(e) => setUserName(e.target.value)}
+                                // onFocus={handleInputFocus}
+                                // onBlur={handleInputBlur}
+                            />
+                        </div>
+                        <div className='error-msg' >{showError ? 'Username is required*' : ''}</div>
                     </div>
 
                     <div className="category-selection">
@@ -73,7 +113,7 @@ const OnboardingPage = () => {
                         </div>
                     </div>
 
-                    <button className="continue-button">
+                    <button className="continue-button" onClick={handleClickOnContinue} >
                         Continue
                     </button>
                 </div>

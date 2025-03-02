@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useReducer, useState, useEffect } from 'react'
 import hardCurveBtm from '../../assets/hard-curve-bottom.svg';
 import hardCurvetop from '../../assets/hard-curve-top.svg';
 import waveCurvetop from '../../assets/wave-curve-top.svg';
@@ -8,6 +8,9 @@ import MobilePreview from '../Common/MobilePreview/MobilePreview';
 import profilePic from '../../assets/dummy-pic.png';
 
 import './Appearance.scss'
+import { getLinkTreeAPI, createLinkTreeAPI, updateLinkTreeAPI } from '../AddLinks/api';
+import { setMobilePreview } from '../../action';
+import { mobilePreviewInitialState, mobilePreviewReducer } from '../../reducer';
 
 const defaultCards = [
     { label: 'Air Snow', background: 'white', stripe: '#d9d9d9' },
@@ -21,6 +24,8 @@ const defaultCards = [
 ];
 
 const Appearance = () => {
+    const [state, dispatch] = useReducer(mobilePreviewReducer, mobilePreviewInitialState);
+    const { mobilePreviewData } = state;
     const [selectedColor, setSelectedColor] = useState('#FFFFFF');
     const [selectFont, setSelectFont] = useState('Sans-serif');
     const [fontColor, setFontColor] = useState('#888888');
@@ -70,7 +75,7 @@ const Appearance = () => {
 
     const Card = ({ color, label, background, stripe, borderClr = '' }) => (
         <div className="card-container">
-            <div className={`card ${data.theme.name.split('_').join(' ') == label ? 'active' : ''}`} style={{ backgroundColor: background }} onClick={() => setData(prev => ({ ...prev, theme: {...prev.theme, name: label.split(' ').join('_') , background: background} }))} >
+            <div className={`card ${data.theme.name.split('_').join(' ') == label ? 'active' : ''}`} style={{ backgroundColor: background }} onClick={() => setData(prev => ({ ...prev, theme: { ...prev.theme, name: label.split(' ').join('_'), background: background } }))} >
                 <div className="stripes" style={{ backgroundColor: 'transparent' }}>
                     <div className="stripe" style={{ background: stripe, border: borderClr ? `1px solid ${borderClr}` : 'none' }} ></div>
                     <div className="stripe" style={{ background: stripe, border: borderClr ? `1px solid ${borderClr}` : 'none' }} ></div>
@@ -95,6 +100,80 @@ const Appearance = () => {
             icon: 'https://dashboard.codeparrot.ai/api/image/Z8CLKsjn7nbGWzkG/group-11-3.png',
         }
     ];
+
+
+    const updateData = async (payload, id) => {
+        try {
+            const res = await updateLinkTreeAPI(payload, id);
+            if (res.data.sts == 1) {
+                console.log('Data saved successfully');
+            }
+        } catch (error) {
+            console.log("🚀 ~ handleSubmit ~ error:", error)
+            if (error?.response?.data?.msg) {
+                toast.error(error.response.data.msg);
+            }
+        }
+    }
+
+
+    const submitData = async (payload) => {
+        try {
+            const res = await createLinkTreeAPI(payload);
+            if (res.data.sts == 1) {
+                console.log('Data saved successfully');
+            }
+        } catch (error) {
+            console.log("🚀 ~ handleSubmit ~ error:", error)
+            if (error?.response?.data?.msg) {
+                toast.error(error.response.data.msg);
+            }
+        }
+    }
+
+
+
+    const fetchData = async (userId) => {
+        try {
+            const res = await getLinkTreeAPI(userId);
+            if (res?.data?.sts == 1 && res.data?.data) {
+                console.log(res)
+                const modifiedData = {
+                    ...res.data.data,
+                    id: res.data.data._id
+                }
+
+                delete modifiedData._id;
+                delete modifiedData.__v;
+                delete modifiedData.userId;
+
+                dispatch(setMobilePreview(modifiedData));
+                setData(modifiedData);
+            }
+        } catch (error) {
+            console.log("🚀 ~ handleSubmit ~ error:", error)
+            if (error?.response?.data?.msg) {
+                toast.error(error.response.data.msg);
+            }
+        }
+    }
+
+    const handleSave = () => {
+        const userId = JSON.parse(localStorage.getItem('user_data'))?.id;
+        const updateId = mobilePreviewData?.id;
+
+        if (updateId) {
+            updateData({ ...data, userId }, updateId);
+        } else {
+            submitData({ ...data, userId });
+        }
+    }
+
+    useEffect(() => {
+        const userId = JSON.parse(localStorage.getItem('user_data'))?.id;
+        fetchData(userId);
+    }, [])
+
 
     return (
         <div className='appearance-container' >
@@ -287,7 +366,7 @@ const Appearance = () => {
                                                 <div className="label">Button font color</div>
                                                 <input className='input-color' type="text" value={data?.buttons?.fontColor} onChange={(e) => setData(prev => ({ ...prev, buttons: { ...prev.buttons, fontColor: e.target.value } }))} />
                                             </div>
-                                        </div>  
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -318,7 +397,7 @@ const Appearance = () => {
                                             <div className="color-value">
                                                 <div className="color-input">
                                                     <div className="color-label">Color</div>
-                                                    <input className='input-color' type="text" style={{ width: '100%' }} value={data?.fonts?.color}  onChange={(e) => setData(prev => ({ ...prev, fonts: { ...prev.fonts, color: e.target.value } }))} />
+                                                    <input className='input-color' type="text" style={{ width: '100%' }} value={data?.fonts?.color} onChange={(e) => setData(prev => ({ ...prev, fonts: { ...prev.fonts, color: e.target.value } }))} />
                                                 </div>
                                             </div>
                                         </div>
@@ -338,6 +417,12 @@ const Appearance = () => {
                             </div>
                         </div>
                     </div>
+                </div>
+
+                <div className='save-btn-container' >
+                    <button className="save-button" onClick={handleSave}>
+                        Save
+                    </button>
                 </div>
             </div>
         </div>

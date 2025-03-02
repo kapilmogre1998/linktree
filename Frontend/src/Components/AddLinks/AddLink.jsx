@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import Modal from '../Common/Modal/Modal';
 import Sidebar from '../Common/Sidebar/Sidebar';
 import MobilePreview from '../Common/MobilePreview/MobilePreview';
@@ -17,10 +17,12 @@ import { LuPencilLine } from "react-icons/lu";
 import SignalIcon from '../../assets/signal.svg'
 import AmazonIcon from '../../assets/amazon.svg'
 import FlipkartIcon from '../../assets/flipkart.svg'
+import { ToastContainer, toast } from 'react-toastify';
+import { setMobilePreview } from '../../action';
+import { createLinkTreeAPI, getLinkTreeAPI, updateLinkTreeAPI } from './api';
 
 
 import './AddLink.scss';
-import { setMobilePreview } from '../../action';
 
 const AddLink = () => {
   const [state, dispatch] = useReducer(mobilePreviewReducer, mobilePreviewInitialState);
@@ -34,6 +36,8 @@ const AddLink = () => {
   const [title, setTitle] = useState('');
   const [url, setUrl] = useState('');
   const [linkActiveIcon, setLinkActiveIcon] = useState(0);
+  const [modalError, setModalError] = useState(false);
+  const [toggle, setToggle] = useState(false);
   const [data, setData] = useState({
     profile: {
       pic: profilePic,
@@ -43,19 +47,43 @@ const AddLink = () => {
     links: [],
     shops: [],
     bannerBgClr: "#342b26",
-    layout: '',
+    layout: 'Stack',
     buttons: {
-      color: '',
-      fontColor: '',
-      buttonType: ''
+      option: 'Fill',
+      color: '#888888',
+      fontColor: '#888888',
+      index: 2,
+      type: 'teritary'
     },
     fonts: {
-      fontType: '',
-      color: '#ffffff'
+      fontType: 'Sans-serif',
+      color: '#FFFFFF'
     },
-    theme: ''
+    theme: {
+      name: 'Air_Snow',
+      background: 'white',
+    }
   })
-  // const [selectedFile, setSelectedFile] = useState(null);
+  const userName = JSON.parse(localStorage.getItem('user_data'))?.userName || {};
+
+  const colorOptions = [
+    { color: '#342b26', id: 'color1' },
+    { color: '#FFFFFF', id: 'color2', border: '1px solid #fffff' },
+    { color: '#000000', id: 'color3' }
+  ];
+
+  function convertToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+      fileReader.onload = () => {
+        resolve(fileReader.result)
+      };
+      fileReader.onerror = (error) => {
+        reject(error)
+      }
+    })
+  }
 
   const handleCopy = (type) => {
     const textToCopy = type === 'title' ? title : url;
@@ -74,28 +102,22 @@ const AddLink = () => {
   };
 
   const closeModal = () => {
+    setModalError(false);
+    setTitle('');
+    setUrl('');
     setIsModalOpen(false);
+    setToggle(false);
   };
-
-  const colorOptions = [
-    { color: '#342b26', id: 'color1' },
-    { color: '#FFFFFF', id: 'color2', border: '1px solid #fffff' },
-    { color: '#000000', id: 'color3' }
-  ];
 
   const handleBioChange = (e) => {
     const text = e.target.value;
     if (text.length <= 80) {
-      setBio(text);
+      setData(prev => ({ ...prev, profile: { ...prev.profile, bio: text } }));
     }
   };
 
   const handleColorChange = (color) => {
     setData(prev => ({ ...prev, bannerBgClr: color }));
-  };
-
-  const handleImagePick = () => {
-    console.log('Pick image clicked');
   };
 
   const handleRemove = () => {
@@ -106,14 +128,15 @@ const AddLink = () => {
     setData(prev => ({ ...prev, profile: { ...prev.profile, title: e.target.value } }));
   }
 
-  const handleFileChange = (event) => {
+  const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
-      // List of allowed MIME types
       const validTypes = ['image/png', 'image/jpeg', 'image/jpg'];
+
       if (validTypes.includes(file.type)) {
-        const fileUrl = URL.createObjectURL(file);
-        setData(prev => ({ ...prev, profile: { ...prev.profile, pic: fileUrl }}));
+        const base64 = await convertToBase64(file);
+
+        setData(prev => ({ ...prev, profile: { ...prev.profile, pic: base64 } }));
       } else {
         alert('Unsupported file type. Please select a PNG or JPG image.');
       }
@@ -125,16 +148,90 @@ const AddLink = () => {
   };
 
   const handleAddLink = (type, id) => {
-    debugger;
-    if(type == 'DELETE'){
-      setData(prev => ({ ...prev, links: prev.links.filter((link, index) => index !== id)}))
+    if (type == 'DELETE') {
+      setData(prev => ({ ...prev, links: prev.links.filter((link, index) => index !== id) }))
     } else if (title && url) {
-      setData(prev => ({ ...prev, links: [...prev.links, { title, url, icon: linkActiveIcon }] }));
+      if (activeTab == 'link') {
+        setData(prev => ({ ...prev, links: [...prev.links, { title, url, icon: linkActiveIcon, count: 0 }] }));
+      } else {
+        setData(prev => ({ ...prev, shops: [...prev.shops, { title, url, icon: linkActiveIcon, count: 0 }] }));
+      }
       setTitle('');
       setUrl('');
     }
     setIsModalOpen(false)
   }
+
+  const updateData = async (payload, id) => {
+    try {
+      const res = await updateLinkTreeAPI(payload, id);
+      if (res.data.sts == 1) {
+        console.log('Data saved successfully');
+      }
+    } catch (error) {
+      console.log("🚀 ~ handleSubmit ~ error:", error)
+      if (error?.response?.data?.msg) {
+        toast.error(error.response.data.msg);
+      }
+    }
+  }
+
+
+  const submitData = async (payload) => {
+    try {
+      const res = await createLinkTreeAPI(payload);
+      if (res.data.sts == 1) {
+        console.log('Data saved successfully');
+      }
+    } catch (error) {
+      console.log("🚀 ~ handleSubmit ~ error:", error)
+      if (error?.response?.data?.msg) {
+        toast.error(error.response.data.msg);
+      }
+    }
+  }
+
+  const fetchData = async (userId) => {
+    try {
+      const res = await getLinkTreeAPI(userId);
+      if (res?.data?.sts == 1 && res.data?.data) {
+        console.log(res)
+        const modifiedData = {
+          ...res.data.data,
+          id: res.data.data._id
+        }
+
+        delete modifiedData._id;
+        delete modifiedData.__v;
+        delete modifiedData.userId;
+
+        dispatch(setMobilePreview(modifiedData));
+        setData(modifiedData);
+      }
+    } catch (error) {
+      console.log("🚀 ~ handleSubmit ~ error:", error)
+      if (error?.response?.data?.msg) {
+        toast.error(error.response.data.msg);
+      }
+    }
+  }
+
+
+  const handleSave = () => {
+    const userId = JSON.parse(localStorage.getItem('user_data'))?.id;
+    const updateId = mobilePreviewData?.id;
+
+    if(updateId){
+      updateData({...data, userId}, updateId);
+    } else {
+      submitData({...data, userId});
+    }
+  }
+
+  useEffect(() => {
+    const userId = JSON.parse(localStorage.getItem('user_data'))?.id;
+    fetchData(userId);
+  }, [])
 
   return (
     <div className="add-link-container">
@@ -143,7 +240,7 @@ const AddLink = () => {
       <div className="main-content">
         <header className="header">
           <div className="header-content">
-            <h1 className="greeting"><span className='text-bold' >Hi</span>, Jenny Wilson!</h1>
+            <h1 className="greeting"><span className='text-bold' >Hi</span>, {userName}!</h1>
             <p className="notification">Congratulations. You got a great response today.</p>
           </div>
         </header>
@@ -193,7 +290,7 @@ const AddLink = () => {
                         <label className="input-label">Bio</label>
                         <textarea
                           className="bio-input"
-                          value={bio}
+                          value={data?.profile?.bio}
                           onChange={handleBioChange}
                           placeholder="Bio"
                         />
@@ -228,133 +325,42 @@ const AddLink = () => {
                 </button>
 
                 <div>
-                  {data?.links.length > 0 && <div className="links-container">
-                   { data?.links.map(({title, url, count}, index) => (
-                      <div className="links-heading">
-                        <div className='link-content' >
-                          <div className='title' >{title} <LuPencilLine /></div>
-                          <div className='url' >{url} <LuPencilLine /></div>
-                          <div className='signal-count' ><img src={SignalIcon} alt="" /> {count} Clicks</div>
-                        </div>
-                        
-                        <div className='toggle-delete' >
-                          <ToggleSwitch bool={true} />
-                          <div><RiDeleteBin6Line  onClick={() => handleAddLink('DELETE', index)} /></div>
-                        </div>
+                  {
+                    activeTab === 'link' ?
+                      data?.links?.length > 0 && <div className="links-container">
+                        {data?.links.map(({ title, url, count }, index) => (
+                          <div className="links-heading">
+                            <div className='link-content' >
+                              <div className='title' >{title} <LuPencilLine /></div>
+                              <div className='url' >{url} <LuPencilLine /></div>
+                              <div className='signal-count' ><img src={SignalIcon} alt="" /> {count} Clicks</div>
+                            </div>
+
+                            <div className='toggle-delete' >
+                              <ToggleSwitch toggle={true} />
+                              <div><RiDeleteBin6Line onClick={() => handleAddLink('DELETE', index)} /></div>
+                            </div>
+                          </div>
+                        ))}
+                      </div> :
+                      data?.shops?.length > 0 && <div className="links-container">
+                        {data?.shops.map(({ title, url, count }, index) => (
+                          <div className="links-heading">
+                            <div className='link-content' >
+                              <div className='title' >{title} <LuPencilLine /></div>
+                              <div className='url' >{url} <LuPencilLine /></div>
+                              <div className='signal-count' ><img src={SignalIcon} alt="" /> {count} Clicks</div>
+                            </div>
+
+                            <div className='toggle-delete' >
+                              <ToggleSwitch toggle={true} />
+                              <div><RiDeleteBin6Line onClick={() => handleAddLink('DELETE', index)} /></div>
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
                   }
                 </div>
-
-                {isModalOpen && <Modal closeModal={closeModal} activeTab={activeTab} contentWidth={'700'}  >
-                  <div className="addlink-container">
-                    <div className="header-buttons">
-                      <button className={`button-container ${activeTab == 'link' ? 'active' : ''}`} onClick={() => setActiveTab('link')} >
-                        <img src="https://dashboard.codeparrot.ai/api/image/Z735UWZErsX9xb7b/iconoir.png" alt="Add Link Icon" className="button-icon" />
-                        <span>Add Link</span>
-                      </button>
-                      <button className={`button-container ${activeTab == 'shop' ? 'active' : ''}`} onClick={() => setActiveTab('shop')} >
-                        <img src="https://dashboard.codeparrot.ai/api/image/Z735UWZErsX9xb7b/iconoir-2.png" alt="Add Shop Icon" className="button-icon" />
-                        <span>Add Shop</span>
-                      </button>
-                    </div>
-
-                    <div className="content-container">
-                      <div className="section-container">
-                        <div className="url-section">
-                          <h2 className="section-title">Enter URL</h2>
-
-                          <div className="url-input-group">
-                            <div className="input-container">
-                              <div className="input-wrapper">
-                                <input
-                                  type="text"
-                                  placeholder="Link title"
-                                  className="url-input"
-                                  value={title}
-                                  onChange={(e) => setTitle(e.target.value)}
-                                />
-                              </div>
-                              <div style={{ marginLeft: '20px' }}>
-                                <ToggleSwitch addLink={handleAddLink} />
-                              </div>
-                            </div>
-                            <div className="input-container">
-                              <div className="input-wrapper">
-                                <input
-                                  type="text"
-                                  placeholder="Link Url"
-                                  className="url-input"
-                                  value={url}
-                                  onChange={(e) => setUrl(e.target.value)}
-                                />
-                              </div>
-                              <TbShare2 className='delete-share-icon' />
-                              <RiDeleteBinLine className='delete-share-icon' />
-                              {/* <img
-                                src="https://dashboard.codeparrot.ai/api/image/Z735UWZErsX9xb7b/iconoir-3.png"
-                                alt="copy"
-                                className="copy-icon"
-                                onClick={() => handleCopy('url')}
-                              /> */}
-                            </div>
-                          </div>
-                        </div>
-                        <div className="divider"></div>
-                        <div className="applications-section">
-                          <h3 className="section-subtitle">Applications</h3>
-
-                          <div className="apps-grid">
-                            {
-                              activeTab == 'link' ?
-                              [{ title: 'Instagram', icon: instagramIcon }, { title: 'Youtube', icon: youtubeIcon }, { title: 'Twitter', icon: twitterIcon }, { title: 'Facebook', icon: facebookIcon }].map((application, index) => (
-                                <div className="app-item" onClick={() => setLinkActiveIcon(index)} >
-                                  <div className={`app-icon-container ${linkActiveIcon == index ? 'active' : ''}`} >
-                                    <img src={application.icon} alt="Instagram" className="app-icon" />
-                                  </div>
-                                  <span className="app-name">{application.title}</span>
-                                </div>
-                              )) :  
-                              [{ title: 'Flipkart', icon: FlipkartIcon }, { title: 'Amazon', icon: AmazonIcon }].map((application, index) => (
-                                <div className="app-item" onClick={() => setLinkActiveIcon(index)} >
-                                  <div className={`app-icon-container ${linkActiveIcon == index ? 'active' : ''}`} >
-                                    <img src={application.icon} alt="Instagram" className="app-icon" />
-                                  </div>
-                                  <span className="app-name">{application.title}</span>
-                                </div>
-                              ))
-                            }
-                            {/* <div className="app-item">
-                              <div className="app-icon-container">
-                                <img src={instagramIcon} alt="Instagram" className="app-icon" />
-                              </div>
-                              <span className="app-name">Instagram</span>
-                            </div>
-                            <div className="app-item">
-                              <div className="app-icon-container">
-                                <img src={facebookIcon} alt="Facebook" className="app-icon" />
-                              </div>
-                              <span className="app-name">FaceBook</span>
-                            </div>
-                            <div className="app-item">
-                              <div className="app-icon-container">
-                                <img src={youtubeIcon} alt="YouTube" className="app-icon" />
-                              </div>
-                              <span className="app-name">YouTube</span>
-                            </div>
-                            <div className="app-item">
-                              <div className="app-icon-container">
-                                <img src={twitterIcon} alt="X" className="app-icon" />
-                              </div>
-                              <span className="app-name">X</span>
-                            </div> */}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Modal>}
               </div>
 
               <div className="banner-section">
@@ -411,13 +417,105 @@ const AddLink = () => {
             </div>
 
             <div className='save-btn-container' >
-              <button className="save-button" onClick={() => console.log('Save clicked')}>
+              <button className="save-button" onClick={handleSave}>
                 Save
               </button>
             </div>
           </div>
         </div>
       </div>
+
+      {isModalOpen && <Modal closeModal={closeModal} activeTab={activeTab} contentWidth={'700'}  >
+        <div className="addlink-container">
+          <div className="header-buttons">
+            <button className={`button-container ${activeTab == 'link' ? 'active' : ''}`} onClick={() => setActiveTab('link')} >
+              <img src="https://dashboard.codeparrot.ai/api/image/Z735UWZErsX9xb7b/iconoir.png" alt="Add Link Icon" className="button-icon" />
+              <span>Add Link</span>
+            </button>
+            <button className={`button-container ${activeTab == 'shop' ? 'active' : ''}`} onClick={() => setActiveTab('shop')} >
+              <img src="https://dashboard.codeparrot.ai/api/image/Z735UWZErsX9xb7b/iconoir-2.png" alt="Add Shop Icon" className="button-icon" />
+              <span>Add Shop</span>
+            </button>
+          </div>
+
+          <div className="content-container">
+            <div className="section-container">
+              <div className="url-section">
+                <h2 className="section-title">Enter URL</h2>
+
+                <div className="url-input-group">
+                  <div className="input-container">
+                    <div className="input-wrapper">
+                      <input
+                        type="text"
+                        placeholder="Link title"
+                        className="url-input"
+                        value={title}
+                        onChange={(e) => {
+                          setModalError(false)
+                          setTitle(e.target.value)
+                        }}
+                      />
+                    </div>
+                    <div style={{ marginLeft: '20px' }}>
+                      <ToggleSwitch toggle={toggle} addLink={() => {
+                        if (title.trim().length && url.trim().length) {
+                          handleAddLink()
+                        } else {
+                          setModalError(true)
+                        }
+                      }} />
+                    </div>
+                  </div>
+                  <div className="input-container">
+                    <div className="input-wrapper">
+                      <input
+                        type="text"
+                        placeholder="Link Url"
+                        className="url-input"
+                        value={url}
+                        onChange={(e) => {
+                          setModalError(false)
+                          setUrl(e.target.value)
+                        }}
+                      />
+                    </div>
+                    <TbShare2 className='delete-share-icon' />
+                    <RiDeleteBinLine className='delete-share-icon' onClick={() => setUrl('')} />
+                  </div>
+                </div>
+                <div className='error-msg' >{modalError ? 'All Fields are required*' : ''}</div>
+              </div>
+              <div className="divider"></div>
+              <div className="applications-section">
+                <h3 className="section-subtitle">Applications</h3>
+
+                <div className="apps-grid">
+                  {
+                    activeTab == 'link' ?
+                      [{ title: 'Instagram', icon: instagramIcon }, { title: 'Youtube', icon: youtubeIcon }, { title: 'Twitter', icon: twitterIcon }, { title: 'Facebook', icon: facebookIcon }].map((application, index) => (
+                        <div className="app-item" onClick={() => setLinkActiveIcon(index)} >
+                          <div className={`app-icon-container ${linkActiveIcon == index ? 'active' : ''}`} >
+                            <img src={application.icon} alt="Instagram" className="app-icon" />
+                          </div>
+                          <span className="app-name">{application.title}</span>
+                        </div>
+                      )) :
+                      [{ title: 'Flipkart', icon: FlipkartIcon }, { title: 'Amazon', icon: AmazonIcon }].map((application, index) => (
+                        <div className="app-item" onClick={() => setLinkActiveIcon(index)} >
+                          <div className={`app-icon-container ${linkActiveIcon == index ? 'active' : ''}`} >
+                            <img src={application.icon} alt="Instagram" className="app-icon" />
+                          </div>
+                          <span className="app-name">{application.title}</span>
+                        </div>
+                      ))
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Modal>}
     </div>
   );
 };

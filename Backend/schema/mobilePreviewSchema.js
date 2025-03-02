@@ -4,22 +4,21 @@ const { Schema } = mongoose;
 const profileSchema = new Schema({
   pic: { 
     type: String,
-    required: true
+    // required: true
   },
   title: {
     type: String,
-    required: true
+    // required: true
   },
   bio: {
     type: String,
-    required: true
+    // required: true
   }
 });
 
 const buttonsSchema = new Schema({
   option: {
     type: String,
-    enum: ['Fill', 'Outline'],
     default: 'Fill'
   },
   color: {
@@ -36,14 +35,13 @@ const buttonsSchema = new Schema({
   },
   type: {
     type: String,
-    default: 'Teritary'
+    default: 'teritary'
   }
 });
 
 const fontsSchema = new Schema({
   fontType: {
     type: String,
-    enum: ['Sans-serif', 'Serif', 'Monospace'],
     default: 'Sans-serif'
   },
   color: {
@@ -63,7 +61,12 @@ const themeSchema = new Schema({
   }
 });
 
-const MobilePreview = new Schema({
+const mobilePreviewSchema = new Schema({
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
   profile: profileSchema,
   links: [Schema.Types.Mixed],
   shops: [Schema.Types.Mixed],
@@ -83,4 +86,4 @@ const MobilePreview = new Schema({
   timestamps: true
 });
 
-module.exports = mongoose.model('MobilePreview', userDataSchema);
+module.exports = mongoose.model('MobilePreview', mobilePreviewSchema);

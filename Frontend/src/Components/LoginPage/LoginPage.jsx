@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import sparkIcon from '../../assets/spark-icon.png';
 import loginImg from '../../assets/login-img.png';
+import { useNavigate } from 'react-router-dom';
+import { loginAPI } from './api';
+
 import './LoginPage.scss';
 
 const LoginPage = () => {
@@ -10,12 +13,12 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
   
   // Error state
   const [errors, setErrors] = useState({
     username: '',
-    password: '',
-    general: ''
+    password: ''
   });
 
   // Validation functions
@@ -78,40 +81,32 @@ const LoginPage = () => {
     setErrors({
       username: usernameError,
       password: passwordError,
-      general: ''
     });
 
     // If no validation errors, proceed with login
     if (!usernameError && !passwordError) {
-      // try {
-      //   // Add your login API call here
-      //   // const response = await loginApi(username, password);
-        
-      //   // Simulate API call for demonstration
-      //   const mockApiCall = () => {
-      //     return new Promise((resolve, reject) => {
-      //       // Simulate API response
-      //       if (username === 'testuser' && password === 'password123') {
-      //         resolve({ success: true });
-      //       } else {
-      //         reject(new Error('Invalid credentials'));
-      //       }
-      //     });
-      //   };
-
-      //   await mockApiCall();
-      //   // Handle successful login
-      //   console.log('Login successful');
-        
-      // } catch (error) {
-      //   // Handle login error
-      //   setErrors(prev => ({
-      //     ...prev,
-      //     general: 'Invalid username or password'
-      //   }));
-      // }
+      try {
+        const res = await loginAPI({ email: username, password });
+        if(res.data.sts === 1){
+          localStorage.setItem("token", res.data.token);
+          localStorage.setItem("user_data", JSON.stringify(res.data.userData))
+          navigate('/on-board')
+        }
+      } catch (error) {
+        console.log("🚀 ~ handleSubmit ~ error:", error)
+        if(error?.response?.data?.msg){
+          toast.error(error.response.data.msg);
+        }
+      }
     }
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+        navigate('/on-board');
+    }
+}, [])
 
   return (
     <div className="login-container">
@@ -125,12 +120,6 @@ const LoginPage = () => {
           <div className="form-content">
             <form onSubmit={handleSubmit} className="login-form">
               <h1>Sign in to your Spark</h1>
-
-              {errors.general && (
-                <div className="error-message" role="alert">
-                  {errors.general}
-                </div>
-              )}
 
               <div className="input-group">
                 <input
@@ -192,7 +181,7 @@ const LoginPage = () => {
                 </a>
                 <div className="signup-link">
                   <span>Don't have an account? </span>
-                  <a href="#signup">Sign up</a>
+                  <div onClick={() => navigate('/signup')} >Sign up</div>
                 </div>
               </div>
             </form>

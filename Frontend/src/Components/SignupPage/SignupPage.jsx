@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import sparkIcon from '../../assets/spark-icon.png';
 import loginImg from '../../assets/login-img.png';
 import { signupAPI } from './api';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+
 import './SignupPage.scss';
 
 const SignupPage = () => {
@@ -28,6 +30,22 @@ const SignupPage = () => {
             ...prevState,
             [name]: value
         }));
+
+        if(name === 'firstName'){
+            setFirstNameError('');
+        }
+        if(name === 'lastName'){
+            setLastNameError('');
+        }
+        if(name === 'email'){
+            setEmailError('');
+        }
+        if(name === 'password'){
+            setPasswordError('');
+        }
+        if(name === 'confirmPassword'){
+            setConfirmPasswordError('');
+        }
     };
 
     const handleCheckboxChange = (e) => {
@@ -50,11 +68,14 @@ const SignupPage = () => {
             isError = true;
         }
         if(!validateEmail(email)){
-            setEmailError('Enter a valid email address.');
+            setEmailError('Email Id is required');
             isError = true;
         }
 
-        if (password.length < 6) {
+        if (!password.length) {
+            setPasswordError('Password is required');
+            isError = true;
+        } else if(password.length < 6){
             setPasswordError('Password must be at least 6 characters long.');
             isError = true;
         }
@@ -84,20 +105,43 @@ const SignupPage = () => {
     const registerUser = async (data) => {
         try {
             const res = await signupAPI(data);
-            console.log("🚀 ~ registerUser ~ res:", res)
-            // if()
+            if(res?.data?.sts === 1){
+                localStorage.setItem("token", res.data.token);
+                localStorage.setItem("user_data", JSON.stringify(res.data.userData))
+                toast.success(res.data.msg);
+                navigate('/on-board');
+            }
         } catch (error) {
+            if(error?.response?.data?.msg){
+                toast.error(error.response.data.msg);
+            }
             console.log("🚀 ~ registerUser ~ error:", error)
         }
     }
 
     const handleSubmit = (e) => {
-        debugger;
-        e.preventDefault();
-        if (validate()) {
-            registerUser();
+        try {
+            e.preventDefault();
+            if (validate()) {
+                const { firstName, lastName, email, password } = formData;
+                registerUser({
+                    firstName,
+                    lastName,
+                    email,
+                    password
+                });
+            }
+        } catch (error) {
+            console.log({error})
         }
     };
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            navigate('/on-board')
+        }
+    }, [])
 
     return (
         <div className="signup-page-container">
@@ -118,7 +162,7 @@ const SignupPage = () => {
                     <div className="signup-container">
                         <div className="header-row">
                             <h1>Create an account</h1>
-                            <a href="#" className="sign-in-link" onClick={() => navigate('/login')} >Sign in instead</a>
+                            <div className="sign-in-link" onClick={() => navigate('/login')} >Sign in instead</div>
                         </div>
 
                         <form onSubmit={handleSubmit}>
@@ -130,7 +174,7 @@ const SignupPage = () => {
                                     value={formData.firstName}
                                     onChange={handleInputChange}
                                 />
-                                <span className='error-msg' >{firstNameError.length && !formData?.firstName ? `${firstNameError}*` : ''}</span>
+                                <span className='error-msg' >{firstNameError.length ? `${firstNameError}*` : ''}</span>
                             </div>
                             <div className="form-group">
                                 <label>Last name</label>
@@ -140,7 +184,7 @@ const SignupPage = () => {
                                     value={formData.lastName}
                                     onChange={handleInputChange}
                                 />
-                                <span className='error-msg' >{lastNameError.length && !formData?.lastName ? `${lastNameError}*` : ''}</span>
+                                <span className='error-msg' >{lastNameError.length ? `${lastNameError}*` : ''}</span>
                             </div>
                             <div className="form-group">
                                 <label>Email</label>
@@ -150,7 +194,7 @@ const SignupPage = () => {
                                     value={formData.email}
                                     onChange={handleInputChange}
                                 />
-                                <span className='error-msg' >{emailError.length && !formData?.email ? `${emailError}*` : ''}</span>
+                                <span className='error-msg' >{emailError.length ? `${emailError}*` : ''}</span>
                             </div>
                             <div className="form-group">
                                 <label>Password</label>
@@ -160,7 +204,7 @@ const SignupPage = () => {
                                     value={formData.password}
                                     onChange={handleInputChange}
                                 />
-                                <span className='error-msg' >{passwordError.length && !formData?.password ? `${passwordError}*` : ''}</span>
+                                <span className='error-msg' >{passwordError.length ? `${passwordError}*` : ''}</span>
                             </div>
                             <div className="form-group">
                                 <label>Confirm Password</label>
@@ -170,7 +214,7 @@ const SignupPage = () => {
                                     value={formData.confirmPassword}
                                     onChange={handleInputChange}
                                 />
-                                <span className='error-msg' >{confirmPasswordError.length && !formData?.confirmPassword ? `${confirmPasswordError}*` : ''}</span>
+                                <span className='error-msg' >{confirmPasswordError.length ? `${confirmPasswordError}*` : ''}</span>
                             </div>
 
                             <div className='agree-terms-conditions' >
@@ -232,7 +276,17 @@ const SignupPage = () => {
                         />
                     </div>
                 </div>
-            </div>
+            </div>  
+
+            <ToastContainer position="top-right"
+                autoClose={1500}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick={false}
+                rtl={false}
+                pauseOnHover={false}
+                theme={'dark'}
+            />
         </div>
     );
 };
