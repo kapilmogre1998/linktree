@@ -1,5 +1,5 @@
 // HomePage.jsx
-import React from 'react';
+import React, { useEffect } from 'react';
 import analystics from '../../assets/analytics.webp';
 import frame1 from '../../assets/frame1.png';
 import frame2 from '../../assets/frame2.png';
@@ -118,6 +118,13 @@ const HomePage = () => {
       icon: appicon9
     }
   ];
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      navigate('/add-link');
+    }
+  }, [])
 
   return (
     <div className="home-container">
@@ -264,7 +271,7 @@ const HomePage = () => {
               </div>
             ))}
           </section>
-          
+
           <footer className="footer">
             <div className="footer-content">
               <div className="footer-top">

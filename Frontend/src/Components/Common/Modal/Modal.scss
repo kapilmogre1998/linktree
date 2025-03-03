@@ -40,3 +40,11 @@
         }
     }
 }
+
+@media screen and (max-width: 800px) {
+    .modal-content {
+        margin: 0 auto;
+        width: 95% !important;
+    }
+    
+}

@@ -1,4 +1,5 @@
-import React, { useReducer, useState, useEffect } from 'react'
+import React, { useReducer, useState, useEffect, useLayoutEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
 import hardCurveBtm from '../../assets/hard-curve-bottom.svg';
 import hardCurvetop from '../../assets/hard-curve-top.svg';
 import waveCurvetop from '../../assets/wave-curve-top.svg';
@@ -6,11 +7,29 @@ import waveCurveBtm from '../../assets/wave-curve-btm.svg';
 import Sidebar from '../Common/Sidebar/Sidebar';
 import MobilePreview from '../Common/MobilePreview/MobilePreview';
 import profilePic from '../../assets/dummy-pic.png';
-
-import './Appearance.scss'
 import { getLinkTreeAPI, createLinkTreeAPI, updateLinkTreeAPI } from '../AddLinks/api';
 import { setMobilePreview } from '../../action';
+import { MdAddAPhoto } from "react-icons/md";
 import { mobilePreviewInitialState, mobilePreviewReducer } from '../../reducer';
+import SparkIcon from '../../assets/spark-icon.svg';
+import { IoEyeOutline } from "react-icons/io5";
+import LinkIcon from '../../assets/link-icon.svg';
+import AppearanceIcon from '../../assets/apperance.svg';
+import SettingsIcon from '../../assets/settings-icon.svg';
+import AnalyticsIcon from '../../assets/analytics.svg';
+
+import './Appearance.scss'
+
+
+const NAV_ITEMS = [
+    { id: 1, label: 'Links', icon: <LinkIcon />, route: '/add-link' },
+    { id: 2, label: 'Appearance', icon: <AppearanceIcon />, route: '/appearance' },
+    { id: 3, label: 'Analytics', icon: <AnalyticsIcon />, route: '/analytics' },
+    { id: 4, label: 'Settings', icon: <SettingsIcon />, route: '/settings' }
+];
+
+const navIcons = [LinkIcon, AppearanceIcon, AnalyticsIcon, SettingsIcon];
+
 
 const defaultCards = [
     { label: 'Air Snow', background: 'white', stripe: '#d9d9d9' },
@@ -30,19 +49,21 @@ const Appearance = () => {
     const [selectFont, setSelectFont] = useState('Sans-serif');
     const [fontColor, setFontColor] = useState('#888888');
     const [buttonColor, setButtonColor] = useState('#FFFFFF');
+    const [mobileScreenPreview, setMobileScreenPreview] = useState(false);
+
     // const [buttonFontColor, setButtonFontColor] = useState('#888888');
     // const [activeLayout, setActiveLayout] = useState(0);
     // const [option, setButtonType] = useState({ type: 'Fill', index: 2 });
     const [theme, setTheme] = useState('Air_Snow');
+    const token = localStorage.getItem('token');
+    const navigate = useNavigate();
     const [data, setData] = useState({
         profile: {
-            pic: profilePic,
+            pic: '',
             title: '',
             bio: ''
         },
         links: [
-            // {title: 'Youtube', url: 'https://youtube.com', icon: 'https://dashboard.codeparrot.ai/api/image/Z8CLKsjn7nbGWzkG/youtube.png'},
-            // {title: 'Youtube', url: 'https://youtube.com', icon: 'https://dashboard.codeparrot.ai/api/image/Z8CLKsjn7nbGWzkG/youtube.png'},
         ],
         shops: [],
         bannerBgClr: "#342b26",
@@ -169,263 +190,303 @@ const Appearance = () => {
         }
     }
 
+    useLayoutEffect(() => {
+        if (!token) {
+            window.location.href = '/login';
+        }
+    }, [])
+
     useEffect(() => {
         const userId = JSON.parse(localStorage.getItem('user_data'))?.id;
-        fetchData(userId);
+        if (userId) {
+            fetchData(userId);
+        }
     }, [])
 
 
     return (
-        <div className='appearance-container' >
-            <Sidebar activeIndex='2' />
-            <div className='header-content-container' >
-                <header className="header">
-                    <div className="header-content">
-                        <h1 className="greeting"><span className='text-bold' >Hi</span>, Jenny Wilson!</h1>
-                        <p className="notification">Congratulations. You got a great response today.</p>
-                    </div>
-                </header>
-                <div className='mobile-preivew-content-container' >
-                    <MobilePreview data={data} />
-                    <div className='appearance-content' >
-                        <div className='appearance-content-sections' >
-                            <div className='text-design-option' >
-                                <h3>Layout</h3>
-                                <div className="layout-options">
-                                    <div className="layout-options__container">
-                                        <div className="layout-stack">
-                                            <div className={`layout-option__icon-wrapper ${data.layout === 'Stack' ? 'active' : ''}`} onClick={() => setData({ ...data, layout: 'Stack' })}>
-                                                <div style={{ display: 'flex', gap: '0.25rem', flexDirection: 'column' }}>
-                                                    {Array.from({ length: 3 }).map((item, index) => (
-                                                        <div key={index} style={{ background: 'black', height: '8px', width: '40px', borderRadius: '2px' }} />
-                                                    ))}
-                                                </div>
-                                            </div>
-                                            <div>Stack</div>
-                                        </div>
-
-                                        <div className="layout-stack">
-                                            <div className={`layout-option__icon-wrapper ${data.layout === 'Grid' ? 'active' : ''}`} onClick={() => setData({ ...data, layout: 'Grid' })}>
-                                                <div style={{ display: 'grid', gap: '0.5rem', gridTemplateColumns: '20px 20px', gridTemplateRows: '20px 20px' }}>
-                                                    {Array.from({ length: 4 }).map((item, index) => (
-                                                        <div key={index} style={{ background: 'black', borderRadius: '2px' }} />
-                                                    ))}
-                                                </div>
-                                            </div>
-                                            <div>Grid</div>
-                                        </div>
-
-                                        <div className="layout-stack">
-                                            <div className={`layout-option__icon-wrapper ${data.layout === 'Carousel' ? 'active' : ''}`} onClick={() => setData({ ...data, layout: 'Carousel' })}>
-                                                <div style={{ display: 'grid', gap: '0.5rem', gridTemplateColumns: '30px 15px', gridTemplateRows: '40px' }}>
-                                                    {Array.from({ length: 4 }).map((item, index) => (
-                                                        <div key={index} style={{ background: 'black', borderRadius: '2px' }} />
-                                                    ))}
-                                                </div>
-                                            </div>
-                                            <div>Carousel</div>
-                                        </div>
-                                        {/* <div className='layout-stack' >
-                                            <div className={`layout-option__icon-wrapper ${data.layout == 'Stack' ? 'active' : ''}`} onClick={() => setData(prev => ({ ...prev, layout: 'Stack' }))}  >
-                                                <div style={{ display: 'flex', gap: '0.25rem', flexDirection: 'column' }} >
-                                                    <div style={{ background: 'black', height: '8px', width: '40px', borderRadius: '2px' }} ></div>
-                                                    <div style={{ background: 'black', height: '8px', width: '40px', borderRadius: '2px' }} ></div>
-                                                    <div style={{ background: 'black', height: '8px', width: '40px', borderRadius: '2px' }} ></div>
-                                                </div>
-                                            </div>
-                                            <div>Stack</div>
-                                        </div>
-                                        <div className='layout-stack' >
-                                            <div className={`layout-option__icon-wrapper ${data.layout == 'Grid' ? 'active' : ''}`} onClick={() => setData(prev => ({ ...prev, layout: 'Grid' }))} >
-                                                <div style={{ display: 'grid', gap: '0.5rem', gridTemplateColumns: '20px 20px', gridTemplateRows: '20px 20px' }} >
-                                                    <div style={{ background: 'black', borderRadius: '2px' }} ></div>
-                                                    <div style={{ background: 'black', borderRadius: '2px' }} ></div>
-                                                    <div style={{ background: 'black', borderRadius: '2px' }} ></div>
-                                                    <div style={{ background: 'black', borderRadius: '2px' }} ></div>
-                                                </div>
-                                            </div>
-                                            <div>Grid</div>
-                                        </div>
-                                        <div className='layout-stack' >
-                                            <div className={`layout-option__icon-wrapper ${data.layout == 'Carousel' ? 'active' : ''}`} onClick={() => setData(prev => ({ ...prev, layout: 'Carousel' }))} >
-                                                <div style={{ display: 'grid', gap: '0.5rem', gridTemplateColumns: '30px 15px', gridTemplateRows: '40px' }} >
-                                                    <div style={{ background: 'black', borderRadius: '2px' }} ></div>
-                                                    <div style={{ background: 'black', borderRadius: '2px' }} ></div>
-                                                    <div style={{ background: 'black', borderRadius: '2px' }} ></div>
-                                                    <div style={{ background: 'black', borderRadius: '2px' }} ></div>
-                                                </div>
-                                            </div>
-                                            <div>Carousel</div>
-                                        </div> */}
-                                    </div>
-                                </div>
+        <>
+            {!mobileScreenPreview ?
+                <div className='appearance-container' >
+                <Sidebar activeIndex='2' {...{ data }} />
+                    <div className='header-content-container' >
+                        <header className="header">
+                            <div className="header-content">
+                                <h1 className="greeting"><span className='text-bold' >Hi</span>, Jenny Wilson!</h1>
+                                <p className="notification">Congratulations. You got a great response today.</p>
                             </div>
+                        </header>
 
-                            <div className='text-design-option' >
-                                <h3>Buttons</h3>
-                                <div className="layout-container">
-                                    <div className="button-section">
-                                        <div className="fill-buttons-container">
-                                            <div className="fill-label">Fill</div>
-                                            <div className="buttons-row">
-                                                {[{ className: 'primary', index: 0 }, { className: 'secondary', index: 1 }, { className: 'teritary', index: 2 },].map(({ className, index }) => (
-                                                    <button
-                                                        key={index}
-                                                        className={`fill-button ${className} ${data?.buttons?.option === 'Fill' && data?.buttons?.index === index ? 'clr-opacity-8' : ''}`}
-                                                        onClick={() => setData(prev => ({ ...prev, buttons: { ...prev.buttons, option: 'Fill', index, type: className } }))}
-                                                    />
-                                                ))}
-                                            </div>
-                                        </div>
-
-                                        <div className="outline-buttons-container">
-                                            <h3 className="outline-title">Outline</h3>
-                                            <div className="buttons-row">
-                                                {[{ className: 'primary', index: 0 }, { className: 'secondary', index: 1 }, { className: 'teritary', index: 2 },].map(({ className, index }) => (
-                                                    <button
-                                                        key={index}
-                                                        className={`outline-button  ${className} ${data?.buttons?.option === 'Outline' && data?.buttons?.index === index ? 'clr-opacity-8' : ''}`}
-                                                        onClick={() => setData(prev => ({ ...prev, buttons: { ...prev.buttons, option: 'Outline', index, type: className } }))}
-                                                    />
-                                                ))}
-                                            </div>
-                                        </div>
-
-                                        <div className="hard-shadow-container">
-                                            <h2 className="hard-shadow-title">Hard shadow</h2>
-                                            <div className="hard-shadow-buttons">
-                                                {[{ className: 'primary', index: 0 }, { className: 'secondary', index: 1 }, { className: 'teritary', index: 2 },].map(({ className, index }) => (
-                                                    <button
-                                                        key={index}
-                                                        className={`hard-shadow-btn  ${className} ${data?.buttons?.option === 'HardShadow' && data?.buttons?.index === index ? 'clr-opacity-8' : ''}`}
-                                                        onClick={() => setData(prev => ({ ...prev, buttons: { ...prev.buttons, option: 'HardShadow', index, type: className } }))}
-                                                    />
-                                                ))}
-                                            </div>
-                                        </div>
-
-                                        <div className="soft-shadow-container">
-                                            <h2 className="soft-shadow-title">Soft shadow</h2>
-                                            <div className="soft-shadow-buttons">
-                                                {[{ className: 'primary', index: 0 }, { className: 'secondary', index: 1 }, { className: 'teritary', index: 2 },].map(({ className, index }) => (
-                                                    <button
-                                                        key={index}
-                                                        className={`soft-shadow-button  ${className} ${data?.buttons?.option === 'SoftShadow' && data?.buttons?.index === index ? 'clr-opacity-8' : ''}`}
-                                                        onClick={() => setData(prev => ({ ...prev, buttons: { ...prev.buttons, option: 'SoftShadow', index, type: className } }))}
-                                                    />
-                                                ))}
-                                            </div>
-                                        </div>
-
-                                        <div className="special-buttons">
-                                            <div className="special-title">Special</div>
-                                            <div className="button-container">
-                                                <div className="button-row">
-                                                    <div className="special-button wave-top">
-                                                        <img src={hardCurvetop} className='hard-curve-top' alt="hard-curve" />
-                                                        <img src={hardCurveBtm} className='hard-curve-btm' alt="hard-curve" />
-                                                    </div>
-                                                    <div className="special-button wave-middle">
-                                                        <img src={waveCurvetop} className='wave-curve-top' alt="wave-curve" />
-                                                        <img src={waveCurveBtm} className='wave-curve-btm' alt="wave-curve" />
-                                                    </div>
-                                                    <div className="special-button rectangle-1">
-                                                        <button className='special-button rectangle-2' ></button>
-                                                    </div>
-                                                </div>
-                                                <div className="button-row">
-                                                    <button className="special-button solid"></button>
-                                                    <div className="special-button box-corner">
-                                                        <button className="corner-button top-left"></button>
-                                                        <button className="corner-button top-right"></button>
-                                                        <button className="corner-button bottom-left"></button>
-                                                        <button className="corner-button bottom-right"></button>
-                                                    </div>
-                                                    <button className="special-button dotted"></button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="button-color-container">
-                                        <div className="button-color-title">Button color</div>
-                                        <div className="button-color-frame">
-                                            <div className="color-preview" style={{ backgroundColor: data?.buttons?.color }} />
-                                            <div className="color-input-container">
-                                                <div className="color-label">Button color</div>
-                                                <input className='input-color' type="text" value={data?.buttons?.color} onChange={(e) => setData(prev => ({ ...prev, buttons: { ...prev.buttons, color: e.target.value } }))} />
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="button-font-color-container">
-                                        <div className="title">Button font color</div>
-                                        <div className="content">
-                                            <div className="color-preview" style={{ backgroundColor: data?.buttons?.fontColor }} />
-                                            <div className="color-selector">
-                                                <div className="label">Button font color</div>
-                                                <input className='input-color' type="text" value={data?.buttons?.fontColor} onChange={(e) => setData(prev => ({ ...prev, buttons: { ...prev.buttons, fontColor: e.target.value } }))} />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                        <div className='mobile-header-container' >
+                            <div className='mobile-icon' >
+                                <img src={SparkIcon} width='30px' height='30px' alt="spark-icon" />
+                                <div className='spark-trade-mark-container' >SPARK <span className='trade-mark' >TM</span> </div>
                             </div>
+                            {
+                                data?.profile?.pic ?
+                                    <img src={data.profile.pic} alt="Profile" className="mobile-header-image" /> :
+                                    <div className='mobile-header-image no-img' ><MdAddAPhoto style={{ width: '50px', height: '50px' }} /></div>
+                            }
+                        </div>
 
-                            <div className='text-design-option' >
-                                <h3>Fonts</h3>
-                                <div className="font-color-selector">
-                                    <div className="section">
-                                        <h2 className="section-title">Font</h2>
-                                        <div className="option-selector">
-                                            <select className='select' value={data?.fonts?.fontType} onChange={(e) => setData(prev => ({ ...prev, fonts: { ...prev.fonts, fontType: e.target.value } }))}>
-                                                {[{ label: 'Sans-serif', value: 'Sans-serif' }, { label: 'Serif', value: 'Serif' }, { label: 'System-ui', value: 'System-ui' }].map((option, index) => (
-                                                    <option key={index} value={option.value}>
-                                                        {option.label}
-                                                    </option>
-                                                ))}
-                                            </select>
+                        <div className='mobile-preivew-content-container' >
+                            <MobilePreview data={data} />
+                            <div className='appearance-content' >
+                                <div className='appearance-content-sections' >
+                                    <div className='text-design-option' >
+                                        <h3>Layout</h3>
+                                        <div className="layout-options">
+                                            <div className="layout-options__container">
+                                                <div className="layout-stack">
+                                                    <div className={`layout-option__icon-wrapper ${data.layout === 'Stack' ? 'active' : ''}`} onClick={() => setData({ ...data, layout: 'Stack' })}>
+                                                        <div style={{ display: 'flex', gap: '0.25rem', flexDirection: 'column' }}>
+                                                            {Array.from({ length: 3 }).map((item, index) => (
+                                                                <div key={index} style={{ background: 'black', height: '8px', width: '40px', borderRadius: '2px' }} />
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                    <div>Stack</div>
+                                                </div>
+
+                                                <div className="layout-stack">
+                                                    <div className={`layout-option__icon-wrapper ${data.layout === 'Grid' ? 'active' : ''}`} onClick={() => setData({ ...data, layout: 'Grid' })}>
+                                                        <div style={{ display: 'grid', gap: '0.5rem', gridTemplateColumns: '20px 20px', gridTemplateRows: '20px 20px' }}>
+                                                            {Array.from({ length: 4 }).map((item, index) => (
+                                                                <div key={index} style={{ background: 'black', borderRadius: '2px' }} />
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                    <div>Grid</div>
+                                                </div>
+
+                                                <div className="layout-stack">
+                                                    <div className={`layout-option__icon-wrapper ${data.layout === 'Carousel' ? 'active' : ''}`} onClick={() => setData({ ...data, layout: 'Carousel' })}>
+                                                        <div style={{ display: 'grid', gap: '0.5rem', gridTemplateColumns: '30px 15px', gridTemplateRows: '40px' }}>
+                                                            {Array.from({ length: 4 }).map((item, index) => (
+                                                                <div key={index} style={{ background: 'black', borderRadius: '2px' }} />
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                    <div>Carousel</div>
+                                                </div>
+                                                {/* <div className='layout-stack' >
+                                                <div className={`layout-option__icon-wrapper ${data.layout == 'Stack' ? 'active' : ''}`} onClick={() => setData(prev => ({ ...prev, layout: 'Stack' }))}  >
+                                                    <div style={{ display: 'flex', gap: '0.25rem', flexDirection: 'column' }} >
+                                                        <div style={{ background: 'black', height: '8px', width: '40px', borderRadius: '2px' }} ></div>
+                                                        <div style={{ background: 'black', height: '8px', width: '40px', borderRadius: '2px' }} ></div>
+                                                        <div style={{ background: 'black', height: '8px', width: '40px', borderRadius: '2px' }} ></div>
+                                                    </div>
+                                                </div>
+                                                <div>Stack</div>
+                                            </div>
+                                            <div className='layout-stack' >
+                                                <div className={`layout-option__icon-wrapper ${data.layout == 'Grid' ? 'active' : ''}`} onClick={() => setData(prev => ({ ...prev, layout: 'Grid' }))} >
+                                                    <div style={{ display: 'grid', gap: '0.5rem', gridTemplateColumns: '20px 20px', gridTemplateRows: '20px 20px' }} >
+                                                        <div style={{ background: 'black', borderRadius: '2px' }} ></div>
+                                                        <div style={{ background: 'black', borderRadius: '2px' }} ></div>
+                                                        <div style={{ background: 'black', borderRadius: '2px' }} ></div>
+                                                        <div style={{ background: 'black', borderRadius: '2px' }} ></div>
+                                                    </div>
+                                                </div>
+                                                <div>Grid</div>
+                                            </div>
+                                            <div className='layout-stack' >
+                                                <div className={`layout-option__icon-wrapper ${data.layout == 'Carousel' ? 'active' : ''}`} onClick={() => setData(prev => ({ ...prev, layout: 'Carousel' }))} >
+                                                    <div style={{ display: 'grid', gap: '0.5rem', gridTemplateColumns: '30px 15px', gridTemplateRows: '40px' }} >
+                                                        <div style={{ background: 'black', borderRadius: '2px' }} ></div>
+                                                        <div style={{ background: 'black', borderRadius: '2px' }} ></div>
+                                                        <div style={{ background: 'black', borderRadius: '2px' }} ></div>
+                                                        <div style={{ background: 'black', borderRadius: '2px' }} ></div>
+                                                    </div>
+                                                </div>
+                                                <div>Carousel</div>
+                                            </div> */}
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div className="section">
-                                        <h2 className="section-title">Color</h2>
-                                        <div className="color-selector">
-                                            <div
-                                                className="color-preview"
-                                                style={{ backgroundColor: data?.fonts?.color }}
-                                            ></div>
-                                            <div className="color-value">
-                                                <div className="color-input">
-                                                    <div className="color-label">Color</div>
-                                                    <input className='input-color' type="text" style={{ width: '100%' }} value={data?.fonts?.color} onChange={(e) => setData(prev => ({ ...prev, fonts: { ...prev.fonts, color: e.target.value } }))} />
+                                    <div className='text-design-option' >
+                                        <h3>Buttons</h3>
+                                        <div className="layout-container">
+                                            <div className="button-section">
+                                                <div className="fill-buttons-container">
+                                                    <div className="fill-label">Fill</div>
+                                                    <div className="buttons-row">
+                                                        {[{ className: 'primary', index: 0 }, { className: 'secondary', index: 1 }, { className: 'teritary', index: 2 },].map(({ className, index }) => (
+                                                            <button
+                                                                key={index}
+                                                                className={`fill-button ${className} ${data?.buttons?.option === 'Fill' && data?.buttons?.index === index ? 'clr-opacity-8' : ''}`}
+                                                                onClick={() => setData(prev => ({ ...prev, buttons: { ...prev.buttons, option: 'Fill', index, type: className } }))}
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                </div>
+
+                                                <div className="outline-buttons-container">
+                                                    <h3 className="outline-title">Outline</h3>
+                                                    <div className="buttons-row">
+                                                        {[{ className: 'primary', index: 0 }, { className: 'secondary', index: 1 }, { className: 'teritary', index: 2 },].map(({ className, index }) => (
+                                                            <button
+                                                                key={index}
+                                                                className={`outline-button  ${className} ${data?.buttons?.option === 'Outline' && data?.buttons?.index === index ? 'clr-opacity-8' : ''}`}
+                                                                onClick={() => setData(prev => ({ ...prev, buttons: { ...prev.buttons, option: 'Outline', index, type: className } }))}
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                </div>
+
+                                                <div className="hard-shadow-container">
+                                                    <h2 className="hard-shadow-title">Hard shadow</h2>
+                                                    <div className="hard-shadow-buttons">
+                                                        {[{ className: 'primary', index: 0 }, { className: 'secondary', index: 1 }, { className: 'teritary', index: 2 },].map(({ className, index }) => (
+                                                            <button
+                                                                key={index}
+                                                                className={`hard-shadow-btn  ${className} ${data?.buttons?.option === 'HardShadow' && data?.buttons?.index === index ? 'clr-opacity-8' : ''}`}
+                                                                onClick={() => setData(prev => ({ ...prev, buttons: { ...prev.buttons, option: 'HardShadow', index, type: className } }))}
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                </div>
+
+                                                <div className="soft-shadow-container">
+                                                    <h2 className="soft-shadow-title">Soft shadow</h2>
+                                                    <div className="soft-shadow-buttons">
+                                                        {[{ className: 'primary', index: 0 }, { className: 'secondary', index: 1 }, { className: 'teritary', index: 2 },].map(({ className, index }) => (
+                                                            <button
+                                                                key={index}
+                                                                className={`soft-shadow-button  ${className} ${data?.buttons?.option === 'SoftShadow' && data?.buttons?.index === index ? 'clr-opacity-8' : ''}`}
+                                                                onClick={() => setData(prev => ({ ...prev, buttons: { ...prev.buttons, option: 'SoftShadow', index, type: className } }))}
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                </div>
+
+                                                <div className="special-buttons">
+                                                    <div className="special-title">Special</div>
+                                                    <div className="button-container">
+                                                        <div className="button-row">
+                                                            <div className="special-button wave-top">
+                                                                <img src={hardCurvetop} className='hard-curve-top' alt="hard-curve" />
+                                                                <img src={hardCurveBtm} className='hard-curve-btm' alt="hard-curve" />
+                                                            </div>
+                                                            <div className="special-button wave-middle">
+                                                                <img src={waveCurvetop} className='wave-curve-top' alt="wave-curve" />
+                                                                <img src={waveCurveBtm} className='wave-curve-btm' alt="wave-curve" />
+                                                            </div>
+                                                            <div className="special-button rectangle-1">
+                                                                <button className='special-button rectangle-2' ></button>
+                                                            </div>
+                                                        </div>
+                                                        <div className="button-row">
+                                                            <button className="special-button solid"></button>
+                                                            <div className="special-button box-corner">
+                                                                <button className="corner-button top-left"></button>
+                                                                <button className="corner-button top-right"></button>
+                                                                <button className="corner-button bottom-left"></button>
+                                                                <button className="corner-button bottom-right"></button>
+                                                            </div>
+                                                            <button className="special-button dotted"></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="button-color-container">
+                                                <div className="button-color-title">Button color</div>
+                                                <div className="button-color-frame">
+                                                    <div className="color-preview" style={{ backgroundColor: data?.buttons?.color }} />
+                                                    <div className="color-input-container">
+                                                        <div className="color-label">Button color</div>
+                                                        <input className='input-color' type="text" value={data?.buttons?.color} onChange={(e) => setData(prev => ({ ...prev, buttons: { ...prev.buttons, color: e.target.value } }))} />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="button-font-color-container">
+                                                <div className="title">Button font color</div>
+                                                <div className="content">
+                                                    <div className="color-preview" style={{ backgroundColor: data?.buttons?.fontColor }} />
+                                                    <div className="color-selector">
+                                                        <div className="label">Button font color</div>
+                                                        <input className='input-color' type="text" value={data?.buttons?.fontColor} onChange={(e) => setData(prev => ({ ...prev, buttons: { ...prev.buttons, fontColor: e.target.value } }))} />
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
 
-                            <div className='text-design-option' >
-                                <h3>Themes</h3>
-                                <div className="color-grid">
-                                    <div className="grid-row">
-                                        {defaultCards.map((card, index) => (
-                                            <Card key={index} {...card} />
-                                        ))}
+                                    <div className='text-design-option' >
+                                        <h3>Fonts</h3>
+                                        <div className="font-color-selector">
+                                            <div className="section">
+                                                <h2 className="section-title">Font</h2>
+                                                <div className="option-selector">
+                                                    <select className='select' value={data?.fonts?.fontType} onChange={(e) => setData(prev => ({ ...prev, fonts: { ...prev.fonts, fontType: e.target.value } }))}>
+                                                        {[{ label: 'Sans-serif', value: 'Sans-serif' }, { label: 'Serif', value: 'Serif' }, { label: 'System-ui', value: 'System-ui' }].map((option, index) => (
+                                                            <option key={index} value={option.value}>
+                                                                {option.label}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div className="section">
+                                                <h2 className="section-title">Color</h2>
+                                                <div className="color-selector">
+                                                    <div
+                                                        className="color-preview"
+                                                        style={{ backgroundColor: data?.fonts?.color }}
+                                                    ></div>
+                                                    <div className="color-value">
+                                                        <div className="color-input">
+                                                            <div className="color-label">Color</div>
+                                                            <input className='input-color' type="text" style={{ width: '100%' }} value={data?.fonts?.color} onChange={(e) => setData(prev => ({ ...prev, fonts: { ...prev.fonts, color: e.target.value } }))} />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className='text-design-option' >
+                                        <h3>Themes</h3>
+                                        <div className="color-grid">
+                                            <div className="grid-row">
+                                                {defaultCards.map((card, index) => (
+                                                    <Card key={index} {...card} />
+                                                ))}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
 
-                <div className='save-btn-container' >
-                    <button className="save-button" onClick={handleSave}>
-                        Save
-                    </button>
-                </div>
-            </div>
-        </div>
+                        <div className='save-btn-container' >
+                            <button className="save-button" onClick={handleSave}>
+                                Save
+                            </button>
+                        </div>
+                    </div>
+                    <div className='mobile-nav-bar-container' >
+                        {
+                            NAV_ITEMS.map(({ label, route, id }) => (<div className='mobile-nav-icon' onClick={() => navigate(route)} >
+                                <img src={navIcons[id - 1]} alt="nav" />
+                                <div>{label}</div>
+                            </div>))
+                        }
+                    </div>
+                    <div className='preview-icon-container' >
+                        <div className='eye-icon' onClick={() => setMobileScreenPreview(true)} >
+                            <IoEyeOutline style={{ width: '22px', height: '22px' }} />
+                            <div>Preview</div>
+                        </div>
+                    </div>
+                </div> :
+                <MobilePreview {...{ data, setMobileScreenPreview }} />
+            }
+        </>
     )
 }
 

@@ -5,7 +5,7 @@ import { CiCalendar } from "react-icons/ci";
 import { FaAngleDown } from "react-icons/fa6";
 
 const Analytics = () => {
-    const userName = JSON.parse(localStorage.getItem('user_data'))?.userName || {};
+    const userName = JSON.parse(localStorage.getItem('user_data'))?.username || {};
     const [hoveredBarIndex, setHoveredBarIndex] = useState(null);
 
     const lineChartData = [1000, 800, 900, 1500, 2800, 2200, 2400];

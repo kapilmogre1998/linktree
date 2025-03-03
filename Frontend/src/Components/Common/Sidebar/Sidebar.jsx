@@ -5,6 +5,7 @@ import AppearanceIcon from '../../../assets/apperance.svg';
 import SettingsIcon from '../../../assets/settings-icon.svg';
 import AnalyticsIcon from '../../../assets/analytics.svg';
 import SparkIcon from '../../../assets/spark-icon.svg';
+import { MdAddAPhoto } from "react-icons/md";
 import { RxShare2 } from "react-icons/rx";
 
 import './Sidebar.scss'
@@ -18,9 +19,9 @@ const navItems = [
 
 const navIcons = [LinkIcon, AppearanceIcon, AnalyticsIcon, SettingsIcon];
 
-const Sidebar = ({ activeIndex = 1 }) => {
+const Sidebar = ({ activeIndex = 1, data }) => {
     const navigate = useNavigate();
-    const userName = JSON.parse(localStorage.getItem('user_data'))?.userName || {};
+    const userName = JSON.parse(localStorage.getItem('user_data'))?.username || '';
 
     return (
         <div className="sidebar-container">
@@ -31,9 +32,9 @@ const Sidebar = ({ activeIndex = 1 }) => {
                 </div>
 
                 <nav className="nav-section">
-                    {navItems.map(({id, label, icon, route}) => (
+                    {navItems.map(({ id, label, icon, route }) => (
                         <div key={id} className={`nav-item ${id == activeIndex ? 'active' : ''}`} onClick={() => navigate(route)} >
-                             <img src={navIcons[id - 1]} alt="YouTube" />
+                            <img src={navIcons[id - 1]} alt="YouTube" />
                             <span className="nav-label">{label}</span>
                         </div>
                     ))}
@@ -41,8 +42,11 @@ const Sidebar = ({ activeIndex = 1 }) => {
             </div>
             <div className="profile-section">
                 <div className="profile-info">
-                    <RxShare2 style={{ width: '22px', height: '22px' }} />
-                    {/* <img src="https://dashboard.codeparrot.ai/api/image/Z7sOYjHWD6EJo6xw/frame-2.png" alt="Profile" className="profile-img" /> */}
+                    {
+                        data?.profile?.pic ? 
+                        <img src={data.profile.pic} alt="Profile" className="sidebar-profile-img" /> :
+                        <div className='sidebar-profile-image no-img' ><MdAddAPhoto style={{ width: '24px', height: '24px' }} /></div>
+                    }
                     <span className="profile-name">{userName}</span>
                 </div>
             </div>

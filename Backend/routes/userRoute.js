@@ -31,7 +31,7 @@ router.post('/register', async (req, res) => {
             res.status(200).json({
                 token, 
                 userData: {
-                    userId: userData._id, 
+                    id: userData._id, 
                     email: userData.email,
                     firstname, 
                     lastname
@@ -63,7 +63,7 @@ router.post('/add-username', authenticateToken, async (req, res) => {
 
         res.status(200).json({
             userData: {
-                userId: userData._id,
+                id: userData._id,
                 email: userData.email,
                 firstname: userData.firstname,
                 lastname: userData.lastname,
@@ -119,7 +119,7 @@ router.post('/update', authenticateToken, async (req, res) => {
         res.status(200).json({
             token,
             userData: {
-                userId: userData._id,
+                id: userData._id,
                 email: userData.email,
                 firstname: userData.firstname,
                 lastname: userData.lastname,
@@ -156,10 +156,11 @@ router.post('/login',async(req,res)=> {
             res.status(200).json({
                 token, 
                 userData: {
-                    userId: userExists._id, 
+                    id: userExists._id, 
                     email: userExists.email,
                     firstname: userExists.firstname, 
-                    lastname: userExists.lastname
+                    lastname: userExists.lastname,
+                    username: userExists.username
                 },
                 msg:'Login successful',
                 sts: 1

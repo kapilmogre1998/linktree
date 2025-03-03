@@ -14,7 +14,7 @@ const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-  
+
   // Error state
   const [errors, setErrors] = useState({
     username: '',
@@ -46,7 +46,7 @@ const LoginPage = () => {
   const handleUsernameChange = (e) => {
     const value = e.target.value;
     setUsername(value);
-    
+
     // Clear error when user starts typing
     if (errors.username) {
       setErrors(prev => ({
@@ -59,7 +59,7 @@ const LoginPage = () => {
   const handlePasswordChange = (e) => {
     const value = e.target.value;
     setPassword(value);
-    
+
     // Clear error when user starts typing
     if (errors.password) {
       setErrors(prev => ({
@@ -72,11 +72,11 @@ const LoginPage = () => {
   // Form submission handler with validation
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Validate all fields
     const usernameError = validateUsername(username);
     const passwordError = validatePassword(password);
-    
+
     // Update errors state
     setErrors({
       username: usernameError,
@@ -87,14 +87,18 @@ const LoginPage = () => {
     if (!usernameError && !passwordError) {
       try {
         const res = await loginAPI({ email: username, password });
-        if(res.data.sts === 1){
+        if (res.data.sts === 1) {
           localStorage.setItem("token", res.data.token);
           localStorage.setItem("user_data", JSON.stringify(res.data.userData))
-          navigate('/on-board')
+          if(res.data.userData?.username){
+            navigate('/add-link');
+          } else {
+            navigate('/on-board')
+          }
         }
       } catch (error) {
         console.log("🚀 ~ handleSubmit ~ error:", error)
-        if(error?.response?.data?.msg){
+        if (error?.response?.data?.msg) {
           toast.error(error.response.data.msg);
         }
       }
@@ -104,9 +108,9 @@ const LoginPage = () => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-        navigate('/on-board');
+      navigate('/on-board');
     }
-}, [])
+  }, [])
 
   return (
     <div className="login-container">

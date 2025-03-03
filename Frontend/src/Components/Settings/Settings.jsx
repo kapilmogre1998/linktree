@@ -1,9 +1,14 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useReducer, useState } from 'react';
 import './Settings.scss';
 import Sidebar from '../Common/Sidebar/Sidebar';
 import { updateUserAPI } from './api';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
+import { getLinkTreeAPI } from '../AddLinks/api';
+import SparkIcon from '../../assets/spark-icon.svg';
+import { mobilePreviewInitialState, mobilePreviewReducer } from '../../reducer';
+import { MdAddAPhoto } from "react-icons/md";
+import { setMobilePreview } from '../../action';
 
 const Settings = () => {
     const [formData, setFormData] = useState({
@@ -13,21 +18,50 @@ const Settings = () => {
         password: '',
         confirmPassword: ''
     });
+    const [state, dispatch] = useReducer(mobilePreviewReducer, mobilePreviewInitialState);
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [confirmPasswordError, setConfirmPasswordError] = useState('');
-    const userName = JSON.parse(localStorage.getItem('user_data'))?.userName || {};
+    const userName = JSON.parse(localStorage.getItem('user_data'))?.username || {};
     const navigate = useNavigate();
+    const token = localStorage.getItem('token');
+    const [data, setData] = useState({
+        profile: {
+            pic: '',
+            title: '',
+            bio: ''
+        },
+        links: [
+        ],
+        shops: [],
+        bannerBgClr: "#342b26",
+        layout: 'Stack',
+        buttons: {
+            option: 'Fill',
+            color: '#888888',
+            fontColor: '#888888',
+            index: 2,
+            type: 'Teritary'
+        },
+        fonts: {
+            fontType: 'Sans-serif',
+            color: '#FFFFFF'
+        },
+        theme: {
+            name: 'Air_Snow',
+            background: 'white',
+        }
+    })
 
 
     const handleChange = (e) => {
-        if(e.target.name === 'email'){
+        if (e.target.name === 'email') {
             setEmailError('');
         }
-        if(e.target.name === 'password'){
+        if (e.target.name === 'password') {
             setPasswordError('');
         }
-        if(e.target.name === 'confirmPassword'){
+        if (e.target.name === 'confirmPassword') {
             setConfirmPasswordError('');
         }
         const { name, value } = e.target;
@@ -72,8 +106,8 @@ const Settings = () => {
             const res = await updateUserAPI(data);
 
             if (res.data.sts === 1) {
-                const { email, lastname, firstname, userId } = res.data.userData;
-                localStorage.setItem('user_data', JSON.stringify({ id: userId, userName, email, lastName: lastname, firstName: firstname }));
+                const { email, lastname, firstname, id } = res.data.userData;
+                localStorage.setItem('user_data', JSON.stringify({ id, userName, email, lastName: lastname, firstName: firstname }));
                 toast.success('Profile updated successfully', { theme: 'colored' });
                 // navigate('/add-link');
             }
@@ -104,7 +138,7 @@ const Settings = () => {
             isError = true;
         }
 
-        if(isError){
+        if (isError) {
             return;
         }
 
@@ -129,17 +163,67 @@ const Settings = () => {
     }
 
     useLayoutEffect(() => {
-        const { firstName, lastName, email } = JSON.parse(localStorage.getItem('user_data')) || {};
+        const { firstname, lastname, email } = JSON.parse(localStorage.getItem('user_data')) || {};
         setFormData({
-            firstName,
-            lastName,
+            firstName: firstname,
+            lastName: lastname,
             email
         })
     }, [])
 
+    const fetchData = async (userId) => {
+        try {
+            const res = await getLinkTreeAPI(userId);
+            if (res?.data?.sts == 1 && res.data?.data) {
+                console.log(res)
+                const modifiedData = {
+                    ...res.data.data,
+                    id: res.data.data._id
+                }
+
+                delete modifiedData._id;
+                delete modifiedData.__v;
+                delete modifiedData.userId;
+
+                dispatch(setMobilePreview(modifiedData));
+                setData(modifiedData);
+            }
+        } catch (error) {
+            console.log("🚀 ~ handleSubmit ~ error:", error)
+            if (error?.response?.data?.msg) {
+                toast.error(error.response.data.msg);
+            }
+        }
+    }
+
+    useLayoutEffect(() => {
+        if (!token) {
+            window.location.href = '/login';
+        }
+    }, [])
+
+    useEffect(() => {
+        const userId = JSON.parse(localStorage.getItem('user_data'))?.id;
+        if (userId) {
+            fetchData(userId);
+        }
+    }, [])
+
+
     return (
         <div className='edit-profile-container' >
-            <Sidebar activeIndex={'4'} />
+            <Sidebar activeIndex={'4'}  {...{ data }} />
+            <div className='mobile-header-container' >
+                <div className='mobile-icon' >
+                    <img src={SparkIcon} width='30px' height='30px' alt="spark-icon" />
+                    <div className='spark-trade-mark-container' >SPARK <span className='trade-mark' >TM</span> </div>
+                </div>
+                {
+                    data?.profile?.pic ?
+                        <img src={data.profile.pic} alt="Profile" className="mobile-header-image" /> :
+                        <div className='mobile-header-image no-img' ><MdAddAPhoto style={{ width: '50px', height: '50px' }} /></div>
+                }
+            </div>
             <div className="edit-profile-layout">
                 <header className="setting-header">
                     <div className="setting-header-content">
@@ -205,7 +289,7 @@ const Settings = () => {
                                 onChange={handleChange}
                                 placeholder="Enter your password"
                             />
-                             <div className='error-msg' >{passwordError ? passwordError : ''}</div>
+                            <div className='error-msg' >{passwordError ? passwordError : ''}</div>
                         </div>
 
                         <div className="form-group">
@@ -231,7 +315,7 @@ const Settings = () => {
             </div>
 
             <ToastContainer
-                // toastStyle={{ backgroundColor: "crimson" }}
+            // toastStyle={{ backgroundColor: "crimson" }}
             />
         </div>
     );

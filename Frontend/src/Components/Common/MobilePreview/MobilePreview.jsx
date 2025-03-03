@@ -7,12 +7,13 @@ import youtubeIcon from '../../../assets/youtube.svg';
 import instagramIcon from '../../../assets/instagram.svg';
 import facebookIcon from '../../../assets/facebook.svg';
 import twitterIcon from '../../../assets/twitter.svg';
+import { IoShareOutline } from "react-icons/io5";
 
 import './MobilePreview.scss'
 import { useNavigate } from 'react-router-dom';
 
 const MobilePreview = (props) => {
-    const { data: { profile, bannerBgClr, links, shops, buttons, theme, layout, fonts } } = props;
+    const { data: { profile, bannerBgClr, links, shops, buttons, theme, layout, fonts }, setMobileScreenPreview } = props;
     const [activeTab, setActiveTab] = useState('link')
     const navigate = useNavigate();
 
@@ -100,6 +101,9 @@ const MobilePreview = (props) => {
                             }
                         </div>
                         <div className="mobile-username" style={{ color: fonts.color }}  >{profile?.title}</div>
+                        <div className='share-icon' >
+                            <IoShareOutline />
+                        </div>
                     </div>
                     <div className="button-group" >
                         <div className="toggle-button" >
@@ -111,14 +115,14 @@ const MobilePreview = (props) => {
                         {
                             activeTab === 'link' ?
                                 links?.map(({ title, url, icon, index }, id) => (
-                                    <div key={id} className="link-item" onClick={() =>  window.open(url, '_blank')} style={{ ...applyStyles(buttons.option), width: layout == 'Stack' ? '100%' : '120px' }} >
+                                    <div key={id} className="link-item" onClick={() => window.open(url, '_blank')} style={{ ...applyStyles(buttons.option), width: layout == 'Stack' ? '100%' : '120px' }} >
                                         <div className="link-thumbnail" style={{ width: layout == 'Carousel' ? '60px' : '42px', height: layout == 'Carousel' ? '60px' : '42px' }} >
                                             <img src={LINKICON[icon]} alt="YouTube" />
                                         </div>
                                         <span style={{ color: buttons.fontColor }} >{title}</span>
                                     </div>)) :
                                 shops?.map(({ title, url, icon }, id) => (
-                                    <div key={id} className="link-item" style={applyStyles(buttons.option)} onClick={() =>  window.open(url, '_blank')} >
+                                    <div key={id} className="link-item" style={applyStyles(buttons.option)} onClick={() => window.open(url, '_blank')} >
                                         <div className="link-thumbnail">
                                             <img src={SHOPICON[icon]} alt="YouTube" />
                                         </div>
@@ -138,6 +142,10 @@ const MobilePreview = (props) => {
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div className='cross-container' >
+                <div className='cross'  onClick={() => setMobileScreenPreview(false)} >x</div>
             </div>
         </div>
     )

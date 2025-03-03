@@ -34,7 +34,7 @@ const OnboardingPage = () => {
 
     const handleClickOnContinue = async () => {
         if(!userName.trim().length){
-            setShowError(true);
+            return setShowError(true);
         }
         try {
             const userData = localStorage.getItem('user_data')
@@ -91,7 +91,12 @@ const OnboardingPage = () => {
                                 value={userName}
                                 className={`username-input`}
                                 placeholder="Tell us your username"
-                                onChange={(e) => setUserName(e.target.value)}
+                                onChange={(e) => {
+                                    if(e?.target?.value?.length){
+                                        setShowError(false)
+                                        setUserName(e.target.value)
+                                    }
+                                }}
                                 // onFocus={handleInputFocus}
                                 // onBlur={handleInputBlur}
                             />

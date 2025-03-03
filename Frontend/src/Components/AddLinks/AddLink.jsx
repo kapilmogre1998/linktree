@@ -1,6 +1,8 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useReducer, useState } from 'react';
+import SparkIcon from '../../assets/spark-icon.svg';
 import Modal from '../Common/Modal/Modal';
 import Sidebar from '../Common/Sidebar/Sidebar';
+import { useNavigate } from 'react-router-dom';
 import MobilePreview from '../Common/MobilePreview/MobilePreview';
 import ToggleSwitch from '../Common/ToggleSwitch/ToggleSwitch';
 import { TbShare2 } from "react-icons/tb";
@@ -20,10 +22,24 @@ import FlipkartIcon from '../../assets/flipkart.svg'
 import { ToastContainer, toast } from 'react-toastify';
 import { setMobilePreview } from '../../action';
 import { createLinkTreeAPI, getLinkTreeAPI, updateLinkTreeAPI } from './api';
-
+import { IoEyeOutline } from "react-icons/io5";
+import Loader from '../Common/Loader/Loader';
+import LinkIcon from '../../assets/link-icon.svg';
+import AppearanceIcon from '../../assets/apperance.svg';
+import SettingsIcon from '../../assets/settings-icon.svg';
+import AnalyticsIcon from '../../assets/analytics.svg';
 
 import './AddLink.scss';
-import Loader from '../Common/Loader/Loader';
+
+const NAV_ITEMS = [
+  { id: 1, label: 'Links', icon: <LinkIcon />, route: '/add-link' },
+  { id: 2, label: 'Appearance', icon: <AppearanceIcon />, route: '/appearance' },
+  { id: 3, label: 'Analytics', icon: <AnalyticsIcon />, route: '/analytics' },
+  { id: 4, label: 'Settings', icon: <SettingsIcon />, route: '/settings' }
+];
+
+const navIcons = [LinkIcon, AppearanceIcon, AnalyticsIcon, SettingsIcon];
+
 
 const AddLink = () => {
   const [state, dispatch] = useReducer(mobilePreviewReducer, mobilePreviewInitialState);
@@ -40,9 +56,10 @@ const AddLink = () => {
   const [modalError, setModalError] = useState(false);
   const [toggle, setToggle] = useState(false);
   const [isLoader, setIsLoader] = useState(false);
+  const [mobileScreenPreview, setMobileScreenPreview] = useState(false);
   const [data, setData] = useState({
     profile: {
-      pic: profilePic,
+      pic: '',
       title: '',
       bio: ''
     },
@@ -66,7 +83,9 @@ const AddLink = () => {
       background: 'white',
     }
   })
-  const userName = JSON.parse(localStorage.getItem('user_data'))?.userName || {};
+  const userName = JSON.parse(localStorage.getItem('user_data'))?.username || '';
+  const token = localStorage.getItem('token');
+  const navigate = useNavigate();
 
   const colorOptions = [
     { color: '#342b26', id: 'color1' },
@@ -226,304 +245,342 @@ const AddLink = () => {
     const userId = JSON.parse(localStorage.getItem('user_data'))?.id;
     const updateId = mobilePreviewData?.id;
 
-    if(updateId){
-      updateData({...data, userId}, updateId);
+    if (updateId) {
+      updateData({ ...data, userId }, updateId);
     } else {
-      submitData({...data, userId});
+      submitData({ ...data, userId });
     }
   }
 
+  useLayoutEffect(() => {
+    if (!token) {
+      window.location.href = '/login';
+    }
+  }, [])
+
   useEffect(() => {
     const userId = JSON.parse(localStorage.getItem('user_data'))?.id;
-    fetchData(userId);
+    if (userId) {
+      fetchData(userId);
+    }
   }, [])
 
   return (
-  <div className="add-link-container">
-      <Sidebar activeIndex='1' />
+    <>
+      {!mobileScreenPreview ? <div className="add-link-container">
+        <Sidebar activeIndex={'1'} data={data} />
 
-      <div className="main-content">
-        <header className="header">
-          <div className="header-content">
-            <h1 className="greeting"><span className='text-bold' >Hi</span>, {userName}!</h1>
-            <p className="notification">Congratulations. You got a great response today.</p>
+        <div className="main-content">
+          <header className="header">
+            <div className="header-content">
+              <h1 className="greeting"><span className='text-bold' >Hi</span>, {userName}!</h1>
+              <p className="notification">Congratulations. You got a great response today.</p>
+            </div>
+          </header>
+
+          <div className='mobile-header-container' >
+            <div className='mobile-icon' >
+              <img src={SparkIcon} width='30px' height='30px' alt="spark-icon" />
+              <div className='spark-trade-mark-container' >SPARK <span className='trade-mark' >TM</span> </div>
+            </div>
+            {
+              data?.profile?.pic ?
+                <img src={data.profile.pic} alt="Profile" className="mobile-header-image" /> :
+                <div className='mobile-header-image no-img' ><MdAddAPhoto style={{ width: '50px', height: '50px' }} /></div>
+            }
           </div>
-        </header>
 
-        <div className='left-right-container' >
-          <MobilePreview data={data} />
+          <div className='mobile-nav-bar-container' >
+            {
+              NAV_ITEMS.map(({ label, route, id }) => (<div key={id} className={`mobile-nav-icon ${label == 'Links' ? 'active' : ''}`} onClick={() => navigate(route)} >
+                <img src={navIcons[id - 1]} alt="nav" />
+                <div>{label}</div>
+              </div>))
+            }
+          </div>
 
-          <div className='profile-banner-section' >
-            <div className="content-sections">
-              <div className="profile-section-container">
-                <h2 className="profile-heading">Profile</h2>
-                <div className="profile-container">
-                  <div className="profile-content">
-                    <div className="profile-header">
-                      {
-                        data?.profile?.pic ? 
-                          <img src={data.profile.pic} alt="Profile" className="profile-image" /> :
-                          <div className='profile-image no-img' ><MdAddAPhoto style={{ width: '50px', height: '50px' }} /></div>
-                      }
-                      <div className="profile-buttons">
-                        <div className="file-upload-container">
-                          <input
-                            type="file"
-                            id="fileInput"
-                            accept="image/*"
-                            onChange={handleFileChange}
-                            style={{ display: 'none' }}
-                          />
-                          <button
-                            className="upload-button"
-                            onClick={handleClick}
-                          >
-                            Pick an image
+          <div className='left-right-container' >
+            <MobilePreview data={data} />
+
+            <div className='profile-banner-section' >
+              <div className="content-sections">
+                <div className="profile-section-container">
+                  <h2 className="profile-heading">Profile</h2>
+                  <div className="profile-container">
+                    <div className="profile-content">
+                      <div className="profile-header">
+                        {
+                          data?.profile?.pic ?
+                            <img src={data.profile.pic} alt="Profile" className="profile-image" /> :
+                            <div className='profile-image no-img' ><MdAddAPhoto style={{ width: '50px', height: '50px' }} /></div>
+                        }
+                        <div className="profile-buttons">
+                          <div className="file-upload-container">
+                            <input
+                              type="file"
+                              id="fileInput"
+                              accept="image/*"
+                              onChange={handleFileChange}
+                              style={{ display: 'none' }}
+                            />
+                            <button
+                              className="upload-button"
+                              onClick={handleClick}
+                            >
+                              Pick an image
+                            </button>
+                          </div>
+                          <button className="remove-button" onClick={handleRemove}>
+                            Remove
                           </button>
                         </div>
-                        <button className="remove-button" onClick={handleRemove}>
-                          Remove
-                        </button>
+                      </div>
+                      <div className="profile-form">
+                        <div className="input-group">
+                          <label className="input-label">Profile Title</label>
+                          <input type="text" placeholder='title' className="profile-input" value={data?.profile?.title} onChange={handleTitleChange} />
+                        </div>
+                        <div className="input-group">
+                          <label className="input-label">Bio</label>
+                          <textarea
+                            className="bio-input"
+                            value={data?.profile?.bio}
+                            onChange={handleBioChange}
+                            placeholder="Bio"
+                          />
+                          <span className="bio-counter">{bio.length} / 80</span>
+                        </div>
                       </div>
                     </div>
-                    <div className="profile-form">
-                      <div className="input-group">
-                        <label className="input-label">Profile Title</label>
-                        <input type="text" placeholder='title' className="profile-input" value={data?.profile?.title} onChange={handleTitleChange} />
+                  </div>
+                </div>
+
+                <div className="frame-container">
+                  <div className="toggle-container">
+                    <div
+                      className={activeTab === 'link' ? "active-toggle" : "inactive-toggle"}
+                      onClick={() => setActiveTab('link')}
+                    >
+                      <img src="https://dashboard.codeparrot.ai/api/image/Z7ymhiOoSyo_4k6O/iconoir.png" alt="link-icon" className="icon" />
+                      <span className={activeTab === 'link' ? "active-text" : "inactive-text"}>Add Link</span>
+                    </div>
+                    <div
+                      className={activeTab === 'shop' ? "active-toggle" : "inactive-toggle"}
+                      onClick={() => setActiveTab('shop')}
+                    >
+                      <img src="https://dashboard.codeparrot.ai/api/image/Z7ymhiOoSyo_4k6O/iconoir-2.png" alt="shop-icon" className="icon" />
+                      <span className={activeTab === 'shop' ? "active-text" : "inactive-text"}>Add Shop</span>
+                    </div>
+                  </div>
+
+                  <button className="add-button" onClick={openModal}>
+                    <img src="https://dashboard.codeparrot.ai/api/image/Z7ymhiOoSyo_4k6O/mingcute.png" alt="add-icon" className="add-icon" />
+                    <span>Add</span>
+                  </button>
+
+                  <div>
+                    {
+                      activeTab === 'link' ?
+                        data?.links?.length > 0 && <div className="links-container">
+                          {data?.links.map(({ title, url, count }, index) => (
+                            <div className="links-heading">
+                              <div className='link-content' >
+                                <div className='title' >{title} <LuPencilLine /></div>
+                                <div className='url' >{url} <LuPencilLine /></div>
+                                <div className='signal-count' ><img src={SignalIcon} alt="" /> {count} Clicks</div>
+                              </div>
+
+                              <div className='toggle-delete' >
+                                <ToggleSwitch toggle={true} />
+                                <div><RiDeleteBin6Line onClick={() => handleAddLink('DELETE', index)} /></div>
+                              </div>
+                            </div>
+                          ))}
+                        </div> :
+                        data?.shops?.length > 0 ? <div className="links-container">
+                          {data?.shops.map(({ title, url, count }, index) => (
+                            <div className="links-heading">
+                              <div className='link-content' >
+                                <div className='title' >{title} <LuPencilLine /></div>
+                                <div className='url' >{url} <LuPencilLine /></div>
+                                <div className='signal-count' ><img src={SignalIcon} alt="" /> {count} Clicks</div>
+                              </div>
+
+                              <div className='toggle-delete' >
+                                <ToggleSwitch toggle={true} />
+                                <div><RiDeleteBin6Line onClick={() => handleAddLink('DELETE', index)} /></div>
+                              </div>
+                            </div>
+                          ))}
+                        </div> : null
+                    }
+                  </div>
+                </div>
+
+                <div className="banner-section">
+                  <h2 className="banner-title">Banner</h2>
+                  <div className='banner-box' >
+                    <div className="banner-preview" style={{ backgroundColor: data?.bannerBgClr }}>
+                      <div className="banner-profile-content">
+                        {
+                          data?.profile?.pic ?
+                            <img src={data?.profile?.pic} alt="Profile" className="banner-profile-image" /> :
+                            <div className='banner-profile-image no-img' >
+                              <MdAddAPhoto style={{ width: '50px', height: '50px' }} />
+                            </div>
+                        }
+                        <h1 className="banner-username">{data?.profile?.title}</h1>
+                        {data?.profile?.title ? <div className="handle-container">
+                          <img src="https://dashboard.codeparrot.ai/api/image/Z7sOYjHWD6EJo6xw/frame-3.png" alt="Frame" className="frame-icon" />
+                          <span className="handle">/{data?.profile?.title}</span>
+                        </div> : null}
                       </div>
-                      <div className="input-group">
-                        <label className="input-label">Bio</label>
-                        <textarea
-                          className="bio-input"
-                          value={data?.profile?.bio}
-                          onChange={handleBioChange}
-                          placeholder="Bio"
-                        />
-                        <span className="bio-counter">{bio.length} / 80</span>
+                    </div>
+                    <div className="color-customization">
+                      <p className="color-label">Custom Background Color</p>
+                      <div className="color-options">
+                        {colorOptions.map((option) => (
+                          <button
+                            key={option.id}
+                            className={`color-button ${backgroundColor === option.color ? 'active' : ''}`}
+                            style={{ backgroundColor: option.color, border: option.border ? option.border : 'none' }}
+                            onClick={() => handleColorChange(option.color)}
+                          />
+                        ))}
+                      </div>
+                      <div className="color-input-container">
+                        <div className="color-preview" style={{ backgroundColor: data?.bannerBgClr }} />
+                        <div className="color-input-wrapper">
+                          <input
+                            type="text"
+                            value={data?.bannerBgClr}
+                            onChange={(e) => {
+                              // setColorInput(e.target.value);
+                              setData(prev => ({ ...prev.data, bannerBgClr: e.target.value }));
+                              // if (e.target.value.match(/^#[0-9A-Fa-f]{6}$/)) {
+                              // setBackgroundColor(e.target.value);
+                              // }
+                            }}
+                            className="color-input"
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="frame-container">
-                <div className="toggle-container">
-                  <div
-                    className={activeTab === 'link' ? "active-toggle" : "inactive-toggle"}
-                    onClick={() => setActiveTab('link')}
-                  >
-                    <img src="https://dashboard.codeparrot.ai/api/image/Z7ymhiOoSyo_4k6O/iconoir.png" alt="link-icon" className="icon" />
-                    <span className={activeTab === 'link' ? "active-text" : "inactive-text"}>Add Link</span>
-                  </div>
-                  <div
-                    className={activeTab === 'shop' ? "active-toggle" : "inactive-toggle"}
-                    onClick={() => setActiveTab('shop')}
-                  >
-                    <img src="https://dashboard.codeparrot.ai/api/image/Z7ymhiOoSyo_4k6O/iconoir-2.png" alt="shop-icon" className="icon" />
-                    <span className={activeTab === 'shop' ? "active-text" : "inactive-text"}>Add Shop</span>
-                  </div>
-                </div>
-
-                <button className="add-button" onClick={openModal}>
-                  <img src="https://dashboard.codeparrot.ai/api/image/Z7ymhiOoSyo_4k6O/mingcute.png" alt="add-icon" className="add-icon" />
-                  <span>Add</span>
+              <div className='save-btn-container' >
+                <button className="save-button" onClick={handleSave}>
+                  Save
                 </button>
-
-                <div>
-                  {
-                    activeTab === 'link' ?
-                      data?.links?.length > 0 && <div className="links-container">
-                        {data?.links.map(({ title, url, count }, index) => (
-                          <div className="links-heading">
-                            <div className='link-content' >
-                              <div className='title' >{title} <LuPencilLine /></div>
-                              <div className='url' >{url} <LuPencilLine /></div>
-                              <div className='signal-count' ><img src={SignalIcon} alt="" /> {count} Clicks</div>
-                            </div>
-
-                            <div className='toggle-delete' >
-                              <ToggleSwitch toggle={true} />
-                              <div><RiDeleteBin6Line onClick={() => handleAddLink('DELETE', index)} /></div>
-                            </div>
-                          </div>
-                        ))}
-                      </div> :
-                      data?.shops?.length > 0 && <div className="links-container">
-                        {data?.shops.map(({ title, url, count }, index) => (
-                          <div className="links-heading">
-                            <div className='link-content' >
-                              <div className='title' >{title} <LuPencilLine /></div>
-                              <div className='url' >{url} <LuPencilLine /></div>
-                              <div className='signal-count' ><img src={SignalIcon} alt="" /> {count} Clicks</div>
-                            </div>
-
-                            <div className='toggle-delete' >
-                              <ToggleSwitch toggle={true} />
-                              <div><RiDeleteBin6Line onClick={() => handleAddLink('DELETE', index)} /></div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                  }
-                </div>
-              </div>
-
-              <div className="banner-section">
-                <h2 className="banner-title">Banner</h2>
-                <div className='banner-box' >
-                  <div className="banner-preview" style={{ backgroundColor: data?.bannerBgClr }}>
-                    <div className="banner-profile-content">
-                      {
-                        data?.profile?.pic ?
-                          <img src={data?.profile?.pic} alt="Profile" className="banner-profile-image" /> :
-                          <div className='banner-profile-image no-img' >
-                            <MdAddAPhoto style={{ width: '50px', height: '50px' }} />
-                          </div>
-                      }
-                      <h1 className="banner-username">{data?.profile?.title}</h1>
-                      {data?.profile?.title ? <div className="handle-container">
-                        <img src="https://dashboard.codeparrot.ai/api/image/Z7sOYjHWD6EJo6xw/frame-3.png" alt="Frame" className="frame-icon" />
-                        <span className="handle">/{data?.profile?.title}</span>
-                      </div> : null}
-                    </div>
-                  </div>
-                  <div className="color-customization">
-                    <p className="color-label">Custom Background Color</p>
-                    <div className="color-options">
-                      {colorOptions.map((option) => (
-                        <button
-                          key={option.id}
-                          className={`color-button ${backgroundColor === option.color ? 'active' : ''}`}
-                          style={{ backgroundColor: option.color, border: option.border ? option.border : 'none' }}
-                          onClick={() => handleColorChange(option.color)}
-                        />
-                      ))}
-                    </div>
-                    <div className="color-input-container">
-                      <div className="color-preview" style={{ backgroundColor: data?.bannerBgClr }} />
-                      <div className="color-input-wrapper">
-                        <input
-                          type="text"
-                          value={data?.bannerBgClr}
-                          onChange={(e) => {
-                            // setColorInput(e.target.value);
-                            setData(prev => ({ ...prev.data, bannerBgClr: e.target.value }));
-                            // if (e.target.value.match(/^#[0-9A-Fa-f]{6}$/)) {
-                            // setBackgroundColor(e.target.value);
-                            // }
-                          }}
-                          className="color-input"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
+          </div>
+        </div>
 
-            <div className='save-btn-container' >
-              <button className="save-button" onClick={handleSave}>
-                Save
+        {isModalOpen && <Modal closeModal={closeModal} activeTab={activeTab} contentWidth={'700'}  >
+          <div className="addlink-container">
+            <div className="header-buttons">
+              <button className={`button-container ${activeTab == 'link' ? 'active' : ''}`} onClick={() => setActiveTab('link')} >
+                <img src="https://dashboard.codeparrot.ai/api/image/Z735UWZErsX9xb7b/iconoir.png" alt="Add Link Icon" className="button-icon" />
+                <span>Add Link</span>
+              </button>
+              <button className={`button-container ${activeTab == 'shop' ? 'active' : ''}`} onClick={() => setActiveTab('shop')} >
+                <img src="https://dashboard.codeparrot.ai/api/image/Z735UWZErsX9xb7b/iconoir-2.png" alt="Add Shop Icon" className="button-icon" />
+                <span>Add Shop</span>
               </button>
             </div>
-          </div>
-        </div>
-      </div>
 
-      {isModalOpen && <Modal closeModal={closeModal} activeTab={activeTab} contentWidth={'700'}  >
-        <div className="addlink-container">
-          <div className="header-buttons">
-            <button className={`button-container ${activeTab == 'link' ? 'active' : ''}`} onClick={() => setActiveTab('link')} >
-              <img src="https://dashboard.codeparrot.ai/api/image/Z735UWZErsX9xb7b/iconoir.png" alt="Add Link Icon" className="button-icon" />
-              <span>Add Link</span>
-            </button>
-            <button className={`button-container ${activeTab == 'shop' ? 'active' : ''}`} onClick={() => setActiveTab('shop')} >
-              <img src="https://dashboard.codeparrot.ai/api/image/Z735UWZErsX9xb7b/iconoir-2.png" alt="Add Shop Icon" className="button-icon" />
-              <span>Add Shop</span>
-            </button>
-          </div>
+            <div className="content-container">
+              <div className="section-container">
+                <div className="url-section">
+                  <h2 className="section-title">Enter URL</h2>
 
-          <div className="content-container">
-            <div className="section-container">
-              <div className="url-section">
-                <h2 className="section-title">Enter URL</h2>
-
-                <div className="url-input-group">
-                  <div className="input-container">
-                    <div className="input-wrapper">
-                      <input
-                        type="text"
-                        placeholder="Link title"
-                        className="url-input"
-                        value={title}
-                        onChange={(e) => {
-                          setModalError(false)
-                          setTitle(e.target.value)
-                        }}
-                      />
+                  <div className="url-input-group">
+                    <div className="input-container">
+                      <div className="input-wrapper">
+                        <input
+                          type="text"
+                          placeholder="Link title"
+                          className="url-input"
+                          value={title}
+                          onChange={(e) => {
+                            setModalError(false)
+                            setTitle(e.target.value)
+                          }}
+                        />
+                      </div>
+                      <div style={{ marginLeft: '20px' }}>
+                        <ToggleSwitch toggle={toggle} addLink={() => {
+                          if (title.trim().length && url.trim().length) {
+                            handleAddLink()
+                          } else {
+                            setModalError(true)
+                          }
+                        }} />
+                      </div>
                     </div>
-                    <div style={{ marginLeft: '20px' }}>
-                      <ToggleSwitch toggle={toggle} addLink={() => {
-                        if (title.trim().length && url.trim().length) {
-                          handleAddLink()
-                        } else {
-                          setModalError(true)
-                        }
-                      }} />
+                    <div className="input-container">
+                      <div className="input-wrapper">
+                        <input
+                          type="text"
+                          placeholder="Link Url"
+                          className="url-input"
+                          value={url}
+                          onChange={(e) => {
+                            setModalError(false)
+                            setUrl(e.target.value)
+                          }}
+                        />
+                      </div>
+                      <TbShare2 className='delete-share-icon' />
+                      <RiDeleteBinLine className='delete-share-icon' onClick={() => setUrl('')} />
                     </div>
                   </div>
-                  <div className="input-container">
-                    <div className="input-wrapper">
-                      <input
-                        type="text"
-                        placeholder="Link Url"
-                        className="url-input"
-                        value={url}
-                        onChange={(e) => {
-                          setModalError(false)
-                          setUrl(e.target.value)
-                        }}
-                      />
-                    </div>
-                    <TbShare2 className='delete-share-icon' />
-                    <RiDeleteBinLine className='delete-share-icon' onClick={() => setUrl('')} />
-                  </div>
+                  <div className='error-msg' >{modalError ? 'All Fields are required*' : ''}</div>
                 </div>
-                <div className='error-msg' >{modalError ? 'All Fields are required*' : ''}</div>
-              </div>
-              <div className="divider"></div>
-              <div className="applications-section">
-                <h3 className="section-subtitle">Applications</h3>
+                <div className="divider"></div>
+                <div className="applications-section">
+                  <h3 className="section-subtitle">Applications</h3>
 
-                <div className="apps-grid">
-                  {
-                    activeTab == 'link' ?
-                      [{ title: 'Instagram', icon: instagramIcon }, { title: 'Youtube', icon: youtubeIcon }, { title: 'Twitter', icon: twitterIcon }, { title: 'Facebook', icon: facebookIcon }].map((application, index) => (
-                        <div className="app-item" onClick={() => setLinkActiveIcon(index)} >
-                          <div className={`app-icon-container ${linkActiveIcon == index ? 'active' : ''}`} >
-                            <img src={application.icon} alt="Instagram" className="app-icon" />
+                  <div className="apps-grid">
+                    {
+                      activeTab == 'link' ?
+                        [{ title: 'Instagram', icon: instagramIcon }, { title: 'Youtube', icon: youtubeIcon }, { title: 'Twitter', icon: twitterIcon }, { title: 'Facebook', icon: facebookIcon }].map((application, index) => (
+                          <div className="app-item" onClick={() => setLinkActiveIcon(index)} >
+                            <div className={`app-icon-container ${linkActiveIcon == index ? 'active' : ''}`} >
+                              <img src={application.icon} alt="Instagram" className="app-icon" />
+                            </div>
+                            <span className="app-name">{application.title}</span>
                           </div>
-                          <span className="app-name">{application.title}</span>
-                        </div>
-                      )) :
-                      [{ title: 'Flipkart', icon: FlipkartIcon }, { title: 'Amazon', icon: AmazonIcon }].map((application, index) => (
-                        <div className="app-item" onClick={() => setLinkActiveIcon(index)} >
-                          <div className={`app-icon-container ${linkActiveIcon == index ? 'active' : ''}`} >
-                            <img src={application.icon} alt="Instagram" className="app-icon" />
+                        )) :
+                        [{ title: 'Flipkart', icon: FlipkartIcon }, { title: 'Amazon', icon: AmazonIcon }].map((application, index) => (
+                          <div className="app-item" onClick={() => setLinkActiveIcon(index)} >
+                            <div className={`app-icon-container ${linkActiveIcon == index ? 'active' : ''}`} >
+                              <img src={application.icon} alt="Instagram" className="app-icon" />
+                            </div>
+                            <span className="app-name">{application.title}</span>
                           </div>
-                          <span className="app-name">{application.title}</span>
-                        </div>
-                      ))
-                  }
+                        ))
+                    }
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </Modal>}
+        </Modal>}
 
-      {isLoader && <Loader /> }
-    </div>
+        {isLoader && <Loader />}
+
+        <div className='preview-icon-container' >
+          <div className='eye-icon' onClick={() => setMobileScreenPreview(true)} >
+            <IoEyeOutline style={{ width: '22px', height: '22px' }} />
+            <div>Preview</div>
+          </div>
+        </div>
+      </div> : <MobilePreview {...{ data, setMobileScreenPreview }} />}
+    </>
   );
 };
 
