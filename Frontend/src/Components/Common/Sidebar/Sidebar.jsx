@@ -2,7 +2,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import LinkIcon from '../../../assets/link-icon.svg';
 import AppearanceIcon from '../../../assets/apperance.svg';
-import SettingsIcon from '../../../assets/settings-icon.svg';
+import SettingsIcon from '../../../assets/setting-icon.svg';
 import AnalyticsIcon from '../../../assets/analytics.svg';
 import SparkIcon from '../../../assets/spark-icon.svg';
 import { MdAddAPhoto } from "react-icons/md";

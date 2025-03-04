@@ -249,6 +249,13 @@
         text-align: right;
     }
 
+    .chart-area-1{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        // height: 307px;
+    }
+
     .chart-area {
         display: flex;
         flex-direction: column-reverse;

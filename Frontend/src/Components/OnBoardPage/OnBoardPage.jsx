@@ -5,6 +5,7 @@ import sparkIcon from '../../assets/spark-icon.png';
 import { addUserNameAPI } from './api';
 
 import './OnBoardPage.scss';
+import { toast } from 'react-toastify';
 
 const OnboardingPage = () => {
     const [selectedCategory, setSelectedCategory] = useState('Business');

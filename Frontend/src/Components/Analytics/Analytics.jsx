@@ -1,12 +1,20 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './Analytics.scss';
 import Sidebar from '../Common/Sidebar/Sidebar';
 import { CiCalendar } from "react-icons/ci";
 import { FaAngleDown } from "react-icons/fa6";
+import { getCountAPI } from './api';
+import { toast } from 'react-toastify';
 
 const Analytics = () => {
     const userName = JSON.parse(localStorage.getItem('user_data'))?.username || {};
     const [hoveredBarIndex, setHoveredBarIndex] = useState(null);
+    const [data, setData] = useState({
+        linkCount: 0,
+        shopCount: 0,
+        ctaCount: 0,
+        
+    })
 
     const lineChartData = [1000, 800, 900, 1500, 2800, 2200, 2400];
 
@@ -64,6 +72,36 @@ const Analytics = () => {
         currentAngle += (percentage / 100) * 360;
         return segment;
     });
+
+    const fetchCountTracking = async (userId) => {
+        try {
+            const res = await getCountAPI(userId);
+            if (res?.data?.sts == 1 && res.data?.data) {
+                console.log(res)
+                // const modifiedData = {
+                //     ...res.data.data,
+                //     id: res.data.data._id
+                // }
+
+                // delete modifiedData._id;
+                // delete modifiedData.__v;
+                // delete modifiedData.userId;
+
+                // dispatch(setMobilePreview(modifiedData));
+                // setData(modifiedData);
+            }
+        } catch (error) {
+            console.log("🚀 ~ handleSubmit ~ error:", error)
+            if (error?.response?.data?.msg) {
+                toast.error(error.response.data.msg);
+            }
+        }
+    }
+
+    useEffect(() => {
+        const userId = JSON.parse(localStorage.getItem('user_data'))?.id;
+        fetchCountTracking(userId)
+    },[])
 
     return (
         <div className='analytics-container' >
@@ -137,7 +175,7 @@ const Analytics = () => {
                             <span>1K</span>
                             <span>0</span>
                         </div>
-                        <div className="chart-area">
+                        <div className="chart-area-1">
                             <svg width="100%" height="100%" viewBox="0 0 989 307" className="line-chart">
                                 {/* Horizontal grid lines */}
                                 {/* <line x1="0" y1="0" x2="989" y2="0" className="grid-line" /> */}

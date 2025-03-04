@@ -106,8 +106,8 @@ const Settings = () => {
             const res = await updateUserAPI(data);
 
             if (res.data.sts === 1) {
-                const { email, lastname, firstname, id } = res.data.userData;
-                localStorage.setItem('user_data', JSON.stringify({ id, userName, email, lastName: lastname, firstName: firstname }));
+                const { email, lastname, firstname, id, username } = res.data.userData;
+                localStorage.setItem('user_data', JSON.stringify({ id, username, email, lastname: lastname, firstname: firstname }));
                 toast.success('Profile updated successfully', { theme: 'colored' });
                 // navigate('/add-link');
             }
@@ -315,7 +315,6 @@ const Settings = () => {
             </div>
 
             <ToastContainer
-            // toastStyle={{ backgroundColor: "crimson" }}
             />
         </div>
     );
