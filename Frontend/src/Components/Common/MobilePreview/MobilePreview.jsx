@@ -8,17 +8,29 @@ import instagramIcon from '../../../assets/instagram.svg';
 import facebookIcon from '../../../assets/facebook.svg';
 import twitterIcon from '../../../assets/twitter.svg';
 import { IoShareOutline } from "react-icons/io5";
-
-import './MobilePreview.scss'
+import { toast, ToastContainer } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
+import './MobilePreview.scss'
+
 const MobilePreview = (props) => {
-    const { data: { profile, bannerBgClr, links, shops, buttons, theme, layout, fonts }, setMobileScreenPreview } = props;
+    const { data: { profile, bannerBgClr, links, shops, buttons, theme, layout, fonts }, setMobileScreenPreview, apiCall = false, apiCallback = () => { } } = props;
     const [activeTab, setActiveTab] = useState('link')
     const navigate = useNavigate();
+    const userData = JSON.parse(localStorage.getItem('user_data'));
 
     const LINKICON = [instagramIcon, youtubeIcon, twitterIcon, facebookIcon];
     const SHOPICON = [FlipkartIcon, AmazonIcon];
+
+    const handleCopyLink = async () => {
+        try {
+
+            await navigator.clipboard.writeText(`${window.location.origin}/share-profile/${userData?.id}`);
+            toast.success('Copied to clipboard!');
+        } catch (err) {
+            console.error('Failed to copy: ', err);
+        }
+    };
 
     const applyStyles = (selectedOption) => {
         switch (selectedOption) {
@@ -86,6 +98,27 @@ const MobilePreview = (props) => {
         }
     }
 
+    const handleClickOnLink = () => {
+        setActiveTab('link');
+        if (apiCall) {
+            apiCallback({ linkCount: 1 });
+        }
+    }
+
+    const handleClickOnShop = () => {
+        setActiveTab('shop')
+        if (apiCall) {
+            apiCallback({ shopCount: 1 });
+        }
+    }
+
+    const handleClickOnGetConnected = () => {
+        navigate('/');
+        if (apiCall) {
+            apiCallback({ getConnectCount: 1 });
+        }
+    }
+
     return (
         <div className="mobile-preview-container" >
             <div className="mobile-frame" style={{ fontFamily: buttons?.fonts?.fontType, background: theme.background }} >
@@ -102,13 +135,13 @@ const MobilePreview = (props) => {
                         </div>
                         <div className="mobile-username" style={{ color: fonts.color }}  >{profile?.title}</div>
                         <div className='share-icon' >
-                            <IoShareOutline />
+                            <IoShareOutline onClick={handleCopyLink} />
                         </div>
                     </div>
                     <div className="button-group" >
                         <div className="toggle-button" >
-                            <div className={`btn-container ${activeTab == 'link' ? 'active' : ''}`} onClick={() => setActiveTab('link')} style={{ color: fonts.color }} >link</div>
-                            <div className={`btn-container ${activeTab == 'shop' ? 'active' : ''}`} onClick={() => setActiveTab('shop')} style={{ color: fonts.color }}>Shop</div>
+                            <div className={`btn-container ${activeTab == 'link' ? 'active' : ''}`} onClick={handleClickOnLink} style={{ color: fonts.color }} >link</div>
+                            <div className={`btn-container ${activeTab == 'shop' ? 'active' : ''}`} onClick={handleClickOnShop} style={{ color: fonts.color }}>Shop</div>
                         </div>
                     </div>
                     <div className="links-section" style={buttonStyles(layout)}>
@@ -133,7 +166,7 @@ const MobilePreview = (props) => {
                 </div>
 
                 <div className='mobile-preview-footer-container' >
-                    <button className="connect-button" style={{ color: fonts.color }} onClick={() => navigate('/')} >Get Connected</button>
+                    <button className="connect-button" style={{ color: fonts.color }} onClick={handleClickOnGetConnected} >Get Connected</button>
                     <div className="footer">
                         <div className="spark-logo">
                             <img src="https://dashboard.codeparrot.ai/api/image/Z7sOYjHWD6EJo6xw/group.png" alt="Spark Logo" />
@@ -145,8 +178,10 @@ const MobilePreview = (props) => {
             </div>
 
             <div className='cross-container' >
-                <div className='cross'  onClick={() => setMobileScreenPreview(false)} >x</div>
+                <div className='cross' onClick={() => setMobileScreenPreview(false)} >x</div>
             </div>
+
+            <ToastContainer />
         </div>
     )
 }

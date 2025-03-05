@@ -3,15 +3,15 @@
   display: flex;
   justify-content: center;
   // align-items: center;
-  min-width: 360px;
-  height: 710px;
+  min-width: 420px;
+  height: 750px;
   padding: 20px;
   border-radius: 50px;
-  background-color: #000000;
+  // background-color: #000000;
 }
 
 .mobile-frame {
-  width: 328px;
+  width: 380px;
   background: #ffffff;
   border-radius: 40px;
   height: 100%;
@@ -20,12 +20,15 @@
   flex-direction: column;
   position: relative;
   justify-content: space-between;
+
+  background: white;
+  border: 30px solid black;
 }
 
 .mobile-profile-section {
   height: 237px;
   // background: #342b26;
-  border-radius: 40px;
+  // border-radius: 40px;
   display: flex;
   flex-direction: column;
   align-items: center;

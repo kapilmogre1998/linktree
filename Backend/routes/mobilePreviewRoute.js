@@ -26,6 +26,28 @@ router.get('/mobilepreview/get', authenticateToken, async (req, res) => {
     }
 });
 
+router.get('/share-profle', async (req, res) => {
+    try {
+        if(!req.query.userId){
+            return res.status(400).json({ msg: 'UserId is required', sts: 0 });
+        }
+
+        const data = await MobilePreview.findOne({userId: req.query.userId});
+
+        if(!data){
+            return res.status(404).json({ msg: 'Data not found', sts: 1 });
+        }
+        
+        res.status(201).json({
+            data: data,
+            sts: 1
+        });
+    } catch (error) {
+        console.error('Error creating data:', error);
+        res.status(400).json({ msg: 'Error creating data', sts: 0 });
+    }
+});
+
 router.post('/mobilepreview/create', authenticateToken, async (req, res) => {
     try {
         const newData = new MobilePreview(req.body);

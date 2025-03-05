@@ -173,9 +173,9 @@ const AddLink = () => {
       setData(prev => ({ ...prev, links: prev.links.filter((link, index) => index !== id) }))
     } else if (title && url) {
       if (activeTab == 'link') {
-        setData(prev => ({ ...prev, links: [...prev.links, { title, url, icon: linkActiveIcon, count: 0 }] }));
+        setData(prev => ({ ...prev, links: [...prev.links, { title, url, icon: linkActiveIcon, count: 0, unqId: linkActiveIcon }] }));
       } else {
-        setData(prev => ({ ...prev, shops: [...prev.shops, { title, url, icon: linkActiveIcon, count: 0 }] }));
+        setData(prev => ({ ...prev, shops: [...prev.shops, { title, url, icon: linkActiveIcon, count: 0,  unqId: linkActiveIcon }]}));
       }
       setTitle('');
       setUrl('');
@@ -383,7 +383,7 @@ const AddLink = () => {
                       activeTab === 'link' ?
                         data?.links?.length > 0 && <div className="links-container">
                           {data?.links.map(({ title, url, count }, index) => (
-                            <div className="links-heading">
+                            <div key={index} className="links-heading">
                               <div className='link-content' >
                                 <div className='title' >{title} <LuPencilLine /></div>
                                 <div className='url' >{url} <LuPencilLine /></div>
@@ -399,7 +399,7 @@ const AddLink = () => {
                         </div> :
                         data?.shops?.length > 0 ? <div className="links-container">
                           {data?.shops.map(({ title, url, count }, index) => (
-                            <div className="links-heading">
+                            <div key={index} className="links-heading">
                               <div className='link-content' >
                                 <div className='title' >{title} <LuPencilLine /></div>
                                 <div className='url' >{url} <LuPencilLine /></div>

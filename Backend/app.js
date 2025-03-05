@@ -5,6 +5,7 @@ const userRoutes = require('./routes/userRoute');
 const mobilePreviewRoute = require('./routes/mobilePreviewRoute');
 const clickTrackingRoute = require('./routes/clicktrackingRoute');
 const cors = require('cors');
+const device = require('express-device'); 
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
@@ -18,6 +19,10 @@ app.use((req, res, next) => {
     next();
   }
 })
+
+app.use(device.capture()); // This will automatically capture the device type and add it to `req.device`
+
+app.use(express.json()); // For parsing JSON bodies
 
 // Increase payload limit for JSON requests 
 app.use(bodyParser.json({ limit: '10mb' }));
