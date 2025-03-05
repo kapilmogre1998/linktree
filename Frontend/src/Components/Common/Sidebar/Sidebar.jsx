@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import LinkIcon from '../../../assets/link-icon.svg';
 import AppearanceIcon from '../../../assets/apperance.svg';
@@ -7,8 +7,10 @@ import AnalyticsIcon from '../../../assets/analytics.svg';
 import SparkIcon from '../../../assets/spark-icon.svg';
 import { MdAddAPhoto } from "react-icons/md";
 import { RxShare2 } from "react-icons/rx";
+import { CiLogout } from "react-icons/ci";
 
 import './Sidebar.scss'
+import useOutsideClick from '../../Hooks/useOutSideClick';
 
 const navItems = [
     { id: 1, label: 'Links', icon: <LinkIcon />, route: '/add-link' },
@@ -22,6 +24,15 @@ const navIcons = [LinkIcon, AppearanceIcon, AnalyticsIcon, SettingsIcon];
 const Sidebar = ({ activeIndex = 1, data }) => {
     const navigate = useNavigate();
     const userName = JSON.parse(localStorage.getItem('user_data'))?.username || '';
+    const [logout, setLogout] = useState(false);
+    const ref = useRef(null)
+
+    useOutsideClick(ref, () => setLogout(false))
+
+    const handleLogout = () => {
+        localStorage.clear();
+        navigate('/')
+    }
 
     return (
         <div className="sidebar-container">
@@ -41,13 +52,14 @@ const Sidebar = ({ activeIndex = 1, data }) => {
                 </nav>
             </div>
             <div className="profile-section">
-                <div className="profile-info">
+                <div className="profile-info" onClick={() => setLogout(true)} >
                     {
                         data?.profile?.pic ? 
                         <img src={data.profile.pic} alt="Profile" className="sidebar-profile-img" /> :
                         <div className='sidebar-profile-image no-img' ><MdAddAPhoto style={{ width: '24px', height: '24px' }} /></div>
                     }
                     <span className="profile-name">{userName}</span>
+                    <div ref={ref} className={`profile-logout  ${logout ? 'active' : ''}`} onClick={handleLogout} ><CiLogout /> Log out</div>
                 </div>
             </div>
         </div>

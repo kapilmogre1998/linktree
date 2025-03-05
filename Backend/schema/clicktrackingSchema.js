@@ -8,9 +8,6 @@ const clickTrackingSchema = new Schema({
         required: true
     },
     monthlyStats: {
-        month: {
-            type: String, // you can use 'YYYY-MM' format
-        },
         linkCount: {
             type: Number,
             default: 0
@@ -27,47 +24,58 @@ const clickTrackingSchema = new Schema({
     deviceCount: {
         linux: {
             type: Number,
-            default: 0
+            default: 0,
+            date: new Date()
         },
         mac: {
             type: Number,
-            default: 0
+            default: 0,
+            date: new Date()
         },
         ios: {
             type: Number,
-            default: 0
+            default: 0,
+            date: new Date()
         },
         windows: {
             type: Number,
-            default: 0
+            default: 0,
+            date: new Date()
         },
         android: {
             type: Number,
-            default: 0
+            default: 0,
+            date: new Date()
         },
         others: {
             type: Number,
-            default: 0
+            default: 0,
+            date: new Date()
         }
     },
-    sitesCount: {
-        youtube: {
-            type: Number,
-            default: 0
+    sitesCount: [{
+        type: {
+            type: String,
         },
-        facebook: {
-            type: Number,
-            default: 0
+        id: {
+            type: String
         },
-        instagram: {
-            type: Number,
-            default: 0
+        title: {
+            type: String
         },
-        others: {
-            type: Number,
-            default: 0
+        count: {
+            type: Number
         }
-    }
+    }],
+    socialMediaCount: [{
+        type: {
+            type: String,
+            enum: ['INSTAGRAM', 'YOUTUBE', 'FACEBOOK', 'OTHER']
+        },
+        count: {
+            type: Number
+        }
+    }]
 })
 
 module.exports = mongoose.model("clickTracking", clickTrackingSchema);

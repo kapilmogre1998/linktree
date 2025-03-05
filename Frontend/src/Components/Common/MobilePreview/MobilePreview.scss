@@ -3,7 +3,7 @@
   display: flex;
   justify-content: center;
   // align-items: center;
-  min-width: 420px;
+  // min-width: 420px;
   height: 750px;
   padding: 20px;
   border-radius: 50px;
@@ -22,7 +22,7 @@
   justify-content: space-between;
 
   background: white;
-  border: 30px solid black;
+  border: 20px solid black;
 }
 
 .mobile-profile-section {
@@ -50,6 +50,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
   }
 }
 

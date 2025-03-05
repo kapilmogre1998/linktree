@@ -24,9 +24,10 @@ const MobilePreview = (props) => {
 
     const handleCopyLink = async () => {
         try {
-
             await navigator.clipboard.writeText(`${window.location.origin}/share-profile/${userData?.id}`);
-            toast.success('Copied to clipboard!');
+            toast.success('Copied to clipboard!', {
+                theme: 'colored'
+            });
         } catch (err) {
             console.error('Failed to copy: ', err);
         }
@@ -52,7 +53,7 @@ const MobilePreview = (props) => {
                 };
             case 'HardShadow':
                 return {
-                    background: buttons.color,
+                    // background: buttons.color,
                     boxShadow: `4px 4px 4px ${buttons.color}`,
                     borderRadius: buttons.type === 'teritary' ? '18px' : buttons.type == 'secondary' ? '8px' : '0px',
                     color: buttons.fontColor,
@@ -62,7 +63,7 @@ const MobilePreview = (props) => {
                 };
             case 'SoftShadow':
                 return {
-                    background: buttons.color,
+                    // background: buttons.color,
                     boxShadow: `2px 2px 4px ${buttons.color}`,
                     borderRadius: buttons.type === 'teritary' ? '18px' : buttons.type == 'secondary' ? '8px' : '0px',
                     color: buttons.fontColor,
@@ -119,6 +120,13 @@ const MobilePreview = (props) => {
         }
     }
 
+    const handleClickOnRedirectionLink = (obj, url) => {
+        window.open(url, '_blank');
+        if(apiCall){
+            apiCallback({ sitesCount: obj })
+        }
+    }
+
     return (
         <div className="mobile-preview-container" >
             <div className="mobile-frame" style={{ fontFamily: buttons?.fonts?.fontType, background: theme.background }} >
@@ -147,15 +155,15 @@ const MobilePreview = (props) => {
                     <div className="links-section" style={buttonStyles(layout)}>
                         {
                             activeTab === 'link' ?
-                                links?.map(({ title, url, icon, index }, id) => (
-                                    <div key={id} className="link-item" onClick={() => window.open(url, '_blank')} style={{ ...applyStyles(buttons.option), width: layout == 'Stack' ? '100%' : '120px' }} >
+                                links?.map(({ data: {title, url, icon, index, type}, _id }, id) => (
+                                    <div key={id} className="link-item" onClick={() => handleClickOnRedirectionLink({title, id: _id, type}, url)} style={{ ...applyStyles(buttons.option), width: layout == 'Stack' ? '100%' : '120px' }} >
                                         <div className="link-thumbnail" style={{ width: layout == 'Carousel' ? '60px' : '42px', height: layout == 'Carousel' ? '60px' : '42px' }} >
                                             <img src={LINKICON[icon]} alt="YouTube" />
                                         </div>
                                         <span style={{ color: buttons.fontColor }} >{title}</span>
                                     </div>)) :
-                                shops?.map(({ title, url, icon }, id) => (
-                                    <div key={id} className="link-item" style={applyStyles(buttons.option)} onClick={() => window.open(url, '_blank')} >
+                                shops?.map(({ data: {title, url, icon, type}, _id }, id) => (
+                                    <div key={id} className="link-item" onClick={() => handleClickOnRedirectionLink({title, id: _id, type}, url)} style={{ ...applyStyles(buttons.option), width: layout == 'Stack' ? '100%' : '120px' }} >
                                         <div className="link-thumbnail">
                                             <img src={SHOPICON[icon]} alt="YouTube" />
                                         </div>

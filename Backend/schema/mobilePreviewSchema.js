@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const profileSchema = new Schema({
-  pic: { 
+  pic: {
     type: String,
     // required: true
   },
@@ -68,8 +68,66 @@ const mobilePreviewSchema = new Schema({
     required: true
   },
   profile: profileSchema,
-  links: [Schema.Types.Mixed],
-  shops: [Schema.Types.Mixed],
+  links: [{
+    _id: {
+      type: Schema.Types.ObjectId,
+      default: () => new mongoose.Types.ObjectId()
+    },
+    data: {
+      count: {
+        type: Number
+      },
+      icon: {
+        type: String
+      },
+      title: {
+        type: String
+      },
+      type: {
+        type: String
+      },
+      unqId: {
+        type: String
+      },
+      url: {
+        type: String
+      }
+    },
+    date: {
+      type: Date,
+      default: Date.now
+    }
+  }],
+  shops: [{
+    _id: {
+      type: Schema.Types.ObjectId,
+      default: () => new mongoose.Types.ObjectId()
+    },
+    data: {
+      count: {
+        type: Number
+      },
+      icon: {
+        type: String
+      },
+      title: {
+        type: String
+      },
+      type: {
+        type: String
+      },
+      unqId: {
+        type: String
+      },
+      url: {
+        type: String
+      }
+    },
+    date: {
+      type: Date,
+      default: Date.now
+    }
+  }],
   bannerBgClr: {
     type: String,
     default: '#342b26'

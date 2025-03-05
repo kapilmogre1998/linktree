@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import { loginAPI } from './api';
 
 import './LoginPage.scss';
+import { toast, ToastContainer } from 'react-toastify';
+import Loader from '../Common/Loader/Loader';
 
 const LoginPage = () => {
   // Form state
@@ -14,6 +16,7 @@ const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const [isLoader, setIsLoader] = useState(false);
 
   // Error state
   const [errors, setErrors] = useState({
@@ -86,6 +89,7 @@ const LoginPage = () => {
     // If no validation errors, proceed with login
     if (!usernameError && !passwordError) {
       try {
+        setIsLoader(true)
         const res = await loginAPI({ email: username, password });
         if (res.data.sts === 1) {
           localStorage.setItem("token", res.data.token);
@@ -99,8 +103,12 @@ const LoginPage = () => {
       } catch (error) {
         console.log("🚀 ~ handleSubmit ~ error:", error)
         if (error?.response?.data?.msg) {
-          toast.error(error.response.data.msg);
+          toast.error(error.response.data.msg, {
+            theme: 'colored'
+          });
         }
+      } finally {
+        setIsLoader(false)
       }
     }
   };
@@ -223,6 +231,10 @@ const LoginPage = () => {
           />
         </div>
       </div>
+
+      <ToastContainer />
+
+      {isLoader && <Loader />}
     </div>
   );
 };

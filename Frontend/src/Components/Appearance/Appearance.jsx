@@ -15,10 +15,12 @@ import SparkIcon from '../../assets/spark-icon.svg';
 import { IoEyeOutline } from "react-icons/io5";
 import LinkIcon from '../../assets/link-icon.svg';
 import AppearanceIcon from '../../assets/apperance.svg';
-import SettingsIcon from '../../assets/settings-icon.svg';
+import SettingsIcon from '../../assets/setting-icon.svg';
 import AnalyticsIcon from '../../assets/analytics.svg';
 
 import './Appearance.scss'
+import Loader from '../Common/Loader/Loader';
+import MobileHeader from '../Common/MobileHeader/MobileHeader';
 
 
 const NAV_ITEMS = [
@@ -50,6 +52,7 @@ const Appearance = () => {
     const [fontColor, setFontColor] = useState('#888888');
     const [buttonColor, setButtonColor] = useState('#FFFFFF');
     const [mobileScreenPreview, setMobileScreenPreview] = useState(false);
+    const [isLoader, setIsLoader] = useState(false);
 
     // const [buttonFontColor, setButtonFontColor] = useState('#888888');
     // const [activeLayout, setActiveLayout] = useState(0);
@@ -63,8 +66,7 @@ const Appearance = () => {
             title: '',
             bio: ''
         },
-        links: [
-        ],
+        links: [],
         shops: [],
         bannerBgClr: "#342b26",
         layout: 'Stack',
@@ -125,6 +127,7 @@ const Appearance = () => {
 
     const updateData = async (payload, id) => {
         try {
+            setIsLoader(true)
             const res = await updateLinkTreeAPI(payload, id);
             if (res.data.sts == 1) {
                 console.log('Data saved successfully');
@@ -134,12 +137,15 @@ const Appearance = () => {
             if (error?.response?.data?.msg) {
                 toast.error(error.response.data.msg);
             }
+        } finally {
+            setIsLoader(false)
         }
     }
 
 
     const submitData = async (payload) => {
         try {
+            setIsLoader(true)
             const res = await createLinkTreeAPI(payload);
             if (res.data.sts == 1) {
                 console.log('Data saved successfully');
@@ -149,13 +155,14 @@ const Appearance = () => {
             if (error?.response?.data?.msg) {
                 toast.error(error.response.data.msg);
             }
+        } finally{
+            setIsLoader(false)
         }
     }
 
-
-
     const fetchData = async (userId) => {
         try {
+            setIsLoader(true)
             const res = await getLinkTreeAPI(userId);
             if (res?.data?.sts == 1 && res.data?.data) {
                 console.log(res)
@@ -176,6 +183,8 @@ const Appearance = () => {
             if (error?.response?.data?.msg) {
                 toast.error(error.response.data.msg);
             }
+        } finally{
+            setIsLoader(false)
         }
     }
 
@@ -217,17 +226,7 @@ const Appearance = () => {
                             </div>
                         </header>
 
-                        <div className='mobile-header-container' >
-                            <div className='mobile-icon' >
-                                <img src={SparkIcon} width='30px' height='30px' alt="spark-icon" />
-                                <div className='spark-trade-mark-container' >SPARK <span className='trade-mark' >TM</span> </div>
-                            </div>
-                            {
-                                data?.profile?.pic ?
-                                    <img src={data.profile.pic} alt="Profile" className="mobile-header-image" /> :
-                                    <div className='mobile-header-image no-img' ><MdAddAPhoto style={{ width: '50px', height: '50px' }} /></div>
-                            }
-                        </div>
+                        <MobileHeader />
 
                         <div className='mobile-preivew-content-container' >
                             <MobilePreview data={data} />
@@ -269,38 +268,6 @@ const Appearance = () => {
                                                     </div>
                                                     <div>Carousel</div>
                                                 </div>
-                                                {/* <div className='layout-stack' >
-                                                <div className={`layout-option__icon-wrapper ${data.layout == 'Stack' ? 'active' : ''}`} onClick={() => setData(prev => ({ ...prev, layout: 'Stack' }))}  >
-                                                    <div style={{ display: 'flex', gap: '0.25rem', flexDirection: 'column' }} >
-                                                        <div style={{ background: 'black', height: '8px', width: '40px', borderRadius: '2px' }} ></div>
-                                                        <div style={{ background: 'black', height: '8px', width: '40px', borderRadius: '2px' }} ></div>
-                                                        <div style={{ background: 'black', height: '8px', width: '40px', borderRadius: '2px' }} ></div>
-                                                    </div>
-                                                </div>
-                                                <div>Stack</div>
-                                            </div>
-                                            <div className='layout-stack' >
-                                                <div className={`layout-option__icon-wrapper ${data.layout == 'Grid' ? 'active' : ''}`} onClick={() => setData(prev => ({ ...prev, layout: 'Grid' }))} >
-                                                    <div style={{ display: 'grid', gap: '0.5rem', gridTemplateColumns: '20px 20px', gridTemplateRows: '20px 20px' }} >
-                                                        <div style={{ background: 'black', borderRadius: '2px' }} ></div>
-                                                        <div style={{ background: 'black', borderRadius: '2px' }} ></div>
-                                                        <div style={{ background: 'black', borderRadius: '2px' }} ></div>
-                                                        <div style={{ background: 'black', borderRadius: '2px' }} ></div>
-                                                    </div>
-                                                </div>
-                                                <div>Grid</div>
-                                            </div>
-                                            <div className='layout-stack' >
-                                                <div className={`layout-option__icon-wrapper ${data.layout == 'Carousel' ? 'active' : ''}`} onClick={() => setData(prev => ({ ...prev, layout: 'Carousel' }))} >
-                                                    <div style={{ display: 'grid', gap: '0.5rem', gridTemplateColumns: '30px 15px', gridTemplateRows: '40px' }} >
-                                                        <div style={{ background: 'black', borderRadius: '2px' }} ></div>
-                                                        <div style={{ background: 'black', borderRadius: '2px' }} ></div>
-                                                        <div style={{ background: 'black', borderRadius: '2px' }} ></div>
-                                                        <div style={{ background: 'black', borderRadius: '2px' }} ></div>
-                                                    </div>
-                                                </div>
-                                                <div>Carousel</div>
-                                            </div> */}
                                             </div>
                                         </div>
                                     </div>
@@ -486,6 +453,7 @@ const Appearance = () => {
                 </div> :
                 <MobilePreview {...{ data, setMobileScreenPreview }} />
             }
+            {isLoader && <Loader />}
         </>
     )
 }

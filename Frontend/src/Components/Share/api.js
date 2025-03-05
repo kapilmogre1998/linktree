@@ -7,7 +7,7 @@ const getHeaders = () => ({
   });
 
 
-export const clickTrackingAPI = async (data) => {
+export const setClickTrackingAPI = async (data) => {
     try {
         return await axios.post(`${API_URL}/api/click-tracking`, data, getHeaders())
     } catch (error) {

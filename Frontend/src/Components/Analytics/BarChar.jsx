@@ -1,15 +1,15 @@
 import { Column } from '@ant-design/plots';
 
-const data = [
-  { color: '#92FFC6',type: '1-3秒', value: 0.16 },
-  { color: '#9BEBC1',type: '4-10秒', value: 0.125 },
-  { color: '#165534',type: '11-30秒', value: 0.24 },
-  { color: '#3EE58F',type: '31-60秒', value: 0.19 },
-  { color: '#A1D4BA',type: '1-3分', value: 0.22 },
-  { color: '#21AF66',type: '3-10分', value: 0.05 },
-];
 
-const BarChart = () => {
+const BarChart = ({ deviceCount }) => {
+  const data = [
+    {  color: '#92FFC6', type: 'linux', value: deviceCount?.['linux'] || 0 },
+    {  color: '#9BEBC1', type: 'mac', value: deviceCount?.['mac'] || 0 },
+    {  color: '#165534', type: 'ios', value: deviceCount?.['ios'] || 0 },
+    {  color: '#3EE58F', type: 'windows', value: deviceCount?.['windows'] || 0 },
+    {  color: '#A1D4BA', type: 'android', value: deviceCount?.['andriod'] || 0 },
+    {  color: '#21AF66', type: 'other', value: deviceCount?.['others'] || 0 },
+  ];
   const config = {
     data,
     xField: 'type',

@@ -193,9 +193,16 @@
 
     // Responsive styles
     @media screen and (max-width: 800px) {
+
+        .header-editprofile-container{
+            margin-top: 20px;
+            padding: 0px;
+        }
         .edit-profile-layout {
             margin-left: 0px;
             padding: 20px;
+            background-color: white;
+            margin-bottom: 60px;
         }
 
         .setting-header{

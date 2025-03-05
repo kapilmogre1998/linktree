@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import MobilePreview from '../Common/MobilePreview/MobilePreview'
 import { useParams } from 'react-router-dom'
-import { clickTrackingAPI, getProfileAPI } from './api';
+import { setClickTrackingAPI, getProfileAPI } from './api';
 import Loader from '../Common/Loader/Loader';
 
 const Share = () => {
@@ -37,7 +37,7 @@ const Share = () => {
 
     const setClickTracking = async (data) => {
         try {
-            const res = await clickTrackingAPI({...data, userId: param?.id});
+            const res = await setClickTrackingAPI({...data, userId: param?.id});
             console.log(res);
         } catch (error) {
             console.log("🚀 ~ setCountTracking ~ error:", error)

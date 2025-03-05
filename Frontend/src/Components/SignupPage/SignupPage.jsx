@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 
 import './SignupPage.scss';
+import Loader from '../Common/Loader/Loader';
 
 const SignupPage = () => {
     const [formData, setFormData] = useState({
@@ -22,6 +23,8 @@ const SignupPage = () => {
     const [firstNameError, setFirstNameError] = useState('');
     const [lastNameError, setLastNameError] = useState('');
     const [agreeToTermsError, setAgreeToTermsError] = useState('');
+    const [isLoader, setIsLoader] = useState(false);
+
     const navigate = useNavigate();
 
     const handleInputChange = (e) => {
@@ -104,6 +107,7 @@ const SignupPage = () => {
 
     const registerUser = async (data) => {
         try {
+            setIsLoader(true)
             const res = await signupAPI(data);
             if(res?.data?.sts === 1){
                 localStorage.setItem("token", res.data.token);
@@ -115,6 +119,8 @@ const SignupPage = () => {
             if(error?.response?.data?.msg){
                 toast.error(error.response.data.msg, { theme: 'colored' });
             }
+        } finally {
+            setIsLoader(false)
         }
     }
 
@@ -124,8 +130,8 @@ const SignupPage = () => {
             if (validate()) {
                 const { firstName, lastName, email, password } = formData;
                 registerUser({
-                    firstName,
-                    lastName,
+                    firstname: firstName,
+                    lastname: lastName,
                     email,
                     password
                 });
@@ -277,15 +283,9 @@ const SignupPage = () => {
                 </div>
             </div>  
 
-            <ToastContainer position="top-right"
-                autoClose={1500}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick={false}
-                rtl={false}
-                pauseOnHover={false}
-                theme={'dark'}
-            />
+            <ToastContainer />
+
+            {isLoader && <Loader />}
         </div>
     );
 };

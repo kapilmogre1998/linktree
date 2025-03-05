@@ -34,22 +34,22 @@ const OnboardingPage = () => {
     };
 
     const handleClickOnContinue = async () => {
-        if(!userName.trim().length){
+        if (!userName.trim().length) {
             return setShowError(true);
         }
         try {
             const userData = localStorage.getItem('user_data')
             const userId = userData ? JSON.parse(userData)?.id : null;
-            const res = await addUserNameAPI({username: userName, category: selectedCategory, userId});
+            const res = await addUserNameAPI({ username: userName, category: selectedCategory, userId });
 
-            if(res.data.sts === 1){
+            if (res.data.sts === 1) {
                 const { email, lastname, firstname } = res.data.userData;
-                localStorage.setItem('user_data', JSON.stringify({id: userId, userName, email, lastName: lastname, firstName: firstname}));
+                localStorage.setItem('user_data', JSON.stringify({ id: userId, username: userName, email, lastname, firstname }));
                 navigate('/add-link');
             }
         } catch (error) {
             console.log("🚀 ~ handleSubmit ~ error:", error)
-            if(error?.response?.data?.msg){
+            if (error?.response?.data?.msg) {
                 toast.error(error.response.data.msg);
             }
         }
@@ -58,11 +58,11 @@ const OnboardingPage = () => {
     useEffect(() => {
         const userData = localStorage.getItem('user_data');
         const parseData = JSON.parse(userData);
-        
-        if(parseData && parseData?.userName && parseData?.category){
+
+        if (parseData && parseData?.username) {
             navigate('/add-link');
         }
-    },[])
+    }, [])
 
     // const handleInputFocus = () => setIsFocused(true);
     // const handleInputBlur = () => setIsFocused(false);
@@ -93,13 +93,11 @@ const OnboardingPage = () => {
                                 className={`username-input`}
                                 placeholder="Tell us your username"
                                 onChange={(e) => {
-                                    if(e?.target?.value?.length){
-                                        setShowError(false)
-                                        setUserName(e.target.value)
-                                    }
+                                    setShowError(false)
+                                    setUserName(e.target.value)
                                 }}
-                                // onFocus={handleInputFocus}
-                                // onBlur={handleInputBlur}
+                            // onFocus={handleInputFocus}
+                            // onBlur={handleInputBlur}
                             />
                         </div>
                         <div className='error-msg' >{showError ? 'Username is required*' : ''}</div>

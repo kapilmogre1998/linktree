@@ -6,7 +6,7 @@ const getHeaders = () => ({
     'Content-Type': 'application/json'
   });
 
-export const getCountAPI = async (id) => {
+  export const clickTrackingAPI = async (id) => {
     try {
         return await axios.get(`${API_URL}/api/click-tracking/${id}`, { headers: getHeaders() })
     } catch (error) {

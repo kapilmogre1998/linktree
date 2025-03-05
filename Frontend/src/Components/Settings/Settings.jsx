@@ -9,6 +9,21 @@ import SparkIcon from '../../assets/spark-icon.svg';
 import { mobilePreviewInitialState, mobilePreviewReducer } from '../../reducer';
 import { MdAddAPhoto } from "react-icons/md";
 import { setMobilePreview } from '../../action';
+import Loader from '../Common/Loader/Loader';
+import MobileHeader from '../Common/MobileHeader/MobileHeader';
+import LinkIcon from '../../assets/link-icon.svg';
+import AppearanceIcon from '../../assets/apperance.svg';
+import SettingsIcon from '../../assets/setting-icon.svg';
+import AnalyticsIcon from '../../assets/analytics.svg';
+
+const NAV_ITEMS = [
+    { id: 1, label: 'Links', icon: <LinkIcon />, route: '/add-link' },
+    { id: 2, label: 'Appearance', icon: <AppearanceIcon />, route: '/appearance' },
+    { id: 3, label: 'Analytics', icon: <AnalyticsIcon />, route: '/analytics' },
+    { id: 4, label: 'Settings', icon: <SettingsIcon />, route: '/settings' }
+];
+
+const navIcons = [LinkIcon, AppearanceIcon, AnalyticsIcon, SettingsIcon];
 
 const Settings = () => {
     const [formData, setFormData] = useState({
@@ -22,6 +37,7 @@ const Settings = () => {
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [confirmPasswordError, setConfirmPasswordError] = useState('');
+    const [isLoader, setIsLoader] = useState(false)
     const userName = JSON.parse(localStorage.getItem('user_data'))?.username || {};
     const navigate = useNavigate();
     const token = localStorage.getItem('token');
@@ -31,8 +47,7 @@ const Settings = () => {
             title: '',
             bio: ''
         },
-        links: [
-        ],
+        links: [],
         shops: [],
         bannerBgClr: "#342b26",
         layout: 'Stack',
@@ -76,33 +91,9 @@ const Settings = () => {
         return re.test(email);
     };
 
-    // const validateFields = () => {
-    //     const { firstName, lastName, email, password, confirmPassword } = formData;
-    //     let isError = false;
-
-    //     if (!validateEmail(email)) {
-    //         setEmailError('Email Id is required');
-    //         isError = true;
-    //     }
-
-    //     if (!password.length) {
-    //         setPasswordError('Password is required');
-    //         isError = true;
-    //     } else if (password.length < 6) {
-    //         setPasswordError('Password must be at least 6 characters long.');
-    //         isError = true;
-    //     }
-
-    //     if (password !== confirmPassword) {
-    //         setConfirmPasswordError('confirm password does not match with password.')
-    //         isError = true;
-    //     }
-
-    //     return isError;
-    // };
-
     const updateProfile = async (data) => {
         try {
+            setIsLoader(true)
             const res = await updateUserAPI(data);
 
             if (res.data.sts === 1) {
@@ -115,6 +106,8 @@ const Settings = () => {
             if (error?.response?.data?.msg) {
                 toast.error(error.response.data.msg, { theme: 'colored' });
             }
+        } finally {
+            setIsLoader(false)
         }
     }
 
@@ -213,7 +206,7 @@ const Settings = () => {
     return (
         <div className='edit-profile-container' >
             <Sidebar activeIndex={'4'}  {...{ data }} />
-            <div className='mobile-header-container' >
+            {/* <div className='mobile-header-container' >
                 <div className='mobile-icon' >
                     <img src={SparkIcon} width='30px' height='30px' alt="spark-icon" />
                     <div className='spark-trade-mark-container' >SPARK <span className='trade-mark' >TM</span> </div>
@@ -223,7 +216,7 @@ const Settings = () => {
                         <img src={data.profile.pic} alt="Profile" className="mobile-header-image" /> :
                         <div className='mobile-header-image no-img' ><MdAddAPhoto style={{ width: '50px', height: '50px' }} /></div>
                 }
-            </div>
+            </div> */}
             <div className="edit-profile-layout">
                 <header className="setting-header">
                     <div className="setting-header-content">
@@ -231,6 +224,9 @@ const Settings = () => {
                         <p className="notification">Congratulations. You got a great response today.</p>
                     </div>
                 </header>
+                <MobileHeader />
+
+
                 <div className='header-editprofile-container'>
 
                     <div className="header">
@@ -314,8 +310,17 @@ const Settings = () => {
                 </div>
             </div>
 
-            <ToastContainer
-            />
+            <div className='mobile-nav-bar-container' >
+                {
+                    NAV_ITEMS.map(({ label, route, id }) => (<div className='mobile-nav-icon' onClick={() => navigate(route)} >
+                        <img src={navIcons[id - 1]} alt="nav" />
+                        <div>{label}</div>
+                    </div>))
+                }
+            </div>
+
+            <ToastContainer />
+            {isLoader && <Loader />}
         </div>
     );
 };

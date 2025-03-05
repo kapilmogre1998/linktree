@@ -25,10 +25,10 @@ app.use(device.capture()); // This will automatically capture the device type an
 app.use(express.json()); // For parsing JSON bodies
 
 // Increase payload limit for JSON requests 
-app.use(bodyParser.json({ limit: '10mb' }));
+// app.use(bodyParser.json({ limit: '10mb' }));
 
 // Increase payload limit for URL-encoded requests
-app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
+// app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 
 app.use(bodyParser.json());
 

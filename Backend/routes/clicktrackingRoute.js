@@ -1,6 +1,7 @@
 const express = require('express');
 const clicktrackingSchema = require('../schema/clicktrackingSchema');
 const os = require('os');
+const mobilePreviewSchema = require('../schema/mobilePreviewSchema');
 
 const router = express.Router();
 
@@ -24,11 +25,13 @@ router.get('/click-tracking/:userId', async (req, res) => {
 
 router.post('/click-tracking', async (req, res) => {
     try {
-        const { userId, monthlyStats = {}, deviceCount = [], sitesCount = [], linkCount = 0, shopCount = 0, getConnectCount = 0 } = req.body;
-        const platform = os.platform();
+        const { userId, monthlyStats = {}, sitesCount = null, linkCount = 0, shopCount = 0, getConnectCount = 0 } = req.body;
+        const platform = os.platform().toLowerCase();
 
         // Find if the tracking document already exists
         let trackingData = await clicktrackingSchema.findOne({ userId });
+
+        let mobilePreviewData = await mobilePreviewSchema.findOne({ userId })
 
         if (trackingData) {
             // Update existing data
@@ -49,46 +52,97 @@ router.post('/click-tracking', async (req, res) => {
             }
 
             if (platform) {
-                console.log(platform == "Linux", typeof platform, typeof trackingData.deviceCount.linux)
-                if(platform == 'linux'){
+                if (platform == 'linux') {
                     trackingData.deviceCount['linux'] = parseInt(trackingData.deviceCount['linux']) + 1;
-                    console.log(parseInt(trackingData.deviceCount['linux']), trackingData.deviceCount)
                 }
-                if(platform == 'mac'){
+                else if (platform == 'mac') {
                     trackingData.deviceCount['mac'] = parseInt(trackingData.deviceCount['mac']) + 1;
                 }
-                if(platform == 'ios'){
+                else if (platform == 'ios') {
                     trackingData.deviceCount['ios'] = parseInt(trackingData.deviceCount['ios']) + 1;
                 }
-                if(platform == 'windows'){
+                else if (platform == 'windows') {
                     trackingData.deviceCount['windows'] = parseInt(trackingData.deviceCount['windows']) + 1;
                 }
-                if(platform == 'android'){
+                else if (platform == 'android') {
                     trackingData.deviceCount['android'] = parseInt(trackingData.deviceCount['android']) + 1;
                 }
-                if(platform == 'others'){
+                else if (platform == 'others') {
                     trackingData.deviceCount['others'] = parseInt(trackingData.deviceCount['others']) + 1;
                 }
             }
-
-            // Increment device counts based on the provided device types
-            // deviceCount.forEach(device => {
-            //     if (trackingData.deviceCount[device] !== undefined) {
-            //         trackingData.deviceCount[device] = (parseInt(trackingData.deviceCount[device]) || 0) + 1;
-            //     } else {
-            //         trackingData.deviceCount.others = (parseInt(trackingData.deviceCount.others) || 0) + 1;
-            //     }
-            // });
-
             // Increment site counts based on the provided site names
             if (sitesCount) {
-                sitesCount.forEach(site => {
-                    if (trackingData.sitesCount[site] !== undefined) {
-                        trackingData.sitesCount[site] = (parseInt(trackingData.sitesCount[site]) || 0) + 1;
+                //Social media count
+                if (['INSTAGRAM', 'YOUTUBE', 'FACEBOOK'].includes(sitesCount?.type)) {
+                    const type = sitesCount?.type;
+
+                    if (trackingData?.socialMediaCount?.length) {
+                        let socialMediaData = trackingData?.socialMediaCount?.find(item => item?.type == sitesCount.type);
+
+                        if (socialMediaData) {
+                            socialMediaData.count += 1;
+                        } else {
+                            trackingData?.socialMediaCount.push({
+                                type,
+                                count: 1
+                            })
+                        }
                     } else {
-                        trackingData.sitesCount.others = (parseInt(trackingData.sitesCount.others) || 0) + 1;
+                        trackingData?.socialMediaCount.push({
+                            type,
+                            count: 1
+                        })
                     }
-                });
+                } else {
+                    if (trackingData?.socialMediaCount?.length) {
+                        const type = 'OTHER'
+                        let socialMediaData = trackingData?.socialMediaCount?.find(item => item?.type == type);
+
+                        if (socialMediaData) {
+                            socialMediaData.count += 1;
+                        } else {
+                            trackingData?.socialMediaCount.push({
+                                type,
+                                count: 1
+                            })
+                        }
+                    } else {
+                        trackingData?.socialMediaCount.push({
+                            type,
+                            count: 1
+                        })
+                    }
+                }
+
+                //mobilepreview link count
+                let mobilePreviewLinkCountData = mobilePreviewData.links.find(item => item._id.toString() == sitesCount.id)
+                let mobilePreviewShopCountData = mobilePreviewData.shops.find(item => item._id.toString() == sitesCount.id)
+
+                
+                if (mobilePreviewLinkCountData || mobilePreviewShopCountData) {
+                    if (mobilePreviewLinkCountData) {
+                        mobilePreviewLinkCountData.data.count = parseInt(mobilePreviewLinkCountData.data.count) + 1
+                    } else {
+                        mobilePreviewShopCountData.data.count = parseInt(mobilePreviewShopCountData.data.count) + 1
+                    }
+                    
+                    console.log(mobilePreviewData.links, 'fawefawefweafwaef')
+                    await mobilePreviewData.save();
+                }
+
+                //Link Count
+                let sitesCountData = trackingData?.sitesCount?.find((item) => (item.id == sitesCount?.id));
+
+                if (sitesCountData) {
+                    console.log(sitesCountData)
+                    sitesCountData.count = parseInt(sitesCountData.count) + 1;
+                } else {
+                    trackingData?.sitesCount.push({
+                        ...sitesCount,
+                        count: 1
+                    })
+                }
             }
 
             // Save the updated tracking data
@@ -99,12 +153,12 @@ router.post('/click-tracking', async (req, res) => {
         // Create new tracking data if it doesn't exist
         trackingData = new clicktrackingSchema({
             userId,
-            monthlyStats: {
+            monthlyStats: [{
                 // month: monthlyStats.month || '2025-03', // Default to current month if not provided
                 linkCount: linkCount,
                 shopCount: shopCount,
                 getConnectCount: getConnectCount
-            },
+            }],
             deviceCount: {
                 linux: platform == 'linux' ? 1 : 0,
                 mac: platform == 'mac' ? 1 : 0,
@@ -113,12 +167,8 @@ router.post('/click-tracking', async (req, res) => {
                 android: platform == 'android' ? 1 : 0,
                 others: 0
             },
-            sitesCount: {
-                youtube: sitesCount?.youtube || 0,
-                facebook: sitesCount?.facebook || 0,
-                instagram: sitesCount?.instagram || 0,
-                others: ['twitter', 'amazon', 'flipkart'].includes(sitesCount) ? 1 : 0
-            },
+            socialMediaCount: [],
+            sitesCount: [],
             sts: 1
         });
 
