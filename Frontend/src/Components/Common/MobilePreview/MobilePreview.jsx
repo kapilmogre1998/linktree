@@ -15,6 +15,7 @@ import './MobilePreview.scss'
 
 const MobilePreview = (props) => {
     const { data: { profile, bannerBgClr, links, shops, buttons, theme, layout, fonts }, setMobileScreenPreview, apiCall = false, apiCallback = () => { }, shareProfile = false } = props;
+    console.log("🚀 ~ MobilePreview ~ bannerBgClr:", bannerBgClr)
     const [activeTab, setActiveTab] = useState('link')
     const navigate = useNavigate();
     const userData = JSON.parse(localStorage.getItem('user_data'));
@@ -38,7 +39,7 @@ const MobilePreview = (props) => {
             case 'Fill':
                 return {
                     background: buttons.color,
-                    borderRadius: buttons.type === 'teritary' ? '18px' : buttons.type == 'secondary' ? '8px' : '0px',
+                    borderRadius: buttons.type === 'teritary' ? '30px' : buttons.type == 'secondary' ? '8px' : '0px',
                     color: buttons.fontColor,
                     flexDirection: layout == 'Grid' || layout == 'Carousel' ? 'Column' : 'Row',
                     // flex: '1 0 0'
@@ -46,7 +47,7 @@ const MobilePreview = (props) => {
             case 'Outline':
                 return {
                     border: `2px solid ${buttons.color}`,
-                    borderRadius: buttons.type === 'teritary' ? '18px' : buttons.type == 'secondary' ? '8px' : '0px',
+                    borderRadius: buttons.type === 'teritary' ? '30px' : buttons.type == 'secondary' ? '8px' : '0px',
                     color: buttons.fontColor,
                     flexDirection: layout == 'Grid' || layout == 'Carousel' ? 'Column' : 'Row',
                     // flex: '1 0 0'
@@ -55,7 +56,7 @@ const MobilePreview = (props) => {
                 return {
                     // background: buttons.color,
                     boxShadow: `4px 4px 4px ${buttons.color}`,
-                    borderRadius: buttons.type === 'teritary' ? '18px' : buttons.type == 'secondary' ? '8px' : '0px',
+                    borderRadius: buttons.type === 'teritary' ? '30px' : buttons.type == 'secondary' ? '8px' : '0px',
                     color: buttons.fontColor,
                     padding: '10px',
                     flexDirection: layout == 'Grid' || layout == 'Carousel' ? 'Column' : 'Row',
@@ -65,7 +66,7 @@ const MobilePreview = (props) => {
                 return {
                     // background: buttons.color,
                     boxShadow: `2px 2px 4px ${buttons.color}`,
-                    borderRadius: buttons.type === 'teritary' ? '18px' : buttons.type == 'secondary' ? '8px' : '0px',
+                    borderRadius: buttons.type === 'teritary' ? '30px' : buttons.type == 'secondary' ? '8px' : '0px',
                     color: buttons.fontColor,
                     padding: '10px',
                     flexDirection: layout == 'Grid' || layout == 'Carousel' ? 'Column' : 'Row',

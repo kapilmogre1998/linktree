@@ -226,7 +226,7 @@ const Appearance = () => {
                             </div>
                         </header>
 
-                        <MobileHeader />
+                        <MobileHeader data={data} />
 
                         <div className='mobile-preivew-content-container' >
                             <MobilePreview data={data} />

@@ -326,7 +326,7 @@ const AddLink = () => {
             </div>
           </header>
 
-          <MobileHeader />
+          <MobileHeader data={data} />
           {/* <div className='mobile-header-container' >
             <div className='mobile-icon' >
               <img src={SparkIcon} width='30px' height='30px' alt="spark-icon" />
@@ -505,7 +505,7 @@ const AddLink = () => {
                             value={data?.bannerBgClr}
                             onChange={(e) => {
                               // setColorInput(e.target.value);
-                              setData(prev => ({ ...prev.data, bannerBgClr: e.target.value }));
+                              setData(prev => ({ ...prev, bannerBgClr: e.target.value }));
                               // if (e.target.value.match(/^#[0-9A-Fa-f]{6}$/)) {
                               // setBackgroundColor(e.target.value);
                               // }

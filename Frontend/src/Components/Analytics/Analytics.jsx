@@ -73,36 +73,19 @@ const Analytics = () => {
     })
 
     const ctaData = [
-        { month: 'Jan', value: 0 },
-        { month: 'Feb', value: 0 },
-        { month: 'Mar', value: clickData?.linkCount + clickData?.shopCount + clickData?.ctaCount },
-        { month: 'Apr', value: 0 },
-        { month: 'May', value: 0 },
-        { month: 'Jun', value: 0 },
-        { month: 'Jul', value: 0 }
+        { color: '#21AF66', month: 'Jan', value: 0 },
+        { color: '#21AF66', month: 'Feb', value: 0 },
+        { color: '#21AF66', month: 'Mar', value: clickData?.linkCount + clickData?.shopCount + clickData?.ctaCount },
+        { color: '#21AF66', month: 'Apr', value: 0 },
+        { color: '#21AF66', month: 'May', value: 0 },
+        { color: '#21AF66', month: 'Jun', value: 0 },
+        { color: '#21AF66', month: 'Jul', value: 0 }
     ];
     const config = {
         data: ctaData,
         xField: 'month',
         yField: 'value',
-        point: {
-            shapeField: 'circle',
-            sizeField: 3,
-        },
-        interaction: {
-            tooltip: {
-                marker: false,
-            },
-        },
-        style: {
-            lineWidth: 2,
-            background: '#000000',
-        },
-        lineStyle: {
-            // Change the stroke property to the desired line color
-            stroke: '#FF5733', // Set this to the color you want for the line
-            lineWidth: 2,
-        },
+        style: { stroke: '#21AF66' },
     };
 
     const fetchClickCount = async (id) => {
@@ -173,7 +156,7 @@ const Analytics = () => {
         <div className='analytics-container' >
             <Sidebar activeIndex={'3'} data={data} />
             <div className='dashboard-container' >
-                <MobileHeader/>
+                <MobileHeader data={data}/>
 
                 <header className="header">
                     <div className="header-content">

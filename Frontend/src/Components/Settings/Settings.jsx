@@ -224,7 +224,7 @@ const Settings = () => {
                         <p className="notification">Congratulations. You got a great response today.</p>
                     </div>
                 </header>
-                <MobileHeader />
+                <MobileHeader data={data} />
 
 
                 <div className='header-editprofile-container'>

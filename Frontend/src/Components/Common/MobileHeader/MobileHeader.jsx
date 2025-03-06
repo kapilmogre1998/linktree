@@ -7,68 +7,12 @@ import { CiLogout } from "react-icons/ci";
 import { useNavigate } from 'react-router-dom';
 import useOutsideClick from '../../Hooks/useOutSideClick';
 
-const MobileHeader = () => {
+const MobileHeader = ({ data }) => {
     const ref = useRef()
     const [logout, setLogout] = useState(false)
     const navigate = useNavigate()
-    const [data, setData] = useState({
-        profile: {
-            pic: '',
-            title: '',
-            bio: ''
-        },
-        links: [],
-        shops: [],
-        bannerBgClr: "#342b26",
-        layout: 'Stack',
-        buttons: {
-            option: 'Fill',
-            color: '#888888',
-            fontColor: '#888888',
-            index: 2,
-            type: 'Teritary'
-        },
-        fonts: {
-            fontType: 'Sans-serif',
-            color: '#FFFFFF'
-        },
-        theme: {
-            name: 'Air_Snow',
-            background: 'white',
-        }
-    })
 
     useOutsideClick(ref, () => setLogout(false))
-
-    useEffect(() => {
-        const userId = JSON.parse(localStorage.getItem('user_data'))?.id;
-        if (userId) {
-            fetchData(userId);
-        }
-    }, [])
-
-    const fetchData = async (userId) => {
-        try {
-            const res = await getLinkTreeAPI(userId);
-            if (res?.data?.sts == 1 && res.data?.data) {
-                const modifiedData = {
-                    ...res.data.data,
-                    id: res.data.data._id
-                }
-
-                delete modifiedData._id;
-                delete modifiedData.__v;
-                delete modifiedData.userId;
-
-                setData(modifiedData);
-            }
-        } catch (error) {
-            console.log("🚀 ~ handleSubmit ~ error:", error)
-            if (error?.response?.data?.msg) {
-                toast.error(error.response.data.msg);
-            }
-        }
-    }
 
     const handleLogout = () => {
         localStorage.clear();
