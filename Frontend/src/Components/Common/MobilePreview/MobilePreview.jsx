@@ -10,8 +10,11 @@ import twitterIcon from '../../../assets/twitter.svg';
 import { IoShareOutline } from "react-icons/io5";
 import { toast, ToastContainer } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import hardCurveBtm from '../../../assets/hard-curve-bottom.svg';
+import hardCurvetop from '../../../assets/hard-curve-top.svg';
 
 import './MobilePreview.scss'
+import Icons from '../../Icons/Icons';
 
 const MobilePreview = (props) => {
     const { data: { profile, bannerBgClr, links, shops, buttons, theme, layout, fonts }, setMobileScreenPreview, apiCall = false, apiCallback = () => { }, shareProfile = false } = props;
@@ -72,6 +75,14 @@ const MobilePreview = (props) => {
                     flexDirection: layout == 'Grid' || layout == 'Carousel' ? 'Column' : 'Row',
                     // flex: '1 0 0'
                 };
+            case 'Special':
+                return {
+                    background: buttons.color,
+                    borderRadius: buttons.type === 'teritary' ? '30px' : buttons.type == 'secondary' ? '8px' : '0px',
+                    color: buttons.fontColor,
+                    flexDirection: layout == 'Grid' || layout == 'Carousel' ? 'Column' : 'Row',
+                    // flex: '1 0 0'
+                };
             default:
                 return {};
         }
@@ -82,7 +93,8 @@ const MobilePreview = (props) => {
             case 'Grid':
                 return {
                     display: 'grid',
-                    gridTemplateColumns: '1fr 1fr',
+                    gridTemplateColumns: '100px 100px',
+                    gridTemplateRows: '100px',
                     gap: '10px',
                 };
             case 'Stack':
@@ -123,7 +135,7 @@ const MobilePreview = (props) => {
 
     const handleClickOnRedirectionLink = (obj, url) => {
         window.open(url, '_blank');
-        if(apiCall){
+        if (apiCall) {
             apiCallback({ sitesCount: obj })
         }
     }
@@ -156,17 +168,29 @@ const MobilePreview = (props) => {
                     <div className="links-section" style={buttonStyles(layout)}>
                         {
                             activeTab === 'link' ?
-                                links?.map(({ data: {title, url, icon, index, type}, _id }, id) => (
-                                    <div key={id} className="link-item" onClick={() => handleClickOnRedirectionLink({title, id: _id, type}, url)} style={{ ...applyStyles(buttons.option), width: layout == 'Stack' ? '100%' : '120px' }} >
+                                links?.map(({ data: { title, url, icon, index, type }, _id }, id) => (
+                                    <div key={id} className={`link-item ${buttons.type == 'teritary' && buttons.option == 'Fill' ? 'border-outline' : ''}`} onClick={() => handleClickOnRedirectionLink({ title, id: _id, type }, url)} style={{ ...applyStyles(buttons.option), width: layout == 'Stack' ? '100%' : '120px', ...(buttons.type == 'teritary' && buttons.option == 'Fill' && { '--border-color': buttons.color }) }} >
                                         <div className="link-thumbnail" style={{ width: layout == 'Carousel' ? '60px' : '42px', height: layout == 'Carousel' ? '60px' : '42px' }} >
-                                            <img src={LINKICON[icon]} alt="YouTube" />
+                                            <img className='logo' src={LINKICON[icon]} alt="YouTube" />
                                         </div>
+                                        {
+                                            buttons.type == 'primary' && buttons.option == 'Special' ?
+                                                <>
+                                                    <Icons className='special-icon top' color={buttons.color} index='11' />
+                                                    <Icons className='special-icon bottom' color={buttons.color} index='12' />
+                                                </> :
+                                            buttons.type == 'secondary' && buttons.option == 'Special' ?
+                                                <>
+                                                    <Icons className='special-icon top' color={buttons.color} index='21' />
+                                                    <Icons className='special-icon bottom' color={buttons.color} index='22' />
+                                                </> : null
+                                        }
                                         <span style={{ color: buttons.fontColor }} >{title}</span>
                                     </div>)) :
-                                shops?.map(({ data: {title, url, icon, type}, _id }, id) => (
-                                    <div key={id} className="link-item" onClick={() => handleClickOnRedirectionLink({title, id: _id, type}, url)} style={{ ...applyStyles(buttons.option), width: layout == 'Stack' ? '100%' : '120px' }} >
+                                shops?.map(({ data: { title, url, icon, type }, _id }, id) => (
+                                    <div key={id} className={`link-item ${buttons.type == 'teritary' && buttons.option == 'Fill' ? 'border-outline' : ''}`} onClick={() => handleClickOnRedirectionLink({ title, id: _id, type }, url)} style={{ ...applyStyles(buttons.option), width: layout == 'Stack' ? '100%' : '120px', ...(buttons.type == 'teritary' && buttons.option == 'Fill' && { '--border-color': buttons.color }) }} >
                                         <div className="link-thumbnail">
-                                            <img src={SHOPICON[icon]} alt="YouTube" />
+                                            <img className='logo' src={SHOPICON[icon]} alt="YouTube" />
                                         </div>
                                         <span style={{ color: buttons.fontColor }} >{title}</span>
                                     </div>))

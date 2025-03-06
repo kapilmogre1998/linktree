@@ -155,7 +155,7 @@ const Appearance = () => {
             if (error?.response?.data?.msg) {
                 toast.error(error.response.data.msg);
             }
-        } finally{
+        } finally {
             setIsLoader(false)
         }
     }
@@ -183,7 +183,7 @@ const Appearance = () => {
             if (error?.response?.data?.msg) {
                 toast.error(error.response.data.msg);
             }
-        } finally{
+        } finally {
             setIsLoader(false)
         }
     }
@@ -217,7 +217,7 @@ const Appearance = () => {
         <>
             {!mobileScreenPreview ?
                 <div className='appearance-container' >
-                <Sidebar activeIndex='2' {...{ data }} />
+                    <Sidebar activeIndex='2' {...{ data }} />
                     <div className='header-content-container' >
                         <header className="header">
                             <div className="header-content">
@@ -332,11 +332,11 @@ const Appearance = () => {
                                                     <div className="special-title">Special</div>
                                                     <div className="button-container">
                                                         <div className="button-row">
-                                                            <div className="special-button wave-top">
+                                                            <div className="special-button wave-top" onClick={() => setData(prev => ({ ...prev, buttons: { ...prev.buttons, option: 'Special', index: 1, type: 'primary' } }))}>
                                                                 <img src={hardCurvetop} className='hard-curve-top' alt="hard-curve" />
                                                                 <img src={hardCurveBtm} className='hard-curve-btm' alt="hard-curve" />
                                                             </div>
-                                                            <div className="special-button wave-middle">
+                                                            <div className="special-button wave-middle" onClick={() => setData(prev => ({ ...prev, buttons: { ...prev.buttons, option: 'Special', index: 2, type: 'secondary' } }))} >
                                                                 <img src={waveCurvetop} className='wave-curve-top' alt="wave-curve" />
                                                                 <img src={waveCurveBtm} className='wave-curve-btm' alt="wave-curve" />
                                                             </div>

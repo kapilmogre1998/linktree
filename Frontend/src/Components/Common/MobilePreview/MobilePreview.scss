@@ -37,7 +37,7 @@
   gap: 10px;
   position: relative;
 
-  .share-icon{
+  .share-icon {
     position: absolute;
     top: 24px;
     left: 35px;
@@ -127,7 +127,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 0 20px 16px;
+  padding: 10px 20px 16px;
   height: 220px;
   overflow: auto;
   margin: 0px 10px;
@@ -165,6 +165,19 @@
   flex-shrink: 0;
   width: 120px;
   cursor: pointer;
+  position: relative;
+
+  &.border-outline::after {
+    content: "";
+    position: absolute;
+    top: -4px;
+    left: -3px;
+    right: -3px;
+    bottom: -4px;
+    border: 2px solid;
+    border-radius: 30px;
+    border-color: var(--border-color, white)
+  }
 }
 
 .link-thumbnail {
@@ -179,10 +192,24 @@
   // margin-right: 12px;
 }
 
-.link-thumbnail img {
+.link-thumbnail .logo {
   width: 28px;
   height: 28px;
   object-fit: contain;
+}
+
+.special-icon{
+  position: absolute;
+  width: 100%;
+  left: 0px;
+
+  &.top{
+    top: -8px;
+  }
+
+  &.bottom{
+    bottom: -8px;
+  }
 }
 
 .link-item span {
@@ -247,7 +274,7 @@
   }
 }
 
-.cross-container{
+.cross-container {
   display: none;
 }
 
@@ -255,19 +282,19 @@
   .mobile-preview-container {
     background-color: white;
   }
-  
-  .links-section{
+
+  .links-section {
     padding: 0px 0px;
   }
 
-  .cross-container{
+  .cross-container {
     position: fixed;
     left: 50%;
     transform: translateX(-50%);
     display: block;
     bottom: 20px;
-    
-    .cross{
+
+    .cross {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -279,7 +306,7 @@
       box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     }
 
-    &.disable{
+    &.disable {
       display: none
     }
   }
