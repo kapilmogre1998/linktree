@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import './MobilePreview.scss'
 
 const MobilePreview = (props) => {
-    const { data: { profile, bannerBgClr, links, shops, buttons, theme, layout, fonts }, setMobileScreenPreview, apiCall = false, apiCallback = () => { } } = props;
+    const { data: { profile, bannerBgClr, links, shops, buttons, theme, layout, fonts }, setMobileScreenPreview, apiCall = false, apiCallback = () => { }, shareProfile = false } = props;
     const [activeTab, setActiveTab] = useState('link')
     const navigate = useNavigate();
     const userData = JSON.parse(localStorage.getItem('user_data'));
@@ -185,7 +185,7 @@ const MobilePreview = (props) => {
                 </div>
             </div>
 
-            <div className='cross-container' >
+            <div className={`cross-container ${shareProfile ? 'disable' : ''}`} >
                 <div className='cross' onClick={() => setMobileScreenPreview(false)} >x</div>
             </div>
 

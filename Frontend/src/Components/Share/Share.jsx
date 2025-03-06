@@ -80,7 +80,7 @@ const Share = () => {
 
     return (
         <div>
-            <MobilePreview {...{ data }} apiCall={true} apiCallback={setClickTracking} />
+            <MobilePreview {...{ data }} apiCall={true} apiCallback={setClickTracking} shareProfile={true} />
             {isLoader && <Loader />}
         </div>
     )
