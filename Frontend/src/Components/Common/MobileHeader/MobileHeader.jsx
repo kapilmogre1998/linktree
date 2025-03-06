@@ -4,7 +4,6 @@ import SparkIcon from '../../../assets/spark-icon.svg';
 import { getLinkTreeAPI } from '../../AddLinks/api';
 import { toast, ToastContainer } from 'react-toastify';
 import { CiLogout } from "react-icons/ci";
-import { referenceLineClasses } from '@mui/x-charts';
 import { useNavigate } from 'react-router-dom';
 import useOutsideClick from '../../Hooks/useOutSideClick';
 

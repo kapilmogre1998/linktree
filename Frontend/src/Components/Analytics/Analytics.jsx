@@ -1,5 +1,4 @@
 import React, { useEffect, useReducer, useRef, useState } from 'react'
-import { LineChart } from '@mui/x-charts/LineChart';
 import Sidebar from '../Common/Sidebar/Sidebar';
 import { CiCalendar } from "react-icons/ci";
 import { FaAngleDown } from "react-icons/fa6";
