@@ -226,7 +226,7 @@ const Analytics = () => {
 
             <div className='mobile-nav-bar-container' >
                 {
-                    NAV_ITEMS.map(({ label, route, id }) => (<div key={id} className={`mobile-nav-icon ${label == 'Links' ? 'active' : ''}`} onClick={() => navigate(route)} >
+                    NAV_ITEMS.map(({ label, route, id }) => (<div key={id} className={`mobile-nav-icon ${label == 'Analytics' ? 'active' : ''}`} onClick={() => navigate(route)} >
                         <img src={navIcons[id - 1]} alt="nav" />
                         <div>{label}</div>
                     </div>))

@@ -110,6 +110,10 @@
       color: black;
       padding: 10px;
       cursor: pointer;
+
+      &.active{
+        color: #28A263;
+      }
     }
 
   }

@@ -312,7 +312,7 @@ const Settings = () => {
 
             <div className='mobile-nav-bar-container' >
                 {
-                    NAV_ITEMS.map(({ label, route, id }) => (<div className='mobile-nav-icon' onClick={() => navigate(route)} >
+                    NAV_ITEMS.map(({ label, route, id }) => (<div className={`mobile-nav-icon ${label == 'Settings' ? 'active' : ''}`} onClick={() => navigate(route)} >
                         <img src={navIcons[id - 1]} alt="nav" />
                         <div>{label}</div>
                     </div>))

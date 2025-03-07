@@ -93,7 +93,7 @@ const MobilePreview = (props) => {
             case 'Grid':
                 return {
                     display: 'grid',
-                    gridTemplateColumns: '100px 100px',
+                    gridTemplateColumns: '1fr 1fr',
                     gridTemplateRows: '100px',
                     gap: '10px',
                 };
