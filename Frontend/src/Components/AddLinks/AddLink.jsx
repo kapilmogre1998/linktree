@@ -54,6 +54,7 @@ const AddLink = () => {
   const [modalError, setModalError] = useState(false);
   const [toggle, setToggle] = useState(false);
   const [isLoader, setIsLoader] = useState(false);
+  const [editModalId, setEditModalId] = useState('')
   const [mobileScreenPreview, setMobileScreenPreview] = useState(false);
   const [data, setData] = useState({
     profile: {
@@ -128,6 +129,7 @@ const AddLink = () => {
     setUrl('');
     setIsModalOpen(false);
     setToggle(false);
+    setEditModalId('')
   };
 
   const handleBioChange = (e) => {
@@ -168,9 +170,20 @@ const AddLink = () => {
     document.getElementById('fileInput').click();
   };
 
-  const handleAddLink = (type, id) => {
-    if (type == 'DELETE') {
-      setData(prev => ({ ...prev, links: prev.links.filter((link, index) => index !== id) }))
+  const handleAddLink = (type, id, category = '') => {
+    if (editModalId) {
+      if (activeTab == 'link') {
+        setData(prev => ({ ...prev, links: prev.links.map((item, index) => index == editModalId ?  { data: { ...item.data, title, url }, date: new Date()} : item ) }))
+      } else {
+        setData(prev => ({ ...prev, shops: prev.shops.map((item, index) => index == editModalId ? { data: { ...item.data, title, url }, date: new Date()} : item ) }))
+      }
+      setEditModalId('')
+    } else if (type == 'DELETE') {
+      if (category == 'LINKS') {
+        setData(prev => ({ ...prev, links: prev.links.filter((link, index) => index !== id) }))
+      } else {
+        setData(prev => ({ ...prev, shops: prev.shops.filter((link, index) => index !== id) }))
+      }
     } else if (title && url) {
       if (activeTab == 'link') {
         setData(prev => ({ ...prev, links: [...prev.links, { data: { title, url, icon: linkActiveIcon, count: 0, unqId: linkActiveIcon, type: LINK_TYPE[linkActiveIcon] }, date: new Date() }] }));
@@ -180,7 +193,7 @@ const AddLink = () => {
       setTitle('');
       setUrl('');
     }
-    setIsModalOpen(false)
+    closeModal();
   }
 
   const updateData = async (payload, id) => {
@@ -205,7 +218,7 @@ const AddLink = () => {
       if (error?.response?.data?.msg) {
         toast.error(error.response.data.msg);
       }
-    } finally{
+    } finally {
       setIsLoader(false)
     }
   }
@@ -233,7 +246,7 @@ const AddLink = () => {
       if (error?.response?.data?.msg) {
         toast.error(error.response.data.msg);
       }
-    } finally{
+    } finally {
       setIsLoader(false)
     }
   }
@@ -271,33 +284,42 @@ const AddLink = () => {
     const userId = JSON.parse(localStorage.getItem('user_data'))?.id;
     const updateId = mobilePreviewData?.id;
 
-    const formData = new FormData();
+    // const formData = new FormData();
 
-    // Append primitive values
-    formData.append('bannerBgClr', data.bannerBgClr);
-    formData.append('layout', data.layout);
+    // // Append primitive values
+    // formData.append('bannerBgClr', data.bannerBgClr);
+    // formData.append('layout', data.layout);
 
-    // Append nested objects
-    formData.append('profile', JSON.stringify(data.profile));
-    formData.append('buttons', JSON.stringify(data.buttons));
-    formData.append('fonts', JSON.stringify(data.fonts));
-    formData.append('theme', JSON.stringify(data.theme));
+    // // Append nested objects
+    // formData.append('profile', JSON.stringify(data.profile));
+    // formData.append('buttons', JSON.stringify(data.buttons));
+    // formData.append('fonts', JSON.stringify(data.fonts));
+    // formData.append('theme', JSON.stringify(data.theme));
 
-    // Append arrays (assuming links and shops are arrays of strings or objects)
-    formData.append('links', JSON.stringify(data.links));
-    formData.append('shops', JSON.stringify(data.shops));
+    // // Append arrays (assuming links and shops are arrays of strings or objects)
+    // debugger;
+    // formData.append('links', JSON.stringify(data.links));
+    // formData.append('shops', JSON.stringify(data.shops));
 
-    formData.append('userId', userId)
+    // formData.append('userId', userId)
 
-    if (updateId) {
-      formData.append('updateId', updateId)
-    }
+    // if (updateId) {
+    //   formData.append('updateId', updateId)
+    // }
 
     if (updateId) {
       updateData({ ...data, userId }, updateId);
     } else {
       submitData({ ...data, userId });
     }
+  }  
+
+  const handleEditLink = ({ id, title, url, icon }) => {
+    setEditModalId(id.toString())
+    setTitle(title)
+    setUrl(url)
+    setLinkActiveIcon(icon)
+    setIsModalOpen(true)
   }
 
   useLayoutEffect(() => {
@@ -431,33 +453,33 @@ const AddLink = () => {
                     {
                       activeTab === 'link' ?
                         data?.links?.length > 0 && <div className="links-container">
-                          {data?.links.map(({ data: { title, url, count } }, index) => (
+                          {data?.links.map(({ data: { title, url, count, icon } }, index) => (
                             <div key={index} className="links-heading">
                               <div className='link-content' >
-                                <div className='title' >{title} <LuPencilLine /></div>
-                                <div className='url' >{url} <LuPencilLine /></div>
+                                <div className='title' >{title} <LuPencilLine onClick={() => handleEditLink({ id: index, title, url, icon })} /></div>
+                                <div className='url' >{url} <LuPencilLine onClick={() => handleEditLink({ id: index, title, url, icon })} /></div>
                                 <div className='signal-count' ><img src={SignalIcon} alt="" /> {count} Clicks</div>
                               </div>
 
                               <div className='toggle-delete' >
                                 <ToggleSwitch toggle={true} />
-                                <div><RiDeleteBin6Line onClick={() => handleAddLink('DELETE', index)} /></div>
+                                <div><RiDeleteBin6Line onClick={() => handleAddLink('DELETE', index, 'LINKS')} /></div>
                               </div>
                             </div>
                           ))}
                         </div> :
                         data?.shops?.length > 0 ? <div className="links-container">
-                          {data?.shops.map(({ data: { title, url, count } }, index) => (
+                          {data?.shops.map(({ data: { title, url, count, icon } }, index) => (
                             <div key={index} className="links-heading">
                               <div className='link-content' >
-                                <div className='title' >{title} <LuPencilLine /></div>
-                                <div className='url' >{url} <LuPencilLine /></div>
+                                <div className='title' >{title} <LuPencilLine onClick={() => handleEditLink({ id: index, title, url, icon })} /></div>
+                                <div className='url' >{url} <LuPencilLine onClick={() => handleEditLink({ id: index, title, url, icon })} /></div>
                                 <div className='signal-count' ><img src={SignalIcon} alt="" /> {count} Clicks</div>
                               </div>
 
                               <div className='toggle-delete' >
                                 <ToggleSwitch toggle={true} />
-                                <div><RiDeleteBin6Line onClick={() => handleAddLink('DELETE', index)} /></div>
+                                <div><RiDeleteBin6Line onClick={() => handleAddLink('DELETE', index, 'SHOPS')} /></div>
                               </div>
                             </div>
                           ))}
@@ -563,6 +585,7 @@ const AddLink = () => {
                       <div style={{ marginLeft: '20px' }}>
                         <ToggleSwitch toggle={toggle} addLink={() => {
                           if (title.trim().length && url.trim().length) {
+                            setEditModalId('')
                             handleAddLink()
                           } else {
                             setModalError(true)

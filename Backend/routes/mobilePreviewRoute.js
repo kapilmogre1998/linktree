@@ -80,10 +80,14 @@ router.post('/mobilepreview/create', authenticateToken, upload.single('image'), 
     }
 });
 
-router.put('/mobilepreview/update/:id', authenticateToken, upload.single('image'), async (req, res) => {
+router.post('/mobilepreview/update/:id', authenticateToken, upload.single('image'), async (req, res) => {
     try {
-        const updatedData = await MobilePreview.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
-
+        const parsedData = JSON.parse(req.body.data);
+        const updatedData = await MobilePreview.findByIdAndUpdate(
+            req.params.id,
+            { $set: parsedData }, 
+            { new: true, runValidators: true }
+        );
         if (!updatedData) {
             return res.status(200).json({ msg: 'Data not found', sts: 0 });
         }

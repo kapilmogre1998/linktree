@@ -20,8 +20,11 @@ export const createLinkTreeAPI = async (data) => {
 }
 
 export const updateLinkTreeAPI = async (data, id) => {
+    const formData = new FormData();
+    formData.append('data', JSON.stringify(data));
+
     try {
-        return await axios.put(`${API_URL}/api/mobilepreview/update/${id}`, data, { headers: multiPartHeaders() })
+        return await axios.post(`${API_URL}/api/mobilepreview/update/${id}`, formData, { headers: multiPartHeaders() })
     } catch (error) {
         throw error;
     }
